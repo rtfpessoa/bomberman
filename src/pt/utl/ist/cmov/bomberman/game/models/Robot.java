@@ -58,7 +58,7 @@ public class Robot {
 	 * Handles the {@link MotionEvent.ACTION_DOWN} event. If the event happens
 	 * on the bitmap surface then the touched state is set to <code>true</code>
 	 * otherwise to <code>false</code>
-	 *
+	 * 
 	 * @param eventX
 	 *            - the event's X coordinate
 	 * @param eventY

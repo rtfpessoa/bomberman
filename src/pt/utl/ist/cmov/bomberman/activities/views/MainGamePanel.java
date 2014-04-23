@@ -1,16 +1,17 @@
 package pt.utl.ist.cmov.bomberman.activities.views;
 
+import pt.utl.ist.cmov.bomberman.game.MainLoopThread;
+import pt.utl.ist.cmov.bomberman.game.models.Robot;
+import pt.utl.ist.cmov.bomberman.util.BitmapFactory;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import pt.utl.ist.cmov.bomberman.game.MainLoopThread;
-import pt.utl.ist.cmov.bomberman.game.models.Robot;
-import pt.utl.ist.cmov.bomberman.util.BitmapFactory;
 
 public class MainGamePanel extends SurfaceView implements
 		SurfaceHolder.Callback {
@@ -20,7 +21,7 @@ public class MainGamePanel extends SurfaceView implements
 	private MainLoopThread thread;
 	private Robot droid;
 
-	public MainGamePanel(Context context) {
+	public MainGamePanel(Context context, AttributeSet attributeSet) {
 		super(context);
 		// adding the callback (this) to the surface holder to intercept events
 		getHolder().addCallback(this);

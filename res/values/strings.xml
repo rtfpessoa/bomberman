@@ -2,12 +2,12 @@
 <resources>
 
     <string name="app_name">Bomberman</string>
-    
+
     <!-- Main Screen -->
     <string name="new_game">New Game</string>
-    
+
     <!-- Level Choice Screen -->
-	<string name="level_choice_title">Level Choice</string>
-	<string name="choose_level">Choose a level</string>
+    <string name="level_choice_title">Level Choice</string>
+    <string name="choose_level">Choose a level</string>
 
 </resources>

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:keepScreenOn="true"
-        android:text="@string/app_name"
+        android:text="@string/level_choice_title"
         android:textColor="#33b5e5"
         android:textSize="50sp"
         android:textStyle="bold" />

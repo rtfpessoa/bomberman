@@ -26,8 +26,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:onClick="newGameAction"
         android:text="@string/new_game"
-        android:textSize="30sp"
-        android:onClick="newGameAction" />
+        android:textSize="30sp" />
 
 </LinearLayout>

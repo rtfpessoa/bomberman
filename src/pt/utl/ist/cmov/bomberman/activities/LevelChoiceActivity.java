@@ -1,21 +1,18 @@
 package pt.utl.ist.cmov.bomberman.activities;
 
 import pt.utl.ist.cmov.bomberman.R;
-import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
 import pt.utl.ist.cmov.bomberman.game.LevelManager;
-import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class LevelChoiceActivity extends FullScreenActivity {
 
-	private static Context context;
+	public static final String LEVEL_MESSAGE = "pt.utl.ist.cmov.bomberman.activities.LEVEL";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -23,9 +20,7 @@ public class LevelChoiceActivity extends FullScreenActivity {
 
 		setContentView(R.layout.activity_level_choice);
 
-		context = getApplicationContext();
-
-		final AssetManager assetManager = context.getAssets();
+		final AssetManager assetManager = getApplicationContext().getAssets();
 
 		String[] levels = LevelManager.listLevels(assetManager);
 
@@ -33,16 +28,24 @@ public class LevelChoiceActivity extends FullScreenActivity {
 				android.R.layout.simple_list_item_1, levels);
 		ListView listView = (ListView) findViewById(R.id.list_levels);
 		listView.setAdapter(adapter);
-		listView.setOnItemClickListener(mMessageClickedHandler);
-		
-		//setContentView(new MainGamePanel(this));
+
+		listView.setOnItemClickListener(listItemClickHandler);
 	}
 
-	private static OnItemClickListener mMessageClickedHandler = new OnItemClickListener() {
-		public void onItemClick(AdapterView<?> parent, View v, int position,
+	private AdapterView.OnItemClickListener listItemClickHandler = new AdapterView.OnItemClickListener() {
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			Toast.makeText(context, "CLICKED[" + position + "]",
-					Toast.LENGTH_SHORT).show();
+			ListView list = (ListView) parent;
+			levelChoosenAction(list.getItemAtPosition(position));
 		}
 	};
+
+	private void levelChoosenAction(Object object) {
+		String levelName = (String) object;
+
+		Intent intent = new Intent(this, GameActivity.class);
+		intent.putExtra(LEVEL_MESSAGE, levelName);
+		startActivity(intent);
+	}
 }
