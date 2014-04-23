@@ -1,6 +1,7 @@
 package pt.utl.ist.cmov.bomberman.activities;
 
 import pt.utl.ist.cmov.bomberman.R;
+import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
 import pt.utl.ist.cmov.bomberman.game.LevelManager;
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -33,6 +34,8 @@ public class LevelChoiceActivity extends FullScreenActivity {
 		ListView listView = (ListView) findViewById(R.id.list_levels);
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(mMessageClickedHandler);
+		
+		//setContentView(new MainGamePanel(this));
 	}
 
 	private static OnItemClickListener mMessageClickedHandler = new OnItemClickListener() {
