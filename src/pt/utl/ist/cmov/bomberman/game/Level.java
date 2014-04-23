@@ -1,5 +1,7 @@
 package pt.utl.ist.cmov.bomberman.game;
 
+import java.util.ArrayList;
+
 public class Level {
 
 	private Integer gameDuration;
@@ -8,11 +10,11 @@ public class Level {
 	private Integer robotSpeed;
 	private Integer pointsRobot;
 	private Integer pointsOpponent;
-	private String map;
+	private ArrayList<ArrayList<Character>> map;
 
 	public Level(Integer gameDuration, Integer explosionTimeout,
 			Integer explosionRange, Integer robotSpeed, Integer pointsRobot,
-			Integer pointsOpponent, String map) {
+			Integer pointsOpponent, ArrayList<ArrayList<Character>> map) {
 		super();
 		this.gameDuration = gameDuration;
 		this.explosionTimeout = explosionTimeout;

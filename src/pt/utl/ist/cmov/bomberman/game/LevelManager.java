@@ -1,6 +1,7 @@
 package pt.utl.ist.cmov.bomberman.game;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import android.content.res.AssetManager;
@@ -18,6 +19,24 @@ public class LevelManager {
 		}
 	}
 
+	private static ArrayList<ArrayList<Character>> readMap(Scanner levelInfo) {
+		ArrayList<ArrayList<Character>> map = new ArrayList<ArrayList<Character>>();
+
+		while (levelInfo.hasNextLine()) {
+			String line = levelInfo.nextLine();
+
+			ArrayList<Character> mapLine = new ArrayList<Character>();
+
+			for (int i = 0; i < line.length(); i++) {
+				mapLine.add(line.charAt(i));
+			}
+
+			map.add(mapLine);
+		}
+
+		return map;
+	}
+
 	public static Level loadLevel(AssetManager assetManager, String levelName) {
 		try {
 			Scanner levelInfo = new Scanner(assetManager.open(levelsPath + "/"
@@ -28,7 +47,7 @@ public class LevelManager {
 			Integer robotSpeed = levelInfo.nextInt();
 			Integer pointsRobot = levelInfo.nextInt();
 			Integer pointsOpponent = levelInfo.nextInt();
-			String map = levelInfo.next();
+			ArrayList<ArrayList<Character>> map = readMap(levelInfo);
 			levelInfo.close();
 			return new Level(gameDuration, explosionTimeout, explosionRange,
 					robotSpeed, pointsRobot, pointsOpponent, map);
