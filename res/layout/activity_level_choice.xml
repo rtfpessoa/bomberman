@@ -5,7 +5,7 @@
     android:background="#0099cc"
     android:orientation="vertical"
     android:padding="10sp"
-    tools:context="pt.utl.ist.cmov.bomberman.MainActivity" >
+    tools:context="pt.utl.ist.cmov.bomberman.activities.LevelChoiceActivity" >
 
     <TextView
         android:layout_width="match_parent"
@@ -21,13 +21,10 @@
         android:layout_width="match_parent"
         android:layout_height="50sp" />
 
-    <Button
-        android:id="@+id/button_new_game"
+    <ListView
+        android:id="@+id/list_levels"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/new_game"
-        android:textSize="30sp"
-        android:onClick="newGameAction" />
+        android:layout_height="wrap_content" >
+    </ListView>
 
 </LinearLayout>
