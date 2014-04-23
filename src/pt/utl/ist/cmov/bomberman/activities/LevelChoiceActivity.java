@@ -25,7 +25,7 @@ public class LevelChoiceActivity extends FullScreenActivity {
 		String[] levels = LevelManager.listLevels(assetManager);
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, levels);
+				R.layout.listview_line, levels);
 		ListView listView = (ListView) findViewById(R.id.list_levels);
 		listView.setAdapter(adapter);
 
