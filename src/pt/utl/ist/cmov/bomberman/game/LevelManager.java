@@ -47,7 +47,7 @@ public class LevelManager {
 			Integer robotSpeed = levelInfo.nextInt();
 			Integer pointsRobot = levelInfo.nextInt();
 			Integer pointsOpponent = levelInfo.nextInt();
-			ArrayList<ArrayList<Character>> map = readMap(levelInfo);
+			GameMap map = new GameMap(readMap(levelInfo));
 			levelInfo.close();
 			return new Level(gameDuration, explosionTimeout, explosionRange,
 					robotSpeed, pointsRobot, pointsOpponent, map);

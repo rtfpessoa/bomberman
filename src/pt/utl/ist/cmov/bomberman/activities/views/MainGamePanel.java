@@ -1,7 +1,12 @@
 package pt.utl.ist.cmov.bomberman.activities.views;
 
+import java.util.ArrayList;
+
+import pt.utl.ist.cmov.bomberman.game.GameElement;
+import pt.utl.ist.cmov.bomberman.game.GameMap;
 import pt.utl.ist.cmov.bomberman.game.MainLoopThread;
 import pt.utl.ist.cmov.bomberman.game.models.Robot;
+import pt.utl.ist.cmov.bomberman.game.models.Wall;
 import pt.utl.ist.cmov.bomberman.util.BitmapFactory;
 import android.app.Activity;
 import android.content.Context;
@@ -19,22 +24,29 @@ public class MainGamePanel extends SurfaceView implements
 	private static final String TAG = MainGamePanel.class.getSimpleName();
 
 	private MainLoopThread thread;
-	private Robot droid;
+	private ArrayList<Wall> walls = new ArrayList<Wall>();
+	
 
 	public MainGamePanel(Context context, AttributeSet attributeSet) {
 		super(context);
 		// adding the callback (this) to the surface holder to intercept events
 		getHolder().addCallback(this);
 
-		// create droid and load bitmap
-		droid = new Robot(BitmapFactory.getBitmapFromAsset(context,
-				"images/bricks.png"), 15, 15);
-
 		// create the game loop thread
 		thread = new MainLoopThread(getHolder(), this);
 
 		// make the GamePanel focusable so it can handle events
 		setFocusable(true);
+	}
+	
+	public void initMap(Context context, GameMap initialMap) {
+		for(Integer y = 0 ; y < initialMap.getHeight() ; y++) {
+			for(Integer x = 0 ; x < initialMap.getWidth() ; x++) {
+				if (initialMap.getContent(x, y) == GameElement.WALL) {
+					this.walls.add(new Wall(context, 25*x, 25*y));
+				}
+			}
+		}
 	}
 
 	@Override
@@ -66,7 +78,7 @@ public class MainGamePanel extends SurfaceView implements
 		}
 		Log.d(TAG, "Thread was shut down cleanly");
 	}
-
+/*
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -96,13 +108,17 @@ public class MainGamePanel extends SurfaceView implements
 			}
 		}
 		return true;
-	}
+	}*/
 
 	@Override
 	public void onDraw(Canvas canvas) {
 		// fills the canvas with black
 		canvas.drawColor(Color.rgb(16, 120, 48));
-		droid.draw(canvas);
+		
+		for(Wall w : this.walls)
+		{
+			w.draw(canvas);
+		}
 	}
 
 }

@@ -10,11 +10,11 @@ public class Level {
 	private Integer robotSpeed;
 	private Integer pointsRobot;
 	private Integer pointsOpponent;
-	private ArrayList<ArrayList<Character>> map;
+	private GameMap map;
 
 	public Level(Integer gameDuration, Integer explosionTimeout,
 			Integer explosionRange, Integer robotSpeed, Integer pointsRobot,
-			Integer pointsOpponent, ArrayList<ArrayList<Character>> map) {
+			Integer pointsOpponent, GameMap map) {
 		super();
 		this.gameDuration = gameDuration;
 		this.explosionTimeout = explosionTimeout;
@@ -73,12 +73,8 @@ public class Level {
 		this.pointsOpponent = pointsOpponent;
 	}
 
-	public ArrayList<ArrayList<Character>> getMap() {
+	public GameMap getMap() {
 		return map;
-	}
-
-	public void setMap(ArrayList<ArrayList<Character>> map) {
-		this.map = map;
 	}
 
 }

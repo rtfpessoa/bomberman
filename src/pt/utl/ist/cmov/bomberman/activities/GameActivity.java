@@ -1,6 +1,7 @@
 package pt.utl.ist.cmov.bomberman.activities;
 
 import pt.utl.ist.cmov.bomberman.R;
+import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
 import pt.utl.ist.cmov.bomberman.controllers.SimpleGestureController;
 import pt.utl.ist.cmov.bomberman.controllers.interfaces.SimpleGestureListener;
 import pt.utl.ist.cmov.bomberman.game.Level;
@@ -31,6 +32,11 @@ public class GameActivity extends FullScreenActivity implements
 				LevelChoiceActivity.LEVEL_MESSAGE);
 
 		Level level = LevelManager.loadLevel(context.getAssets(), levelName);
+
+		MainGamePanel gamePanel = (MainGamePanel) this
+				.findViewById(R.id.game_panel);
+		
+		gamePanel.initMap(context, level.getMap());
 
 		detector = new SimpleGestureController(this, this);
 	}
