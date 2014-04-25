@@ -8,7 +8,9 @@ import pt.utl.ist.cmov.bomberman.game.Level;
 import pt.utl.ist.cmov.bomberman.game.LevelManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Toast;
 
 public class GameActivity extends FullScreenActivity implements
@@ -33,10 +35,10 @@ public class GameActivity extends FullScreenActivity implements
 
 		Level level = LevelManager.loadLevel(context.getAssets(), levelName);
 
-		MainGamePanel gamePanel = (MainGamePanel) this
-				.findViewById(R.id.game_panel);
-		
-		gamePanel.initMap(context, level.getMap());
+		MainGamePanel gamePanel = new MainGamePanel(context, level.getMap());
+
+		this.addContentView(gamePanel, new LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
 		detector = new SimpleGestureController(this, this);
 	}

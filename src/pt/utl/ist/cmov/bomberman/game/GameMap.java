@@ -1,14 +1,19 @@
 package pt.utl.ist.cmov.bomberman.game;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class GameMap {
 
-	private ArrayList<ArrayList<Character>> mapInfo;
+	public static final Character WALL = 'W';
+	public static final Character OBSTACLE = 'O';
+	public static final Character ROBOT = 'R';
+	public static final Character EMPTY = '-';
+
+	private List<List<Character>> mapInfo;
 	private Integer height;
 	private Integer width;
 
-	public GameMap(ArrayList<ArrayList<Character>> mapInfo) {
+	public GameMap(List<List<Character>> mapInfo) {
 		super();
 		this.mapInfo = mapInfo;
 		this.height = mapInfo.size();
@@ -19,11 +24,11 @@ public class GameMap {
 		return this.mapInfo.get(y).get(x);
 	}
 
-	public ArrayList<ArrayList<Character>> getMapInfo() {
+	public List<List<Character>> getMapInfo() {
 		return mapInfo;
 	}
 
-	public void setMapInfo(ArrayList<ArrayList<Character>> mapInfo) {
+	public void setMapInfo(List<List<Character>> mapInfo) {
 		this.mapInfo = mapInfo;
 	}
 
@@ -31,16 +36,8 @@ public class GameMap {
 		return height;
 	}
 
-	public void setHeight(Integer height) {
-		this.height = height;
-	}
-
 	public Integer getWidth() {
 		return width;
-	}
-
-	public void setWidth(Integer width) {
-		this.width = width;
 	}
 
 }

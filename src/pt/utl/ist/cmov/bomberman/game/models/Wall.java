@@ -13,10 +13,10 @@ public class Wall {
 	private int y; // the Y coordinate
 	private boolean touched; // if droid is touched/picked up
 
-	public Wall(Context context, int x, int y) {
+	public Wall(Context context, int height, int width, int x, int y) {
 		Bitmap b = BitmapFactory.getBitmapFromAsset(context,
 				"images/bricks.png");
-		this.bitmap = Bitmap.createScaledBitmap(b, 25, 25, true);
+		this.bitmap = Bitmap.createScaledBitmap(b, width, height, true);
 		this.x = x;
 		this.y = y;
 	}
