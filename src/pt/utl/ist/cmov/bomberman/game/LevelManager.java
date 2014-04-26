@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import android.content.res.AssetManager;
-import android.util.Log;
 
 public class LevelManager {
 

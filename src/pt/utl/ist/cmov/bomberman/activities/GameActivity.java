@@ -1,11 +1,22 @@
 package pt.utl.ist.cmov.bomberman.activities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import pt.utl.ist.cmov.bomberman.R;
 import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
 import pt.utl.ist.cmov.bomberman.controllers.SimpleGestureController;
 import pt.utl.ist.cmov.bomberman.controllers.interfaces.SimpleGestureListener;
+import pt.utl.ist.cmov.bomberman.game.GameMap;
 import pt.utl.ist.cmov.bomberman.game.Level;
 import pt.utl.ist.cmov.bomberman.game.LevelManager;
+import pt.utl.ist.cmov.bomberman.game.models.BombermanModel;
+import pt.utl.ist.cmov.bomberman.game.models.EmptyModel;
+import pt.utl.ist.cmov.bomberman.game.models.Model;
+import pt.utl.ist.cmov.bomberman.game.models.ObstacleModel;
+import pt.utl.ist.cmov.bomberman.game.models.RobotModel;
+import pt.utl.ist.cmov.bomberman.game.models.WallModel;
+import pt.utl.ist.cmov.bomberman.util.Constants;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +32,53 @@ public class GameActivity extends FullScreenActivity implements
 	private static Context context;
 
 	private SimpleGestureController detector;
+	private MainGamePanel gamePanel;
+
+	private List<List<Model>> parseMap(GameMap initialMap) {
+
+		List<List<Model>> parsedMap = new ArrayList<List<Model>>();
+
+		for (Integer y = 0; y < initialMap.getHeight(); y++) {
+			parsedMap.add(new ArrayList<Model>());
+
+			for (Integer x = 0; x < initialMap.getWidth(); x++) {
+				List<Model> line = parsedMap.get(y);
+				Character content = initialMap.getContent(x, y);
+
+				if (content == GameMap.WALL) {
+					line.add(new WallModel(context, Constants.POSITION_HEIGHT,
+							Constants.POSITION_WIDTH, Constants.SIDE_PADDING
+									+ Constants.POSITION_WIDTH * x,
+							Constants.UP_PADDING + Constants.POSITION_HEIGHT
+									* y));
+				} else if (content == GameMap.OBSTACLE) {
+					line.add(new ObstacleModel(context,
+							Constants.POSITION_HEIGHT,
+							Constants.POSITION_WIDTH, Constants.SIDE_PADDING
+									+ Constants.POSITION_WIDTH * x,
+							Constants.UP_PADDING + Constants.POSITION_HEIGHT
+									* y));
+				} else if (content == GameMap.ROBOT) {
+					line.add(new RobotModel(context, Constants.POSITION_HEIGHT,
+							Constants.POSITION_WIDTH, Constants.SIDE_PADDING
+									+ Constants.POSITION_WIDTH * x,
+							Constants.UP_PADDING + Constants.POSITION_HEIGHT
+									* y));
+				} else if (content == GameMap.EMPTY) {
+					line.add(new EmptyModel());
+				} else {
+					line.add(new BombermanModel(context,
+							Constants.POSITION_HEIGHT,
+							Constants.POSITION_WIDTH, Constants.SIDE_PADDING
+									+ Constants.POSITION_WIDTH * x,
+							Constants.UP_PADDING + Constants.POSITION_HEIGHT
+									* y, Character.getNumericValue(content)));
+				}
+			}
+		}
+
+		return parsedMap;
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +93,10 @@ public class GameActivity extends FullScreenActivity implements
 
 		Level level = LevelManager.loadLevel(context.getAssets(), levelName);
 
-		MainGamePanel gamePanel = new MainGamePanel(context, level.getMap());
+		this.gamePanel = new MainGamePanel(context, this.parseMap(level
+				.getMap()));
 
-		this.addContentView(gamePanel, new LayoutParams(
+		this.addContentView(this.gamePanel, new LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
 		detector = new SimpleGestureController(this, this);

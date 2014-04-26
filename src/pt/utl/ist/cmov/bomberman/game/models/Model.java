@@ -1,24 +1,18 @@
 package pt.utl.ist.cmov.bomberman.game.models;
 
-import pt.utl.ist.cmov.bomberman.util.BitmapFactory;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 
-public class Wall {
+public abstract class Model {
 
-	private Bitmap bitmap; // the actual bitmap
-	private int x; // the X coordinate
-	private int y; // the Y coordinate
-	private boolean touched; // if droid is touched/picked up
+	protected Bitmap bitmap; // the actual bitmap
+	protected int x; // the X coordinate
+	protected int y; // the Y coordinate
+	protected boolean touched;
 
-	public Wall(Context context, int height, int width, int x, int y) {
-		Bitmap b = BitmapFactory.getBitmapFromAsset(context,
-				"images/bricks.png");
-		this.bitmap = Bitmap.createScaledBitmap(b, width, height, true);
-		this.x = x;
-		this.y = y;
+	public Model() {
+		super();
 	}
 
 	public Bitmap getBitmap() {
@@ -53,10 +47,7 @@ public class Wall {
 		this.touched = touched;
 	}
 
-	public void draw(Canvas canvas) {
-		canvas.drawBitmap(bitmap, x - (bitmap.getWidth() / 2),
-				y - (bitmap.getHeight() / 2), null);
-	}
+	public abstract void draw(Canvas canvas);
 
 	/**
 	 * Handles the {@link MotionEvent.ACTION_DOWN} event. If the event happens
