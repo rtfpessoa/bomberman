@@ -10,7 +10,7 @@ public class WallModel extends Model {
 	public WallModel(Context context, int height, int width, int x, int y) {
 		super();
 		Bitmap b = BitmapFactory.getBitmapFromAsset(context,
-				"images/bricks.png");
+				"images/wall.png");
 		this.bitmap = Bitmap.createScaledBitmap(b, width, height, true);
 		this.x = x;
 		this.y = y;
