@@ -20,7 +20,6 @@ import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
@@ -154,5 +153,10 @@ public class GameActivity extends FullScreenActivity implements
 	@Override
 	public void onDoubleTap() {
 		Toast.makeText(this, "Double Tap", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onSingleTap() {
+		Toast.makeText(this, "Single Tap", Toast.LENGTH_SHORT).show();
 	}
 }

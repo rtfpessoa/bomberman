@@ -150,6 +150,7 @@ public class SimpleGestureController extends SimpleOnGestureListener {
 
 	@Override
 	public boolean onSingleTapConfirmed(MotionEvent arg0) {
+		this.listener.onSingleTap();
 
 		if (this.mode == MODE_DYNAMIC) { // we owe an ACTION_UP, so we fake an
 			arg0.setAction(ACTION_FAKE); // action which will be converted to an
