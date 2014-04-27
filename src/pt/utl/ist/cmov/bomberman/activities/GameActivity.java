@@ -16,10 +16,12 @@ import pt.utl.ist.cmov.bomberman.game.models.Model;
 import pt.utl.ist.cmov.bomberman.game.models.ObstacleModel;
 import pt.utl.ist.cmov.bomberman.game.models.RobotModel;
 import pt.utl.ist.cmov.bomberman.game.models.WallModel;
-import pt.utl.ist.cmov.bomberman.util.Constants;
+import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Toast;
@@ -36,43 +38,61 @@ public class GameActivity extends FullScreenActivity implements
 
 	private List<List<Model>> parseMap(GameMap initialMap) {
 
+		Display display = getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		int screenWidth = size.x;
+		int screenHeight = size.y;
+		int mapWidth = initialMap.getWidth();
+		int mapHeight = initialMap.getHeight();
+
+		MapMeasurements.updateMapMeasurements(screenWidth, screenHeight,
+				mapWidth, mapHeight);
+
 		List<List<Model>> parsedMap = new ArrayList<List<Model>>();
 
-		for (Integer y = 0; y < initialMap.getHeight(); y++) {
+		for (Integer y = 0; y < mapHeight; y++) {
 			parsedMap.add(new ArrayList<Model>());
 
-			for (Integer x = 0; x < initialMap.getWidth(); x++) {
+			for (Integer x = 0; x < mapWidth; x++) {
 				List<Model> line = parsedMap.get(y);
 				Character content = initialMap.getContent(x, y);
 
 				if (content == GameMap.WALL) {
-					line.add(new WallModel(context, Constants.POSITION_HEIGHT,
-							Constants.POSITION_WIDTH, Constants.SIDE_PADDING
-									+ Constants.POSITION_WIDTH * x,
-							Constants.UP_PADDING + Constants.POSITION_HEIGHT
-									* y));
+					line.add(new WallModel(context,
+							MapMeasurements.POSITION_HEIGHT,
+							MapMeasurements.POSITION_WIDTH,
+							MapMeasurements.SIDE_PADDING
+									+ MapMeasurements.POSITION_WIDTH * x,
+							MapMeasurements.UP_PADDING
+									+ MapMeasurements.POSITION_HEIGHT * y));
 				} else if (content == GameMap.OBSTACLE) {
 					line.add(new ObstacleModel(context,
-							Constants.POSITION_HEIGHT,
-							Constants.POSITION_WIDTH, Constants.SIDE_PADDING
-									+ Constants.POSITION_WIDTH * x,
-							Constants.UP_PADDING + Constants.POSITION_HEIGHT
-									* y));
+							MapMeasurements.POSITION_HEIGHT,
+							MapMeasurements.POSITION_WIDTH,
+							MapMeasurements.SIDE_PADDING
+									+ MapMeasurements.POSITION_WIDTH * x,
+							MapMeasurements.UP_PADDING
+									+ MapMeasurements.POSITION_HEIGHT * y));
 				} else if (content == GameMap.ROBOT) {
-					line.add(new RobotModel(context, Constants.POSITION_HEIGHT,
-							Constants.POSITION_WIDTH, Constants.SIDE_PADDING
-									+ Constants.POSITION_WIDTH * x,
-							Constants.UP_PADDING + Constants.POSITION_HEIGHT
-									* y));
+					line.add(new RobotModel(context,
+							MapMeasurements.POSITION_HEIGHT,
+							MapMeasurements.POSITION_WIDTH,
+							MapMeasurements.SIDE_PADDING
+									+ MapMeasurements.POSITION_WIDTH * x,
+							MapMeasurements.UP_PADDING
+									+ MapMeasurements.POSITION_HEIGHT * y));
 				} else if (content == GameMap.EMPTY) {
 					line.add(new EmptyModel());
 				} else {
 					line.add(new BombermanModel(context,
-							Constants.POSITION_HEIGHT,
-							Constants.POSITION_WIDTH, Constants.SIDE_PADDING
-									+ Constants.POSITION_WIDTH * x,
-							Constants.UP_PADDING + Constants.POSITION_HEIGHT
-									* y, Character.getNumericValue(content)));
+							MapMeasurements.POSITION_HEIGHT,
+							MapMeasurements.POSITION_WIDTH,
+							MapMeasurements.SIDE_PADDING
+									+ MapMeasurements.POSITION_WIDTH * x,
+							MapMeasurements.UP_PADDING
+									+ MapMeasurements.POSITION_HEIGHT * y,
+							Character.getNumericValue(content)));
 				}
 			}
 		}

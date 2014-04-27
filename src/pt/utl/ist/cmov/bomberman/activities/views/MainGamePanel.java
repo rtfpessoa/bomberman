@@ -6,7 +6,7 @@ import pt.utl.ist.cmov.bomberman.game.MainLoopThread;
 import pt.utl.ist.cmov.bomberman.game.models.BombModel;
 import pt.utl.ist.cmov.bomberman.game.models.EmptyModel;
 import pt.utl.ist.cmov.bomberman.game.models.Model;
-import pt.utl.ist.cmov.bomberman.util.Constants;
+import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -46,10 +46,10 @@ public class MainGamePanel extends SurfaceView implements
 	public void putBomb(int x, int y) {
 		this.modelsMap.get(y).set(
 				x,
-				new BombModel(this.context, Constants.POSITION_HEIGHT,
-						Constants.POSITION_WIDTH, Constants.SIDE_PADDING
-								+ Constants.POSITION_WIDTH * x,
-						Constants.UP_PADDING + Constants.POSITION_HEIGHT * y));
+				new BombModel(this.context, MapMeasurements.POSITION_HEIGHT,
+						MapMeasurements.POSITION_WIDTH, MapMeasurements.SIDE_PADDING
+								+ MapMeasurements.POSITION_WIDTH * x,
+						MapMeasurements.UP_PADDING + MapMeasurements.POSITION_HEIGHT * y));
 	}
 
 	public void move(int origX, int origY, int destX, int destY) {
