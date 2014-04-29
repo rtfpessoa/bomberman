@@ -22,7 +22,6 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.MotionEvent;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Toast;
 
 public class GameActivity extends FullScreenActivity implements
@@ -112,11 +111,8 @@ public class GameActivity extends FullScreenActivity implements
 
 		Level level = LevelManager.loadLevel(context.getAssets(), levelName);
 
-		this.gamePanel = new MainGamePanel(context, this.parseMap(level
-				.getMap()));
-
-		this.addContentView(this.gamePanel, new LayoutParams(
-				LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		MainGamePanel gamePanel = (MainGamePanel) findViewById(R.id.game_panel);
+		gamePanel.setModelsMap(this.parseMap(level.getMap()));
 
 		detector = new SimpleGestureController(this, this);
 	}

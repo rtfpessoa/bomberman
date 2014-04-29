@@ -10,6 +10,7 @@ import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -24,9 +25,8 @@ public class MainGamePanel extends SurfaceView implements
 	private List<List<Model>> modelsMap;
 	private Context context;
 
-	public MainGamePanel(Context context, List<List<Model>> modelsMap) {
-		super(context);
-		this.modelsMap = modelsMap;
+	public MainGamePanel(Context context, AttributeSet attrs) {
+		super(context, attrs);
 		this.context = context;
 
 		// adding the callback (this) to the surface holder to intercept events
@@ -39,6 +39,10 @@ public class MainGamePanel extends SurfaceView implements
 		setFocusable(true);
 	}
 
+	public void setModelsMap(List<List<Model>> modelsMap) {
+		this.modelsMap = modelsMap;
+	}
+
 	public void putEmpty(int x, int y) {
 		this.modelsMap.get(y).set(x, new EmptyModel());
 	}
@@ -47,14 +51,17 @@ public class MainGamePanel extends SurfaceView implements
 		this.modelsMap.get(y).set(
 				x,
 				new BombModel(this.context, MapMeasurements.POSITION_HEIGHT,
-						MapMeasurements.POSITION_WIDTH, MapMeasurements.SIDE_PADDING
+						MapMeasurements.POSITION_WIDTH,
+						MapMeasurements.SIDE_PADDING
 								+ MapMeasurements.POSITION_WIDTH * x,
-						MapMeasurements.UP_PADDING + MapMeasurements.POSITION_HEIGHT * y));
+						MapMeasurements.UP_PADDING
+								+ MapMeasurements.POSITION_HEIGHT * y));
 	}
 
 	public void move(int origX, int origY, int destX, int destY) {
 		Model model = this.modelsMap.get(destY).get(destX);
-		this.modelsMap.get(destY).set(destX, this.modelsMap.get(origY).get(origX));
+		this.modelsMap.get(destY).set(destX,
+				this.modelsMap.get(origY).get(origX));
 		this.modelsMap.get(origY).set(origX, model);
 	}
 

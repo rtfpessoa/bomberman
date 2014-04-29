@@ -6,4 +6,9 @@
     android:orientation="vertical"
     tools:context="pt.utl.ist.cmov.bomberman.activities.GameActivity" >
 
+    <pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel
+        android:id="@+id/game_panel"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
 </LinearLayout>
