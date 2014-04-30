@@ -7,72 +7,79 @@
     android:orientation="horizontal"
     tools:context="pt.utl.ist.cmov.bomberman.activities.GameActivity" >
 
-    <TableLayout
-        android:layout_width="120dp"
+    <LinearLayout
+        android:layout_width="120sp"
         android:layout_height="fill_parent"
-        android:layout_gravity="bottom"
-        android:columnCount="3"
-        android:gravity="bottom" >
+        android:gravity="bottom"
+        android:orientation="vertical" >
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
+        <TableLayout
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="bottom"
+            android:columnCount="3"
+            android:gravity="bottom" >
 
-            <ImageButton
-                android:id="@+id/button_up"
-                android:layout_width="50sp"
-                android:layout_height="50sp"
-                android:layout_column="0"
-                android:background="@drawable/arrow_up"
-                android:gravity="center"
-                android:onClick="upClick" />
-        </TableRow>
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal" >
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
+                <ImageButton
+                    android:id="@+id/button_up"
+                    android:layout_width="40sp"
+                    android:layout_height="40sp"
+                    android:layout_column="0"
+                    android:background="@drawable/arrow_up"
+                    android:gravity="center"
+                    android:onClick="upClick" />
+            </TableRow>
 
-            <ImageButton
-                android:id="@+id/button_left"
-                android:layout_width="50sp"
-                android:layout_height="50sp"
-                android:layout_column="0"
-                android:background="@drawable/arrow_left"
-                android:gravity="center"
-                android:onClick="leftClick" />
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal" >
 
-            <TextView
-                android:layout_width="50sp"
-                android:layout_height="50sp"
-                android:layout_column="1" />
+                <ImageButton
+                    android:id="@+id/button_left"
+                    android:layout_width="40sp"
+                    android:layout_height="40sp"
+                    android:layout_column="0"
+                    android:background="@drawable/arrow_left"
+                    android:gravity="center"
+                    android:onClick="leftClick" />
 
-            <ImageButton
-                android:id="@+id/button_right"
-                android:layout_width="50sp"
-                android:layout_height="50sp"
-                android:layout_column="2"
-                android:background="@drawable/arrow_right"
-                android:gravity="center"
-                android:onClick="rightClick" />
-        </TableRow>
+                <TextView
+                    android:layout_width="40sp"
+                    android:layout_height="40sp"
+                    android:layout_column="1" />
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal" >
+                <ImageButton
+                    android:id="@+id/button_right"
+                    android:layout_width="40sp"
+                    android:layout_height="40sp"
+                    android:layout_column="2"
+                    android:background="@drawable/arrow_right"
+                    android:gravity="center"
+                    android:onClick="rightClick" />
+            </TableRow>
 
-            <ImageButton
-                android:id="@+id/button_down"
-                android:layout_width="50sp"
-                android:layout_height="50sp"
-                android:layout_column="0"
-                android:background="@drawable/arrow_down"
-                android:gravity="center"
-                android:onClick="downClick" />
-        </TableRow>
-    </TableLayout>
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal" >
+
+                <ImageButton
+                    android:id="@+id/button_down"
+                    android:layout_width="40sp"
+                    android:layout_height="40sp"
+                    android:layout_column="0"
+                    android:background="@drawable/arrow_down"
+                    android:gravity="center"
+                    android:onClick="downClick" />
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
 
     <pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel
         android:id="@+id/game_panel"
@@ -83,18 +90,26 @@
     <LinearLayout
         android:layout_width="120sp"
         android:layout_height="fill_parent"
-        android:gravity="bottom|center_horizontal"
+        android:gravity="bottom"
         android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/button_bomb"
-            android:layout_width="100sp"
-            android:layout_height="wrap_content"
-            android:layout_row="0"
-            android:onClick="bombClick"
-            android:text="Bomb"
-            android:textAlignment="center"
-            android:textSize="20sp" />
+        <LinearLayout
+            android:layout_width="120sp"
+            android:layout_height="120sp"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/button_bomb"
+                android:layout_width="100sp"
+                android:layout_height="wrap_content"
+                android:layout_row="0"
+                android:background="@color/black"
+                android:onClick="bombClick"
+                android:text="Bomb"
+                android:textAlignment="center"
+                android:textSize="20sp" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
