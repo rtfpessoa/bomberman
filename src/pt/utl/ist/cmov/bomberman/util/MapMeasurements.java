@@ -9,7 +9,7 @@ public class MapMeasurements {
 	public static Integer POSITION_HEIGHT;
 	public static Integer POSITION_WIDTH;
 
-	public static void updateMapMeasurements(int screenWidth, int screenHeight,
+	public static void updateMapMeasurements(int screenHeight, int screenWidth,
 			int mapWidth, int mapHeight) {
 		float positionHeight = (float) ((screenHeight / mapHeight) * (7.0 / 10.0));
 		POSITION_HEIGHT = (int) positionHeight;

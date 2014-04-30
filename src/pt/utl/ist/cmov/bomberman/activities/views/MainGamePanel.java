@@ -100,10 +100,10 @@ public class MainGamePanel extends SurfaceView implements
 		// fills the canvas with black
 		canvas.drawColor(Color.rgb(16, 120, 48));
 
-		for (List<Model> l : this.modelsMap) {
-			for (Model m : l)
-				m.draw(canvas);
-		}
+//		for (List<Model> l : this.modelsMap) {
+//			for (Model m : l)
+//				m.draw(canvas);
+//		}
 	}
 
 }

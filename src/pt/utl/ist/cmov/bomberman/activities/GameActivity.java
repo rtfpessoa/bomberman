@@ -5,8 +5,6 @@ import java.util.List;
 
 import pt.utl.ist.cmov.bomberman.R;
 import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
-import pt.utl.ist.cmov.bomberman.controllers.SimpleGestureController;
-import pt.utl.ist.cmov.bomberman.controllers.interfaces.SimpleGestureListener;
 import pt.utl.ist.cmov.bomberman.game.GameMap;
 import pt.utl.ist.cmov.bomberman.game.Level;
 import pt.utl.ist.cmov.bomberman.game.LevelManager;
@@ -21,18 +19,33 @@ import android.content.Context;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
-import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 
-public class GameActivity extends FullScreenActivity implements
-		SimpleGestureListener {
+public class GameActivity extends FullScreenActivity {
 
 	private static final String TAG = GameActivity.class.getSimpleName();
 
 	private static Context context;
 
-	private SimpleGestureController detector;
 	private MainGamePanel gamePanel;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		context = getApplicationContext();
+
+		setContentView(R.layout.activity_game);
+
+		String levelName = getIntent().getExtras().getString(
+				LevelChoiceActivity.LEVEL_MESSAGE);
+
+		Level level = LevelManager.loadLevel(context.getAssets(), levelName);
+
+		this.gamePanel = (MainGamePanel) findViewById(R.id.game_panel);
+		this.gamePanel.setModelsMap(this.parseMap(level.getMap()));
+	}
 
 	private List<List<Model>> parseMap(GameMap initialMap) {
 
@@ -98,61 +111,23 @@ public class GameActivity extends FullScreenActivity implements
 		return parsedMap;
 	}
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		context = getApplicationContext();
-
-		setContentView(R.layout.activity_game);
-
-		String levelName = getIntent().getExtras().getString(
-				LevelChoiceActivity.LEVEL_MESSAGE);
-
-		Level level = LevelManager.loadLevel(context.getAssets(), levelName);
-
-		MainGamePanel gamePanel = (MainGamePanel) findViewById(R.id.game_panel);
-		gamePanel.setModelsMap(this.parseMap(level.getMap()));
-
-		detector = new SimpleGestureController(this, this);
+	public void upClick(View view) {
+		Toast.makeText(this, "CLICK UP", Toast.LENGTH_SHORT).show();
 	}
 
-	@Override
-	public boolean dispatchTouchEvent(MotionEvent me) {
-		this.detector.onTouchEvent(me);
-		return super.dispatchTouchEvent(me);
+	public void downClick(View view) {
+		Toast.makeText(this, "CLICK DOWN", Toast.LENGTH_SHORT).show();
 	}
 
-	@Override
-	public void onSwipe(int direction) {
-		String str = "";
-
-		switch (direction) {
-
-		case SimpleGestureController.SWIPE_RIGHT:
-			str = "Swipe Right";
-			break;
-		case SimpleGestureController.SWIPE_LEFT:
-			str = "Swipe Left";
-			break;
-		case SimpleGestureController.SWIPE_DOWN:
-			str = "Swipe Down";
-			break;
-		case SimpleGestureController.SWIPE_UP:
-			str = "Swipe Up";
-			break;
-
-		}
-		Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
+	public void rightClick(View view) {
+		Toast.makeText(this, "CLICK RIGHT", Toast.LENGTH_SHORT).show();
 	}
 
-	@Override
-	public void onDoubleTap() {
-		Toast.makeText(this, "Double Tap", Toast.LENGTH_SHORT).show();
+	public void leftClick(View view) {
+		Toast.makeText(this, "CLICK LEFT", Toast.LENGTH_SHORT).show();
 	}
 
-	@Override
-	public void onSingleTap() {
-		Toast.makeText(this, "Single Tap", Toast.LENGTH_SHORT).show();
+	public void bombClick(View view) {
+		Toast.makeText(this, "CLICK BOMB", Toast.LENGTH_SHORT).show();
 	}
 }

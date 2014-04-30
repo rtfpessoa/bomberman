@@ -41,7 +41,7 @@
             android:name="pt.utl.ist.cmov.bomberman.activities.GameActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/level_choice_title"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             android:theme="@style/FullscreenTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
