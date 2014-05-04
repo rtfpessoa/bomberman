@@ -31,8 +31,7 @@
                     android:layout_height="40sp"
                     android:layout_column="0"
                     android:background="@drawable/arrow_up"
-                    android:gravity="center"
-                    android:onClick="upClick" />
+                    android:gravity="center" />
             </TableRow>
 
             <TableRow
@@ -46,8 +45,7 @@
                     android:layout_height="40sp"
                     android:layout_column="0"
                     android:background="@drawable/arrow_left"
-                    android:gravity="center"
-                    android:onClick="leftClick" />
+                    android:gravity="center" />
 
                 <TextView
                     android:layout_width="40sp"
@@ -60,8 +58,7 @@
                     android:layout_height="40sp"
                     android:layout_column="2"
                     android:background="@drawable/arrow_right"
-                    android:gravity="center"
-                    android:onClick="rightClick" />
+                    android:gravity="center" />
             </TableRow>
 
             <TableRow
@@ -75,8 +72,7 @@
                     android:layout_height="40sp"
                     android:layout_column="0"
                     android:background="@drawable/arrow_down"
-                    android:gravity="center"
-                    android:onClick="downClick" />
+                    android:gravity="center" />
             </TableRow>
         </TableLayout>
     </LinearLayout>

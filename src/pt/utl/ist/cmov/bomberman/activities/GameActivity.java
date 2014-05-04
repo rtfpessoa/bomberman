@@ -2,10 +2,14 @@ package pt.utl.ist.cmov.bomberman.activities;
 
 import pt.utl.ist.cmov.bomberman.R;
 import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
+import pt.utl.ist.cmov.bomberman.controllers.DirectionButtonListener;
 import pt.utl.ist.cmov.bomberman.game.Level;
 import pt.utl.ist.cmov.bomberman.game.LevelManager;
+import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -32,22 +36,18 @@ public class GameActivity extends FullScreenActivity {
 
 		this.gamePanel = (MainGamePanel) findViewById(R.id.game_panel);
 		this.gamePanel.setMap(level.getMap());
-	}
 
-	public void upClick(View view) {
-		Toast.makeText(this, "CLICK UP", Toast.LENGTH_SHORT).show();
-	}
+		this.findViewById(R.id.button_up).setOnTouchListener(
+				new DirectionButtonListener(Direction.UP));
 
-	public void downClick(View view) {
-		Toast.makeText(this, "CLICK DOWN", Toast.LENGTH_SHORT).show();
-	}
+		this.findViewById(R.id.button_down).setOnTouchListener(
+				new DirectionButtonListener(Direction.DOWN));
 
-	public void rightClick(View view) {
-		Toast.makeText(this, "CLICK RIGHT", Toast.LENGTH_SHORT).show();
-	}
+		this.findViewById(R.id.button_left).setOnTouchListener(
+				new DirectionButtonListener(Direction.LEFT));
 
-	public void leftClick(View view) {
-		Toast.makeText(this, "CLICK LEFT", Toast.LENGTH_SHORT).show();
+		this.findViewById(R.id.button_right).setOnTouchListener(
+				new DirectionButtonListener(Direction.RIGHT));
 	}
 
 	public void bombClick(View view) {
