@@ -3,6 +3,8 @@ package pt.utl.ist.cmov.bomberman.activities;
 import pt.utl.ist.cmov.bomberman.R;
 import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
 import pt.utl.ist.cmov.bomberman.controllers.DirectionButtonListener;
+import pt.utl.ist.cmov.bomberman.game.Game;
+import pt.utl.ist.cmov.bomberman.game.GameLocal;
 import pt.utl.ist.cmov.bomberman.game.Level;
 import pt.utl.ist.cmov.bomberman.game.LevelManager;
 import pt.utl.ist.cmov.bomberman.util.Direction;
@@ -20,6 +22,7 @@ public class GameActivity extends FullScreenActivity {
 	private static Context context;
 
 	private MainGamePanel gamePanel;
+	private Game game;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,17 +40,19 @@ public class GameActivity extends FullScreenActivity {
 		this.gamePanel = (MainGamePanel) findViewById(R.id.game_panel);
 		this.gamePanel.setMap(level.getMap());
 
+		this.game = new GameLocal(level, gamePanel);
+
 		this.findViewById(R.id.button_up).setOnTouchListener(
-				new DirectionButtonListener(Direction.UP));
+				new DirectionButtonListener(Direction.UP, game));
 
 		this.findViewById(R.id.button_down).setOnTouchListener(
-				new DirectionButtonListener(Direction.DOWN));
+				new DirectionButtonListener(Direction.DOWN, game));
 
 		this.findViewById(R.id.button_left).setOnTouchListener(
-				new DirectionButtonListener(Direction.LEFT));
+				new DirectionButtonListener(Direction.LEFT, game));
 
 		this.findViewById(R.id.button_right).setOnTouchListener(
-				new DirectionButtonListener(Direction.RIGHT));
+				new DirectionButtonListener(Direction.RIGHT, game));
 	}
 
 	public void bombClick(View view) {

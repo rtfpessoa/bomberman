@@ -13,6 +13,7 @@ import pt.utl.ist.cmov.bomberman.game.models.ObstacleModel;
 import pt.utl.ist.cmov.bomberman.game.models.RobotModel;
 import pt.utl.ist.cmov.bomberman.game.models.WallModel;
 import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
+import pt.utl.ist.cmov.bomberman.util.Position;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -51,26 +52,28 @@ public class MainGamePanel extends SurfaceView implements
 		this.map = map;
 	}
 
-	public void putEmpty(int x, int y) {
-		this.modelsMap.get(y).set(x, new EmptyModel());
+	public void putEmpty(Position pos) {
+		this.modelsMap.get(pos.y).set(pos.x, new EmptyModel());
 	}
 
-	public void putBomb(int x, int y) {
-		this.modelsMap.get(y).set(
-				x,
+	public void putBomb(Position pos) {
+		this.modelsMap.get(pos.y).set(
+				pos.x,
 				new BombModel(this.context, MapMeasurements.POSITION_HEIGHT,
 						MapMeasurements.POSITION_WIDTH,
 						MapMeasurements.SIDE_PADDING
-								+ MapMeasurements.POSITION_WIDTH * x,
+								+ MapMeasurements.POSITION_WIDTH * pos.x,
 						MapMeasurements.UP_PADDING
-								+ MapMeasurements.POSITION_HEIGHT * y));
+								+ MapMeasurements.POSITION_HEIGHT * pos.y));
 	}
 
-	public void move(int origX, int origY, int destX, int destY) {
-		Model model = this.modelsMap.get(destY).get(destX);
-		this.modelsMap.get(destY).set(destX,
-				this.modelsMap.get(origY).get(origX));
-		this.modelsMap.get(origY).set(origX, model);
+	public void move(Position orig, Position dest) {
+		Model modelDest = this.modelsMap.get(dest.y).get(dest.x);
+		Model modelOrig = this.modelsMap.get(orig.y).get(orig.x);
+		modelDest.setPos(orig);
+		modelOrig.setPos(dest);
+		this.modelsMap.get(dest.y).set(dest.x, modelOrig);
+		this.modelsMap.get(orig.y).set(orig.x, modelDest);
 	}
 
 	private void parseMap(int viewWidth, int viewHeight) {

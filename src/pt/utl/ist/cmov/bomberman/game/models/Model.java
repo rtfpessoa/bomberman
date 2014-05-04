@@ -1,5 +1,6 @@
 package pt.utl.ist.cmov.bomberman.game.models;
 
+import pt.utl.ist.cmov.bomberman.util.Position;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
@@ -7,8 +8,7 @@ import android.view.MotionEvent;
 public abstract class Model {
 
 	protected Bitmap bitmap; // the actual bitmap
-	protected int x; // the X coordinate
-	protected int y; // the Y coordinate
+	protected Position pos;
 	protected boolean touched;
 
 	public Model() {
@@ -23,20 +23,12 @@ public abstract class Model {
 		this.bitmap = bitmap;
 	}
 
-	public int getX() {
-		return x;
+	public Position getPos() {
+		return pos;
 	}
 
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public void setY(int y) {
-		this.y = y;
+	public void setPos(Position pos) {
+		this.pos = pos;
 	}
 
 	public boolean isTouched() {
@@ -60,10 +52,10 @@ public abstract class Model {
 	 *            - the event's Y coordinate
 	 */
 	public void handleActionDown(int eventX, int eventY) {
-		if (eventX >= (x - bitmap.getWidth() / 2)
-				&& (eventX <= (x + bitmap.getWidth() / 2))) {
-			if (eventY >= (y - bitmap.getHeight() / 2)
-					&& (y <= (y + bitmap.getHeight() / 2))) {
+		if (eventX >= (pos.x - bitmap.getWidth() / 2)
+				&& (eventX <= (pos.x + bitmap.getWidth() / 2))) {
+			if (eventY >= (pos.y - bitmap.getHeight() / 2)
+					&& (pos.y <= (pos.y + bitmap.getHeight() / 2))) {
 				// droid touched
 				setTouched(true);
 			} else {

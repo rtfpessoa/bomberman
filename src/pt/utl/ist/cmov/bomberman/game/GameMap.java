@@ -2,6 +2,8 @@ package pt.utl.ist.cmov.bomberman.game;
 
 import java.util.List;
 
+import pt.utl.ist.cmov.bomberman.util.Position;
+
 public class GameMap {
 
 	public static final Character WALL = 'W';
@@ -22,6 +24,10 @@ public class GameMap {
 
 	public Character getContent(Integer x, Integer y) {
 		return this.mapInfo.get(y).get(x);
+	}
+
+	public Character getContent(Position pos) {
+		return this.mapInfo.get(pos.y).get(pos.x);
 	}
 
 	public List<List<Character>> getMapInfo() {

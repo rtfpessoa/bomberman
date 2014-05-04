@@ -1,6 +1,7 @@
 package pt.utl.ist.cmov.bomberman.game.models;
 
 import pt.utl.ist.cmov.bomberman.util.BitmapFactory;
+import pt.utl.ist.cmov.bomberman.util.Position;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -12,14 +13,13 @@ public class ExplosionModel extends Model {
 		Bitmap b = BitmapFactory.getBitmapFromAsset(context,
 				"images/explosion.png");
 		this.bitmap = Bitmap.createScaledBitmap(b, width, height, true);
-		this.x = x;
-		this.y = y;
+		this.pos = new Position(x, y);
 	}
 
 	@Override
 	public void draw(Canvas canvas) {
-		canvas.drawBitmap(bitmap, x - (bitmap.getWidth() / 2),
-				y - (bitmap.getHeight() / 2), null);
+		canvas.drawBitmap(bitmap, pos.x - (bitmap.getWidth() / 2), pos.y
+				- (bitmap.getHeight() / 2), null);
 	}
 
 }
