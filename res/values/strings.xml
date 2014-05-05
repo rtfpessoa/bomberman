@@ -5,9 +5,14 @@
 
     <!-- Main Screen -->
     <string name="new_game">New Game</string>
+    <string name="multiplayer_game">Multiplayer</string>
 
     <!-- Level Choice Screen -->
     <string name="level_choice_title">Level Choice</string>
     <string name="choose_level">Choose a level</string>
+    
+    <!-- Peer Choice Screen -->
+    <string name="peer_choice_title">Peer Choice</string>
+    <string name="refresh">Refresh</string>
 
 </resources>

@@ -5,14 +5,14 @@
     android:background="#e67e22"
     android:orientation="vertical"
     android:padding="10sp"
-    tools:context="pt.utl.ist.cmov.bomberman.MainActivity" >
+    tools:context="pt.utl.ist.cmov.bomberman.activities.LevelChoiceActivity" >
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:keepScreenOn="true"
-        android:text="@string/app_name"
+        android:text="@string/level_choice_title"
         android:textColor="#ecf0f1"
         android:textSize="50sp"
         android:textStyle="bold" />
@@ -22,25 +22,18 @@
         android:layout_height="50sp" />
 
     <Button
-        android:id="@+id/button_new_game"
+        android:id="@+id/button_refresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:onClick="newGameAction"
-        android:text="@string/new_game"
+        android:onClick="refreshPeers"
+        android:text="@string/refresh"
         android:textSize="30sp" />
 
-    <Space
+    <ListView
+        android:id="@+id/list_levels"
         android:layout_width="match_parent"
-        android:layout_height="10sp" />
-
-    <Button
-        android:id="@+id/button_multiplayer_game"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:onClick="multiplayerAction"
-        android:text="@string/multiplayer_game"
-        android:textSize="30sp" />
+        android:layout_height="wrap_content" >
+    </ListView>
 
 </LinearLayout>

@@ -10,8 +10,6 @@ import pt.utl.ist.cmov.bomberman.game.LevelManager;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
