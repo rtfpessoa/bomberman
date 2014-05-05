@@ -70,8 +70,14 @@ public class MainGamePanel extends SurfaceView implements
 	public void move(Position orig, Position dest) {
 		Model modelDest = this.modelsMap.get(dest.y).get(dest.x);
 		Model modelOrig = this.modelsMap.get(orig.y).get(orig.x);
-		modelDest.setPos(orig);
-		modelOrig.setPos(dest);
+		modelDest.setPos(new Position(MapMeasurements.SIDE_PADDING
+				+ MapMeasurements.POSITION_WIDTH * orig.x,
+				MapMeasurements.UP_PADDING + MapMeasurements.POSITION_HEIGHT
+						* orig.y));
+		modelOrig.setPos(new Position(MapMeasurements.SIDE_PADDING
+				+ MapMeasurements.POSITION_WIDTH * dest.x,
+				MapMeasurements.UP_PADDING + MapMeasurements.POSITION_HEIGHT
+						* dest.y));
 		this.modelsMap.get(dest.y).set(dest.x, modelOrig);
 		this.modelsMap.get(orig.y).set(orig.x, modelDest);
 	}
