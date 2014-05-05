@@ -2,8 +2,7 @@ package pt.utl.ist.cmov.bomberman.controllers;
 
 import pt.utl.ist.cmov.bomberman.game.Game;
 import pt.utl.ist.cmov.bomberman.util.Direction;
-import android.os.AsyncTask;
-import android.os.SystemClock;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,23 +22,16 @@ public class DirectionButtonListener implements View.OnTouchListener {
 		this.pressed = false;
 	}
 
-	private class MoveBombermanTask extends AsyncTask<Void, Void, Void> {
-
+	Handler mHandler = new Handler();
+	Runnable moveBomberman = new Runnable() {
 		@Override
-		protected Void doInBackground(Void... arg0) {
-			long time = -1;
-
-			while (pressed) {
-				if (time == -1
-						|| SystemClock.currentThreadTimeMillis() - time > 500) {
-					Log.d(TAG, "Being pressed");
-					game.moveBomberman(direction);
-				}
-				time = SystemClock.currentThreadTimeMillis();
+		public void run() {
+			game.moveBomberman(direction);
+			if (pressed) {
+				mHandler.postDelayed(moveBomberman, 500);
 			}
-			return null;
 		}
-	}
+	};
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
@@ -47,7 +39,7 @@ public class DirectionButtonListener implements View.OnTouchListener {
 			if (!pressed) {
 				Log.d(TAG, "Pressed " + this.direction);
 				this.pressed = true;
-				new MoveBombermanTask().execute();
+				moveBomberman.run();
 			}
 		} else if (event.getAction() == MotionEvent.ACTION_UP) {
 			Log.d(TAG, "UnPressed Down");
