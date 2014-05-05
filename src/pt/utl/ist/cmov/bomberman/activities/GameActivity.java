@@ -4,7 +4,7 @@ import pt.utl.ist.cmov.bomberman.R;
 import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
 import pt.utl.ist.cmov.bomberman.controllers.DirectionButtonListener;
 import pt.utl.ist.cmov.bomberman.game.Game;
-import pt.utl.ist.cmov.bomberman.game.GameLocal;
+import pt.utl.ist.cmov.bomberman.game.GameServer;
 import pt.utl.ist.cmov.bomberman.game.Level;
 import pt.utl.ist.cmov.bomberman.game.LevelManager;
 import pt.utl.ist.cmov.bomberman.util.Direction;
@@ -38,7 +38,7 @@ public class GameActivity extends FullScreenActivity {
 		this.gamePanel = (MainGamePanel) findViewById(R.id.game_panel);
 		this.gamePanel.setMap(level.getMap());
 
-		this.game = new GameLocal(level, gamePanel);
+		this.game = new GameServer(level, gamePanel);
 
 		this.findViewById(R.id.button_up).setOnTouchListener(
 				new DirectionButtonListener(Direction.UP, game));

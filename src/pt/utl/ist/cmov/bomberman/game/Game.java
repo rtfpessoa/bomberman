@@ -28,8 +28,27 @@ public abstract class Game {
 	}
 
 	protected boolean canMoveBomberman(Direction dir) {
-		// TODO falta implementar verificação de colisões
-		return true;
+		Position newPos = null;
+
+		switch (dir) {
+		case UP:
+			newPos = new Position(this.bombermanPos.x, this.bombermanPos.y - 1);
+			break;
+		case DOWN:
+			newPos = new Position(this.bombermanPos.x, this.bombermanPos.y + 1);
+			break;
+		case LEFT:
+			newPos = new Position(this.bombermanPos.x - 1, this.bombermanPos.y);
+			break;
+		case RIGHT:
+			newPos = new Position(this.bombermanPos.x + 1, this.bombermanPos.y);
+			break;
+		}
+
+		if (this.level.getMap().getContent(newPos) == GameMap.EMPTY)
+			return true;
+		else
+			return false;
 	}
 
 	public abstract void moveBomberman(Direction dir);

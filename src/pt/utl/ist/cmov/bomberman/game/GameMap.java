@@ -46,4 +46,15 @@ public class GameMap {
 		return width;
 	}
 
+	public void move(Position orig, Position dest) {
+		Character content = this.mapInfo.get(dest.y).get(dest.x);
+		this.mapInfo.get(dest.y).set(dest.x,
+				this.mapInfo.get(orig.y).get(orig.x));
+		this.mapInfo.get(orig.y).set(orig.x, content);
+	}
+
+	public void putEmpty(Position pos) {
+		this.mapInfo.get(pos.y).set(pos.x, EMPTY);
+	}
+
 }

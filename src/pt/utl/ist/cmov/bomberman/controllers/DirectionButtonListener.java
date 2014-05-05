@@ -26,9 +26,9 @@ public class DirectionButtonListener implements View.OnTouchListener {
 	Runnable moveBomberman = new Runnable() {
 		@Override
 		public void run() {
-			game.moveBomberman(direction);
 			if (pressed) {
-				mHandler.postDelayed(moveBomberman, 500);
+				game.moveBomberman(direction);
+				mHandler.postDelayed(moveBomberman, 300);
 			}
 		}
 	};
@@ -42,7 +42,7 @@ public class DirectionButtonListener implements View.OnTouchListener {
 				moveBomberman.run();
 			}
 		} else if (event.getAction() == MotionEvent.ACTION_UP) {
-			Log.d(TAG, "UnPressed Down");
+			Log.d(TAG, "UnPressed " + this.direction);
 			this.pressed = false;
 		}
 
