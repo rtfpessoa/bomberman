@@ -1,5 +1,7 @@
 package pt.utl.ist.cmov.bomberman.game;
 
+import android.os.Handler;
+import android.util.Log;
 import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import pt.utl.ist.cmov.bomberman.util.Position;
@@ -9,11 +11,17 @@ public abstract class Game {
 	protected Level level;
 	protected MainGamePanel gamePanel;
 	protected Position bombermanPos;
+	protected boolean bombToDraw;
+	protected Handler explosionTimeoutHandler;
+	protected Handler explosionDurationHandler;
 
 	public Game(Level level, MainGamePanel gamePanel) {
 		super();
 		this.level = level;
 		this.gamePanel = gamePanel;
+		this.bombToDraw = false;
+		this.explosionTimeoutHandler = new Handler();
+		this.explosionDurationHandler = new Handler();
 
 		mapSearch: for (Integer y = 0; y < this.level.getMap().getHeight(); y++) {
 			for (Integer x = 0; x < this.level.getMap().getWidth(); x++) {
@@ -23,6 +31,42 @@ public abstract class Game {
 				}
 			}
 
+		}
+
+	}
+
+	protected class BombExplosion implements Runnable {
+
+		private Position bombPos;
+
+		public BombExplosion(Position bombPos) {
+			super();
+			this.bombPos = bombPos;
+		}
+
+		@Override
+		public void run() {
+			Log.d("BombExplosion", "Explosion");
+			explode(this.bombPos);
+			explosionDurationHandler.postDelayed(new BombExplosionFinish(
+					this.bombPos), level.getExplosionDuration());
+		}
+
+	}
+
+	protected class BombExplosionFinish implements Runnable {
+
+		private Position bombPos;
+
+		public BombExplosionFinish(Position bombPos) {
+			super();
+			this.bombPos = bombPos;
+		}
+
+		@Override
+		public void run() {
+			Log.d("BombExplosionFinish", "Finishing explosion");
+			finishExplosion(bombPos);
 		}
 
 	}
@@ -52,5 +96,11 @@ public abstract class Game {
 	}
 
 	public abstract void moveBomberman(Direction dir);
+
+	public abstract void putBomb();
+
+	public abstract void explode(Position pos);
+
+	public abstract void finishExplosion(Position pos);
 
 }

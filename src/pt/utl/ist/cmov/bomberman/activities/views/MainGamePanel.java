@@ -55,6 +55,10 @@ public class MainGamePanel extends SurfaceView implements
 	public void putEmpty(Position pos) {
 		this.modelsMap.get(pos.y).set(pos.x, new EmptyModel());
 	}
+	
+	public void putExploding(Position pos) {
+		this.modelsMap.get(pos.y).set(pos.x, new EmptyModel());
+	}
 
 	public void putBomb(Position pos) {
 		this.modelsMap.get(pos.y).set(

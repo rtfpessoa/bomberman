@@ -2,11 +2,11 @@ package pt.utl.ist.cmov.bomberman.activities;
 
 import pt.utl.ist.cmov.bomberman.R;
 import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
-import pt.utl.ist.cmov.bomberman.controllers.DirectionButtonListener;
 import pt.utl.ist.cmov.bomberman.game.Game;
 import pt.utl.ist.cmov.bomberman.game.GameServer;
 import pt.utl.ist.cmov.bomberman.game.Level;
 import pt.utl.ist.cmov.bomberman.game.LevelManager;
+import pt.utl.ist.cmov.bomberman.listeners.DirectionButtonListener;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.content.Context;
 import android.os.Bundle;
@@ -54,6 +54,6 @@ public class GameActivity extends FullScreenActivity {
 	}
 
 	public void bombClick(View view) {
-		Toast.makeText(this, "CLICK BOMB", Toast.LENGTH_SHORT).show();
+		game.putBomb();
 	}
 }

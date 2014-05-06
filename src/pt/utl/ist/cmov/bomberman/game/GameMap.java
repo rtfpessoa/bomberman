@@ -9,7 +9,9 @@ public class GameMap {
 	public static final Character WALL = 'W';
 	public static final Character OBSTACLE = 'O';
 	public static final Character ROBOT = 'R';
+	public static final Character BOMB = 'B';
 	public static final Character EMPTY = '-';
+	public static final Character EXPLODING = 'E';
 
 	private List<List<Character>> mapInfo;
 	private Integer height;
@@ -46,6 +48,16 @@ public class GameMap {
 		return width;
 	}
 
+	public boolean hasBomberman(Position pos) {
+		int res = Character.getNumericValue(this.getContent(pos));
+		return res > 0;
+	}
+
+	public boolean hasBomberman(Integer x, Integer y) {
+		int res = Character.getNumericValue(this.getContent(x, y));
+		return res > 0;
+	}
+
 	public void move(Position orig, Position dest) {
 		Character content = this.mapInfo.get(dest.y).get(dest.x);
 		this.mapInfo.get(dest.y).set(dest.x,
@@ -55,6 +67,26 @@ public class GameMap {
 
 	public void putEmpty(Position pos) {
 		this.mapInfo.get(pos.y).set(pos.x, EMPTY);
+	}
+	
+	public void putEmpty(Integer x, Integer y) {
+		this.mapInfo.get(y).set(x, EMPTY);
+	}
+	
+	public void putExploding(Position pos) {
+		this.mapInfo.get(pos.y).set(pos.x, EXPLODING);
+	}
+	
+	public void putExploding(Integer x, Integer y) {
+		this.mapInfo.get(y).set(x, EXPLODING);
+	}
+
+	public void putBomb(Position pos) {
+		this.mapInfo.get(pos.y).set(pos.x, BOMB);
+	}
+	
+	public void putBomb(Integer x, Integer y) {
+		this.mapInfo.get(y).set(x, BOMB);
 	}
 
 }
