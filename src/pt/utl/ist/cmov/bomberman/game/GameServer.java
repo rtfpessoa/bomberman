@@ -80,66 +80,108 @@ public class GameServer extends Game {
 	}
 
 	@Override
-	public void explode(Position pos) {
-		boolean upWallFinded = false;
-		boolean downWallFinded = false;
-		boolean leftWallFinded = false;
-		boolean rightWallFinded = false;
+	public int[] explode(Position pos) {
+		boolean upSearchStop = false;
+		boolean downSearchStop = false;
+		boolean leftSearchStop = false;
+		boolean rightSearchStop = false;
+
+		int explosionRange = this.level.getExplosionRange();
+		// indexes: 0 = Up; 1 = Down; 2 = Left; 3 = Right
+		int[] efectiveRange = { explosionRange, explosionRange, explosionRange,
+				explosionRange };
 
 		this.putExploding(pos);
-		for (int i = 1; i <= this.level.getExplosionRange(); i++) {
-			if (!upWallFinded
-					&& this.level.getMap().getContent(pos.x, pos.y - i) != GameMap.WALL) {
+		for (int i = 1; i <= explosionRange; i++) {
+			if (!upSearchStop
+					&& this.level.getMap().getContent(pos.x, pos.y - i) != GameMap.WALL
+					&& this.level.getMap().getContent(pos.x, pos.y - i) != GameMap.EXPLODING
+					&& this.level.getMap().getContent(pos.x, pos.y - i) != GameMap.BOMB) {
+				if (this.level.getMap().getContent(pos.x, pos.y - i) != GameMap.EMPTY) {
+					upSearchStop = true;
+					efectiveRange[0] = i;
+				}
 				this.putExploding(new Position(pos.x, pos.y - i));
-			} else
-				upWallFinded = true;
+			} else if (!upSearchStop) {
+				upSearchStop = true;
+				efectiveRange[0] = i - 1;
+			}
 
-			if (!downWallFinded
-					&& this.level.getMap().getContent(pos.x, pos.y + i) != GameMap.WALL) {
-				this.putExploding(new Position(pos.x, pos.y - i));
-			} else
-				downWallFinded = true;
+			if (!downSearchStop
+					&& this.level.getMap().getContent(pos.x, pos.y + i) != GameMap.WALL
+					&& this.level.getMap().getContent(pos.x, pos.y + i) != GameMap.EXPLODING
+					&& this.level.getMap().getContent(pos.x, pos.y + i) != GameMap.BOMB) {
+				if (this.level.getMap().getContent(pos.x, pos.y + i) != GameMap.EMPTY) {
+					downSearchStop = true;
+					efectiveRange[1] = i;
+				}
+				this.putExploding(new Position(pos.x, pos.y + i));
+			} else if (!downSearchStop) {
+				downSearchStop = true;
+				efectiveRange[1] = i - 1;
+			}
 
-			if (!leftWallFinded
-					&& this.level.getMap().getContent(pos.x, pos.y) != GameMap.WALL) {
+			if (!leftSearchStop
+					&& this.level.getMap().getContent(pos.x - i, pos.y) != GameMap.WALL
+					&& this.level.getMap().getContent(pos.x - i, pos.y) != GameMap.EXPLODING
+					&& this.level.getMap().getContent(pos.x - i, pos.y) != GameMap.BOMB) {
+				if (this.level.getMap().getContent(pos.x - i, pos.y) != GameMap.EMPTY) {
+					leftSearchStop = true;
+					efectiveRange[2] = i;
+				}
+				this.putExploding(new Position(pos.x - i, pos.y));
+			} else if (!leftSearchStop) {
+				leftSearchStop = true;
+				efectiveRange[2] = i - 1;
+			}
+
+			if (!rightSearchStop
+					&& this.level.getMap().getContent(pos.x + i, pos.y) != GameMap.WALL
+					&& this.level.getMap().getContent(pos.x + i, pos.y) != GameMap.EXPLODING
+					&& this.level.getMap().getContent(pos.x + i, pos.y) != GameMap.BOMB) {
+				if (this.level.getMap().getContent(pos.x + i, pos.y) != GameMap.EMPTY) {
+					rightSearchStop = true;
+					efectiveRange[3] = i;
+				}
 				this.putExploding(new Position(pos.x + i, pos.y));
-			} else
-				leftWallFinded = true;
-
-			if (!rightWallFinded
-					&& this.level.getMap().getContent(pos.x, pos.y) != GameMap.WALL) {
-				this.putExploding(new Position(pos.x + i, pos.y));
-			} else
-				rightWallFinded = true;
+			} else if (!rightSearchStop) {
+				rightSearchStop = true;
+				efectiveRange[3] = i - 1;
+			}
 		}
+
+		return efectiveRange;
 	}
 
 	@Override
-	public void finishExplosion(Position pos) {
+	public void finishExplosion(Position pos, int[] efectiveRange) {
 		GameMap map = this.level.getMap();
 
 		this.gamePanel.putEmpty(pos);
 		map.putEmpty(pos);
-		for (int i = 1; i <= this.level.getExplosionRange(); i++) {
-			if (this.level.getMap().getContent(pos.x, pos.y - i) == GameMap.EXPLODING) {
-				this.gamePanel.putEmpty(new Position(pos.x, pos.y - i));
-				map.putEmpty(pos.x, pos.y - i);
-			}
 
-			if (this.level.getMap().getContent(pos.x, pos.y + i) == GameMap.EXPLODING) {
-				this.gamePanel.putEmpty(new Position(pos.x, pos.y + i));
-				map.putEmpty(pos.x, pos.y - i);
-			}
+		// Up
+		for (int i = 1; i <= efectiveRange[0]; i++) {
+			this.gamePanel.putEmpty(new Position(pos.x, pos.y - i));
+			map.putEmpty(pos.x, pos.y - i);
+		}
 
-			if (this.level.getMap().getContent(pos.x, pos.y - i) == GameMap.EXPLODING) {
-				this.gamePanel.putEmpty(new Position(pos.x - i, pos.y));
-				map.putEmpty(pos.x, pos.y - i);
-			}
+		// Down
+		for (int i = 1; i <= efectiveRange[1]; i++) {
+			this.gamePanel.putEmpty(new Position(pos.x, pos.y + i));
+			map.putEmpty(pos.x, pos.y + i);
+		}
 
-			if (this.level.getMap().getContent(pos.x, pos.y + i) == GameMap.EXPLODING) {
-				this.gamePanel.putEmpty(new Position(pos.x + i, pos.y));
-				map.putEmpty(pos.x, pos.y - i);
-			}
+		// Left
+		for (int i = 1; i <= efectiveRange[2]; i++) {
+			this.gamePanel.putEmpty(new Position(pos.x - i, pos.y));
+			map.putEmpty(pos.x - i, pos.y);
+		}
+
+		// Right
+		for (int i = 1; i <= efectiveRange[3]; i++) {
+			this.gamePanel.putEmpty(new Position(pos.x + i, pos.y));
+			map.putEmpty(pos.x + i, pos.y);
 		}
 	}
 

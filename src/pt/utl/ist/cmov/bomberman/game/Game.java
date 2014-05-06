@@ -47,9 +47,9 @@ public abstract class Game {
 		@Override
 		public void run() {
 			Log.d("BombExplosion", "Explosion");
-			explode(this.bombPos);
+			int[] efectiveRange = explode(this.bombPos);
 			explosionDurationHandler.postDelayed(new BombExplosionFinish(
-					this.bombPos), level.getExplosionDuration());
+					this.bombPos, efectiveRange), level.getExplosionDuration());
 		}
 
 	}
@@ -57,16 +57,18 @@ public abstract class Game {
 	protected class BombExplosionFinish implements Runnable {
 
 		private Position bombPos;
+		private int[] efectiveRange;
 
-		public BombExplosionFinish(Position bombPos) {
+		public BombExplosionFinish(Position bombPos, int[] efectiveRange) {
 			super();
 			this.bombPos = bombPos;
+			this.efectiveRange = efectiveRange;
 		}
 
 		@Override
 		public void run() {
 			Log.d("BombExplosionFinish", "Finishing explosion");
-			finishExplosion(bombPos);
+			finishExplosion(bombPos, this.efectiveRange);
 		}
 
 	}
@@ -89,7 +91,8 @@ public abstract class Game {
 			break;
 		}
 
-		if (this.level.getMap().getContent(newPos) == GameMap.EMPTY)
+		if (this.level.getMap().getContent(newPos) == GameMap.EMPTY
+				|| this.level.getMap().getContent(newPos) == GameMap.EXPLODING)
 			return true;
 		else
 			return false;
@@ -99,8 +102,8 @@ public abstract class Game {
 
 	public abstract void putBomb();
 
-	public abstract void explode(Position pos);
+	public abstract int[] explode(Position pos);
 
-	public abstract void finishExplosion(Position pos);
+	public abstract void finishExplosion(Position pos, int[] efectiveRange);
 
 }
