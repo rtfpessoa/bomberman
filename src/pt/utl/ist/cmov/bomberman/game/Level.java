@@ -1,5 +1,9 @@
 package pt.utl.ist.cmov.bomberman.game;
 
+import java.util.Map;
+
+import pt.utl.ist.cmov.bomberman.util.Position;
+
 public class Level {
 
 	private Integer gameDuration;
@@ -9,12 +13,14 @@ public class Level {
 	private Integer robotSpeed;
 	private Integer pointsRobot;
 	private Integer pointsOpponent;
+	private Map<Integer, Position> bombermansInitialPos;
+	private Integer maxBombermans;
 	private GameMap map;
 
 	public Level(Integer gameDuration, Integer explosionTimeout,
 			Integer explosionDuration, Integer explosionRange,
 			Integer robotSpeed, Integer pointsRobot, Integer pointsOpponent,
-			GameMap map) {
+			Map<Integer, Position> bombermansInitialPos, GameMap map) {
 		super();
 		this.gameDuration = gameDuration;
 		this.explosionTimeout = explosionTimeout;
@@ -23,6 +29,8 @@ public class Level {
 		this.robotSpeed = robotSpeed;
 		this.pointsRobot = pointsRobot;
 		this.pointsOpponent = pointsOpponent;
+		this.bombermansInitialPos = bombermansInitialPos;
+		this.maxBombermans = this.bombermansInitialPos.size();
 		this.map = map;
 	}
 
@@ -80,6 +88,14 @@ public class Level {
 
 	public void setPointsOpponent(Integer pointsOpponent) {
 		this.pointsOpponent = pointsOpponent;
+	}
+
+	public Position getBombermanInitialPos(Integer id) {
+		return this.bombermansInitialPos.get(id);
+	}
+
+	public Integer getMaxBombermans() {
+		return maxBombermans;
 	}
 
 	public GameMap getMap() {

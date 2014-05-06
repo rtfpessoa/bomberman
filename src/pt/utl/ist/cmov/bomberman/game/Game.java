@@ -15,23 +15,15 @@ public abstract class Game {
 	protected Handler explosionTimeoutHandler;
 	protected Handler explosionDurationHandler;
 
-	public Game(Level level, MainGamePanel gamePanel) {
+	public Game(Level level, MainGamePanel gamePanel, Integer bombermanId) {
 		super();
 		this.level = level;
 		this.gamePanel = gamePanel;
 		this.bombToDraw = false;
 		this.explosionTimeoutHandler = new Handler();
 		this.explosionDurationHandler = new Handler();
-
-		mapSearch: for (Integer y = 0; y < this.level.getMap().getHeight(); y++) {
-			for (Integer x = 0; x < this.level.getMap().getWidth(); x++) {
-				if (this.level.getMap().getContent(x, y) == '1') {
-					this.bombermanPos = new Position(x, y);
-					break mapSearch;
-				}
-			}
-
-		}
+		this.bombermanPos = this.level.getBombermanInitialPos(bombermanId);
+		this.gamePanel.addBomberman(this.bombermanPos, bombermanId);
 
 	}
 

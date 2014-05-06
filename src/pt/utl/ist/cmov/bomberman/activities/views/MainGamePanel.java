@@ -33,10 +33,16 @@ public class MainGamePanel extends SurfaceView implements
 
 	private List<List<Model>> modelsMap;
 	private Context context;
+	
+	private Position bombermanToAdd;
+	private Integer idBombermanToAdd;
 
 	public MainGamePanel(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.context = context;
+		this.modelsMap = new ArrayList<List<Model>>();
+		this.bombermanToAdd = null;
+		this.idBombermanToAdd = null;
 
 		// adding the callback (this) to the surface holder to intercept events
 		getHolder().addCallback(this);
@@ -52,10 +58,26 @@ public class MainGamePanel extends SurfaceView implements
 		this.map = map;
 	}
 
+	public void addBomberman(Position pos, Integer id) {
+		if(this.modelsMap.size() == 0) {
+			this.bombermanToAdd = pos;
+			this.idBombermanToAdd = id;
+			return;
+		}
+		this.modelsMap.get(pos.y).set(
+				pos.x,
+				new BombermanModel(context, MapMeasurements.POSITION_HEIGHT,
+						MapMeasurements.POSITION_WIDTH,
+						MapMeasurements.SIDE_PADDING
+								+ MapMeasurements.POSITION_WIDTH * pos.x,
+						MapMeasurements.UP_PADDING
+								+ MapMeasurements.POSITION_HEIGHT * pos.y, id));
+	}
+
 	public void putEmpty(Position pos) {
 		this.modelsMap.get(pos.y).set(pos.x, new EmptyModel());
 	}
-	
+
 	public void putExploding(Position pos) {
 		this.modelsMap.get(pos.y).set(pos.x, new EmptyModel());
 	}
@@ -94,8 +116,6 @@ public class MainGamePanel extends SurfaceView implements
 		MapMeasurements.updateMapMeasurements(viewWidth, viewHeight, mapWidth,
 				mapHeight);
 
-		this.modelsMap = new ArrayList<List<Model>>();
-
 		for (Integer y = 0; y < mapHeight; y++) {
 			this.modelsMap.add(new ArrayList<Model>());
 
@@ -127,19 +147,18 @@ public class MainGamePanel extends SurfaceView implements
 									+ MapMeasurements.POSITION_WIDTH * x,
 							MapMeasurements.UP_PADDING
 									+ MapMeasurements.POSITION_HEIGHT * y));
-				} else if (content == GameMap.EMPTY) {
-					line.add(new EmptyModel());
 				} else {
-					line.add(new BombermanModel(context,
-							MapMeasurements.POSITION_HEIGHT,
-							MapMeasurements.POSITION_WIDTH,
-							MapMeasurements.SIDE_PADDING
-									+ MapMeasurements.POSITION_WIDTH * x,
-							MapMeasurements.UP_PADDING
-									+ MapMeasurements.POSITION_HEIGHT * y,
-							Character.getNumericValue(content)));
+					line.add(new EmptyModel());
 				}
 			}
+		}
+		
+		if (this.bombermanToAdd != null) {
+			Position pos = this.bombermanToAdd;
+			Integer id = this.idBombermanToAdd;
+			this.bombermanToAdd = null;
+			this.idBombermanToAdd = null;
+			this.addBomberman(pos, id);
 		}
 	}
 

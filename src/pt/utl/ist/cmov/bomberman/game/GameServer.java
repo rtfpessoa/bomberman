@@ -8,7 +8,7 @@ import pt.utl.ist.cmov.bomberman.util.Position;
 public class GameServer extends Game {
 
 	public GameServer(Level level, MainGamePanel gamePanel) {
-		super(level, gamePanel);
+		super(level, gamePanel, 1);
 	}
 
 	private void bombermanKilled(Integer bombermanId) {
