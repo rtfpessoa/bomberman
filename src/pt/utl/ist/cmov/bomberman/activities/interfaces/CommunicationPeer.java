@@ -1,12 +1,14 @@
 package pt.utl.ist.cmov.bomberman.activities.interfaces;
 
+import java.util.List;
+
 import pt.utl.ist.cmov.bomberman.handlers.CommunicationManager;
 import android.os.Handler;
 
 public interface CommunicationPeer {
-	public void setCommunicationManager(CommunicationManager cManager);
+	public void addCommunicationManager(CommunicationManager cManager);
 
-	public CommunicationManager getCommunicationManager();
+	public List<CommunicationManager> getCommunicationManagers();
 
 	public Handler getHandler();
 }

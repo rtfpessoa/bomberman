@@ -2,6 +2,7 @@ package pt.utl.ist.cmov.bomberman.activities;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import pt.utl.ist.cmov.bomberman.R;
@@ -42,7 +43,7 @@ public class GameDiscoveryActivity extends FullScreenActivity implements
 	private Channel channel;
 	private GameDiscoveryController discoveryController = null;
 
-	private CommunicationManager commManager;
+	private List<CommunicationManager> commManagers = new ArrayList<CommunicationManager>();
 
 	private Handler handler = new Handler(this);
 
@@ -77,14 +78,17 @@ public class GameDiscoveryActivity extends FullScreenActivity implements
 	}
 
 	public void refreshGames(View view) {
-		if (commManager != null) {
-			Toast.makeText(getApplicationContext(),
-					"Message successfuly sent!", Toast.LENGTH_SHORT).show();
-			commManager.write("Hello world!");
-		} else {
+		if (commManagers.isEmpty()) {
 			discoveryController.discoverPeers();
 			Toast.makeText(getApplicationContext(), "Discovering peers...",
 					Toast.LENGTH_SHORT).show();
+		} else {
+			Toast.makeText(getApplicationContext(),
+					"Message successfuly sent!", Toast.LENGTH_SHORT).show();
+			for (Iterator<CommunicationManager> commManager = commManagers
+					.iterator(); commManager.hasNext();) {
+				commManager.next().write("Hello world!");
+			}
 		}
 	}
 
@@ -187,12 +191,12 @@ public class GameDiscoveryActivity extends FullScreenActivity implements
 	}
 
 	@Override
-	public void setCommunicationManager(CommunicationManager cManager) {
-		this.commManager = cManager;
+	public void addCommunicationManager(CommunicationManager cManager) {
+		this.commManagers.add(cManager);
 	}
 
 	@Override
-	public CommunicationManager getCommunicationManager() {
-		return commManager;
+	public List<CommunicationManager> getCommunicationManagers() {
+		return commManagers;
 	}
 }

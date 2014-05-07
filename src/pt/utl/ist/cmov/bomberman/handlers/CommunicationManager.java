@@ -33,7 +33,7 @@ public class CommunicationManager implements Runnable {
 			iStream = socket.getInputStream();
 			oStream = socket.getOutputStream();
 
-			cPeer.setCommunicationManager(this);
+			cPeer.addCommunicationManager(this);
 
 			while (true) {
 				try {
