@@ -11,7 +11,6 @@ import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 public class GameActivity extends FullScreenActivity {
 
@@ -55,5 +54,17 @@ public class GameActivity extends FullScreenActivity {
 
 	public void bombClick(View view) {
 		game.putBomb();
+	}
+
+	@Override
+	public void onPause() {
+		gamePanel.destroy();
+		super.onPause();
+	}
+
+	@Override
+	public void onDestroy() {
+		gamePanel.destroy();
+		super.onDestroy();
 	}
 }

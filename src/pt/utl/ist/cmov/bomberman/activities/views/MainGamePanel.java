@@ -33,7 +33,7 @@ public class MainGamePanel extends SurfaceView implements
 
 	private List<List<Model>> modelsMap;
 	private Context context;
-	
+
 	private Position bombermanToAdd;
 	private Integer idBombermanToAdd;
 
@@ -47,9 +47,6 @@ public class MainGamePanel extends SurfaceView implements
 		// adding the callback (this) to the surface holder to intercept events
 		getHolder().addCallback(this);
 
-		// create the game loop thread
-		thread = new MainLoopThread(getHolder(), this);
-
 		// make the GamePanel focusable so it can handle events
 		setFocusable(true);
 	}
@@ -59,7 +56,7 @@ public class MainGamePanel extends SurfaceView implements
 	}
 
 	public void addBomberman(Position pos, Integer id) {
-		if(this.modelsMap.size() == 0) {
+		if (this.modelsMap.size() == 0) {
 			this.bombermanToAdd = pos;
 			this.idBombermanToAdd = id;
 			return;
@@ -152,7 +149,7 @@ public class MainGamePanel extends SurfaceView implements
 				}
 			}
 		}
-		
+
 		if (this.bombermanToAdd != null) {
 			Position pos = this.bombermanToAdd;
 			Integer id = this.idBombermanToAdd;
@@ -169,9 +166,14 @@ public class MainGamePanel extends SurfaceView implements
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		// at this point the surface is created and
-		// we can safely start the game loop
-		this.parseMap(this.getWidth(), this.getHeight());
+		boolean isNew = thread == null;
+
+		thread = new MainLoopThread(getHolder(), this);
+
+		if (isNew) {
+			this.parseMap(this.getWidth(), this.getHeight());
+		}
+
 		thread.setRunning(true);
 		thread.start();
 	}
@@ -179,18 +181,24 @@ public class MainGamePanel extends SurfaceView implements
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		Log.d(TAG, "Surface is being destroyed");
-		// tell the thread to shut down and wait for it to finish
-		// this is a clean shutdown
-		boolean retry = true;
-		while (retry) {
-			try {
-				thread.join();
-				retry = false;
-			} catch (InterruptedException e) {
-				// try again shutting down the thread
+		destroy();
+		Log.d(TAG, "Thread was shut down cleanly");
+	}
+
+	public void destroy() {
+		if (thread != null) {
+			thread.setRunning(false);
+
+			boolean retry = true;
+			while (retry) {
+				try {
+					thread.join();
+					retry = false;
+				} catch (InterruptedException e) {
+					// try again shutting down the thread
+				}
 			}
 		}
-		Log.d(TAG, "Thread was shut down cleanly");
 	}
 
 	@Override
