@@ -1,6 +1,7 @@
 package pt.utl.ist.cmov.bomberman.controllers;
 
-import pt.utl.ist.cmov.bomberman.util.AndroidConfigHelper;
+import java.lang.reflect.Method;
+
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -38,16 +39,17 @@ public class GameDiscoveryController extends BroadcastReceiver {
 		String action = intent.getAction();
 
 		if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
-			int wifiState = intent
-					.getIntExtra(WifiManager.EXTRA_WIFI_STATE, -1);
-			if (wifiState == WifiManager.WIFI_STATE_DISABLED) {
-				AndroidConfigHelper.enableWifi(activity);
-			}
+			setupWifi();
 
 			int wifiDirectState = intent.getIntExtra(
 					WifiP2pManager.EXTRA_WIFI_STATE, -1);
 			if (wifiDirectState == WifiP2pManager.WIFI_P2P_STATE_DISABLED) {
-				AndroidConfigHelper.enableWifiDirect(mManager, mChannel);
+				try {
+					Method enableWifiDirect = mManager.getClass().getMethod(
+							"enableP2p", Channel.class);
+					enableWifiDirect.invoke(mManager, mChannel);
+				} catch (Exception ignore) {
+				}
 			}
 		} else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
 			if (mManager != null) {
@@ -66,6 +68,15 @@ public class GameDiscoveryController extends BroadcastReceiver {
 				mManager.requestConnectionInfo(mChannel,
 						(ConnectionInfoListener) activity);
 			}
+		}
+	}
+
+	public void setupWifi() {
+		WifiManager wifi = (WifiManager) activity
+				.getSystemService(Context.WIFI_SERVICE);
+
+		if (!wifi.isWifiEnabled()) {
+			wifi.setWifiEnabled(true);
 		}
 	}
 

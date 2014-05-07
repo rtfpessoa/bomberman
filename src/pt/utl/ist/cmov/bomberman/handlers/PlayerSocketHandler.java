@@ -5,19 +5,20 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
+import pt.utl.ist.cmov.bomberman.activities.interfaces.CommunicationPeer;
 import pt.utl.ist.cmov.bomberman.util.Constants;
-import android.os.Handler;
 import android.util.Log;
 
 public class PlayerSocketHandler extends Thread {
 
 	private static final String TAG = "ClientSocketHandler";
-	private Handler handler;
+	private CommunicationPeer cPeer;
 	private CommunicationManager chat;
 	private InetAddress mAddress;
 
-	public PlayerSocketHandler(Handler handler, InetAddress groupOwnerAddress) {
-		this.handler = handler;
+	public PlayerSocketHandler(CommunicationPeer cPeer,
+			InetAddress groupOwnerAddress) {
+		this.cPeer = cPeer;
 		this.mAddress = groupOwnerAddress;
 	}
 
@@ -29,7 +30,7 @@ public class PlayerSocketHandler extends Thread {
 			socket.connect(new InetSocketAddress(mAddress.getHostAddress(),
 					Constants.SERVER_PORT), 5000);
 			Log.d(TAG, "Launching the I/O handler");
-			chat = new CommunicationManager(socket, handler);
+			chat = new CommunicationManager(socket, cPeer);
 			new Thread(chat).start();
 		} catch (IOException e) {
 			e.printStackTrace();

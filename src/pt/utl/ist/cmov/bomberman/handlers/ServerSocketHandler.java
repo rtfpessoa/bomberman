@@ -6,20 +6,20 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import android.os.Handler;
+import pt.utl.ist.cmov.bomberman.activities.interfaces.CommunicationPeer;
 import android.util.Log;
 
 public class ServerSocketHandler extends Thread {
 
 	ServerSocket socket = null;
 	private final int THREAD_COUNT = 10;
-	private Handler handler;
+	private CommunicationPeer cPeer;
 	private static final String TAG = "GroupOwnerSocketHandler";
 
-	public ServerSocketHandler(Handler handler) throws IOException {
+	public ServerSocketHandler(CommunicationPeer cPeer) throws IOException {
 		try {
 			socket = new ServerSocket(4545);
-			this.handler = handler;
+			this.cPeer = cPeer;
 			Log.d("GroupOwnerSocketHandler", "Socket Started");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -39,7 +39,7 @@ public class ServerSocketHandler extends Thread {
 			try {
 				// A blocking operation. Initiate a ChatManager instance when
 				// there is a new connection
-				pool.execute(new CommunicationManager(socket.accept(), handler));
+				pool.execute(new CommunicationManager(socket.accept(), cPeer));
 				Log.d(TAG, "Launching the I/O handler");
 
 			} catch (IOException e) {

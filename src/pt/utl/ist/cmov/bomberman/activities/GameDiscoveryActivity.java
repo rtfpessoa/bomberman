@@ -6,12 +6,11 @@ import java.util.List;
 
 import pt.utl.ist.cmov.bomberman.R;
 import pt.utl.ist.cmov.bomberman.activities.adapters.GameAdapter;
-import pt.utl.ist.cmov.bomberman.activities.interfaces.MessageTarget;
+import pt.utl.ist.cmov.bomberman.activities.interfaces.CommunicationPeer;
 import pt.utl.ist.cmov.bomberman.controllers.GameDiscoveryController;
 import pt.utl.ist.cmov.bomberman.handlers.CommunicationManager;
 import pt.utl.ist.cmov.bomberman.handlers.PlayerSocketHandler;
 import pt.utl.ist.cmov.bomberman.handlers.ServerSocketHandler;
-import pt.utl.ist.cmov.bomberman.util.Constants;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -32,8 +31,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class GameDiscoveryActivity extends FullScreenActivity implements
-		Handler.Callback, PeerListListener, ConnectionInfoListener,
-		MessageTarget, AdapterView.OnItemClickListener {
+		Handler.Callback, CommunicationPeer, PeerListListener,
+		ConnectionInfoListener, AdapterView.OnItemClickListener {
 
 	public static final String PEER_MESSAGE = "pt.utl.ist.cmov.bomberman.activities.PEER";
 
@@ -51,10 +50,6 @@ public class GameDiscoveryActivity extends FullScreenActivity implements
 
 	public Handler getHandler() {
 		return handler;
-	}
-
-	public void setHandler(Handler handler) {
-		this.handler = handler;
 	}
 
 	@Override
@@ -76,38 +71,31 @@ public class GameDiscoveryActivity extends FullScreenActivity implements
 		discoveryController = new GameDiscoveryController(manager, channel,
 				this);
 
+		discoveryController.setupWifi();
+
 		discoveryController.discoverPeers();
 	}
 
 	public void refreshGames(View view) {
-		discoveryController.discoverPeers();
-
 		if (commManager != null) {
-			Toast.makeText(getApplicationContext(), "Sent!", Toast.LENGTH_SHORT)
-					.show();
-			commManager.write("isto e uma string");
+			Toast.makeText(getApplicationContext(),
+					"Message successfuly sent!", Toast.LENGTH_SHORT).show();
+			commManager.write("Hello world!");
 		} else {
-			Toast.makeText(getApplicationContext(), "Not Sent!",
+			discoveryController.discoverPeers();
+			Toast.makeText(getApplicationContext(), "Discovering peers...",
 					Toast.LENGTH_SHORT).show();
 		}
 	}
 
 	@Override
 	public boolean handleMessage(Message msg) {
-		switch (msg.what) {
-		case Constants.MESSAGE_READ:
-			String readMessage = (String) msg.obj;
-			// construct a string from the valid bytes in the buffer
-			Log.e("BOMBERMAN-SOCKET", readMessage);
-			Toast.makeText(getApplicationContext(), readMessage,
-					Toast.LENGTH_LONG).show();
-			break;
+		String readMessage = (String) msg.obj;
 
-		case Constants.MESSAGE_HANDLE:
-			Object obj = msg.obj;
-			commManager = (CommunicationManager) obj;
+		Log.e("BOMBERMAN-SOCKET", readMessage);
+		Toast.makeText(getApplicationContext(), readMessage, Toast.LENGTH_LONG)
+				.show();
 
-		}
 		return true;
 	}
 
@@ -152,8 +140,7 @@ public class GameDiscoveryActivity extends FullScreenActivity implements
 		if (p2pInfo.isGroupOwner) {
 			Log.d("BOMBERMAN", "Connected as group owner");
 			try {
-				handler = new ServerSocketHandler(
-						((MessageTarget) this).getHandler());
+				handler = new ServerSocketHandler((CommunicationPeer) this);
 				handler.start();
 			} catch (IOException e) {
 				Log.d("BOMBERMAN",
@@ -162,8 +149,7 @@ public class GameDiscoveryActivity extends FullScreenActivity implements
 			}
 		} else {
 			Log.d("BOMBERMAN", "Connected as peer");
-			handler = new PlayerSocketHandler(
-					((MessageTarget) this).getHandler(),
+			handler = new PlayerSocketHandler((CommunicationPeer) this,
 					p2pInfo.groupOwnerAddress);
 			handler.start();
 		}
@@ -198,5 +184,15 @@ public class GameDiscoveryActivity extends FullScreenActivity implements
 		// Intent intent = new Intent(this, PlayerActivity.class);
 		// intent.putExtra(PEER_MESSAGE, device);
 		// startActivity(intent);
+	}
+
+	@Override
+	public void setCommunicationManager(CommunicationManager cManager) {
+		this.commManager = cManager;
+	}
+
+	@Override
+	public CommunicationManager getCommunicationManager() {
+		return commManager;
 	}
 }

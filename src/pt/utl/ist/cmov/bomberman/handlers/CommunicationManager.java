@@ -7,18 +7,18 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import pt.utl.ist.cmov.bomberman.activities.interfaces.CommunicationPeer;
 import pt.utl.ist.cmov.bomberman.util.Constants;
-import android.os.Handler;
 import android.util.Log;
 
 public class CommunicationManager implements Runnable {
 
 	private Socket socket = null;
-	private Handler handler;
+	private CommunicationPeer cPeer;
 
-	public CommunicationManager(Socket socket, Handler handler) {
+	public CommunicationManager(Socket socket, CommunicationPeer cPeer) {
 		this.socket = socket;
-		this.handler = handler;
+		this.cPeer = cPeer;
 	}
 
 	private InputStream iStream;
@@ -32,15 +32,16 @@ public class CommunicationManager implements Runnable {
 			socket.setTcpNoDelay(true);
 			iStream = socket.getInputStream();
 			oStream = socket.getOutputStream();
-			handler.obtainMessage(Constants.MESSAGE_HANDLE, this)
-					.sendToTarget();
+
+			cPeer.setCommunicationManager(this);
 
 			while (true) {
 				try {
 					ObjectInputStream in = new ObjectInputStream(iStream);
 					Object obj = in.readObject();
 
-					handler.obtainMessage(Constants.MESSAGE_READ, -1, -1, obj)
+					cPeer.getHandler()
+							.obtainMessage(Constants.MESSAGE_READ, -1, -1, obj)
 							.sendToTarget();
 				} catch (ClassNotFoundException e) {
 					Log.e(TAG, "disconnected", e);
