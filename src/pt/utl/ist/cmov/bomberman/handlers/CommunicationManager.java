@@ -1,12 +1,11 @@
 package pt.utl.ist.cmov.bomberman.handlers;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.nio.ByteBuffer;
 
 import pt.utl.ist.cmov.bomberman.util.Constants;
 import android.os.Handler;
@@ -38,12 +37,12 @@ public class CommunicationManager implements Runnable {
 
 			while (true) {
 				try {
-					DataInputStream in = new DataInputStream(iStream);
-					String str = in.readUTF();
+					ObjectInputStream in = new ObjectInputStream(iStream);
+					Object obj = in.readObject();
 
-					handler.obtainMessage(Constants.MESSAGE_READ, -1, -1, str)
+					handler.obtainMessage(Constants.MESSAGE_READ, -1, -1, obj)
 							.sendToTarget();
-				} catch (IOException e) {
+				} catch (ClassNotFoundException e) {
 					Log.e(TAG, "disconnected", e);
 				}
 			}
@@ -58,13 +57,12 @@ public class CommunicationManager implements Runnable {
 		}
 	}
 
-	public void write(String str) {
+	public void write(Object obj) {
 		try {
-			DataOutputStream out = new DataOutputStream(oStream);
-			out.writeUTF(str);
+			ObjectOutputStream out = new ObjectOutputStream(oStream);
+			out.writeObject(obj);
 		} catch (IOException e) {
 			Log.e(TAG, "Exception during write", e);
 		}
 	}
-
 }

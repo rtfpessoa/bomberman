@@ -18,6 +18,7 @@ import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
@@ -108,6 +109,26 @@ public class GameDiscoveryActivity extends FullScreenActivity implements
 
 		}
 		return true;
+	}
+
+	@Override
+	public void onStop() {
+		if (manager != null && channel != null) {
+			manager.removeGroup(channel, new ActionListener() {
+
+				@Override
+				public void onFailure(int reasonCode) {
+					Log.d("BOMBERMAN", "Disconnect failed. Reason :"
+							+ reasonCode);
+				}
+
+				@Override
+				public void onSuccess() {
+				}
+
+			});
+		}
+		super.onStop();
 	}
 
 	@Override

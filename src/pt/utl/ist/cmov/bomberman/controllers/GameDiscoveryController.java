@@ -1,11 +1,13 @@
 package pt.utl.ist.cmov.bomberman.controllers;
 
+import pt.utl.ist.cmov.bomberman.util.AndroidConfigHelper;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
+import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -36,11 +38,16 @@ public class GameDiscoveryController extends BroadcastReceiver {
 		String action = intent.getAction();
 
 		if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
-			int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
-			if (state == WifiP2pManager.WIFI_P2P_STATE_DISABLED) {
-				WifiManager wifi = (WifiManager) activity
-						.getSystemService(Context.WIFI_SERVICE);
-				wifi.setWifiEnabled(true);
+			int wifiState = intent
+					.getIntExtra(WifiManager.EXTRA_WIFI_STATE, -1);
+			if (wifiState == WifiManager.WIFI_STATE_DISABLED) {
+				AndroidConfigHelper.enableWifi(activity);
+			}
+
+			int wifiDirectState = intent.getIntExtra(
+					WifiP2pManager.EXTRA_WIFI_STATE, -1);
+			if (wifiDirectState == WifiP2pManager.WIFI_P2P_STATE_DISABLED) {
+				AndroidConfigHelper.enableWifiDirect(mManager, mChannel);
 			}
 		} else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
 			if (mManager != null) {
@@ -63,7 +70,7 @@ public class GameDiscoveryController extends BroadcastReceiver {
 	}
 
 	public void discoverPeers() {
-		mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
+		mManager.discoverPeers(mChannel, new ActionListener() {
 			@Override
 			public void onSuccess() {
 				Log.d("BOMBERMAN", "Discovered peers successfully!");
@@ -79,13 +86,16 @@ public class GameDiscoveryController extends BroadcastReceiver {
 	public void connect(WifiP2pDevice device) {
 		WifiP2pConfig config = new WifiP2pConfig();
 		config.deviceAddress = device.deviceAddress;
+		config.wps.setup = WpsInfo.PBC;
 		mManager.connect(mChannel, config, new ActionListener() {
 			@Override
 			public void onSuccess() {
+				Log.d("BOMBERMAN", "Connected successfully!");
 			}
 
 			@Override
 			public void onFailure(int reason) {
+				Log.d("BOMBERMAN", "Failed to connect!");
 			}
 		});
 	}
