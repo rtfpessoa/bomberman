@@ -1,7 +1,6 @@
 package pt.utl.ist.cmov.bomberman.controllers;
 
-import pt.utl.ist.cmov.bomberman.activities.PlayerActivity;
-import pt.utl.ist.cmov.bomberman.listeners.ConnectionListener;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,17 +11,20 @@ import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
+import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
+import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
+import android.util.Log;
 
-public class CommunicationController extends BroadcastReceiver {
+public class GameDiscoveryController extends BroadcastReceiver {
 
 	private WifiP2pManager mManager;
 
 	private Channel mChannel;
 
-	private PlayerActivity activity;
+	private Activity activity;
 
-	public CommunicationController(WifiP2pManager manager, Channel channel,
-			PlayerActivity activity) {
+	public GameDiscoveryController(WifiP2pManager manager, Channel channel,
+			Activity activity) {
 		super();
 		this.mManager = manager;
 		this.mChannel = channel;
@@ -40,6 +42,10 @@ public class CommunicationController extends BroadcastReceiver {
 						.getSystemService(Context.WIFI_SERVICE);
 				wifi.setWifiEnabled(true);
 			}
+		} else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
+			if (mManager != null) {
+				mManager.requestPeers(mChannel, (PeerListListener) activity);
+			}
 		} else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION
 				.equals(action)) {
 			if (mManager == null) {
@@ -51,9 +57,23 @@ public class CommunicationController extends BroadcastReceiver {
 
 			if (networkInfo.isConnected()) {
 				mManager.requestConnectionInfo(mChannel,
-						new ConnectionListener(this.activity));
+						(ConnectionInfoListener) activity);
 			}
 		}
+	}
+
+	public void discoverPeers() {
+		mManager.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
+			@Override
+			public void onSuccess() {
+				Log.d("BOMBERMAN", "Discovered peers successfully!");
+			}
+
+			@Override
+			public void onFailure(int reasonCode) {
+				Log.e("BOMBERMAN", "Failed to discovered peers!");
+			}
+		});
 	}
 
 	public void connect(WifiP2pDevice device) {

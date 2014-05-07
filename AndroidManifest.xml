@@ -46,7 +46,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="pt.utl.ist.cmov.bomberman.activities.PeerChoiceActivity"
+            android:name="pt.utl.ist.cmov.bomberman.activities.GameDiscoveryActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/peer_choice_title"
             android:screenOrientation="portrait"
@@ -59,18 +59,6 @@
         </activity>
         <activity
             android:name="pt.utl.ist.cmov.bomberman.activities.GameActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/app_name"
-            android:screenOrientation="landscape"
-            android:theme="@style/FullscreenTheme" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="pt.utl.ist.cmov.bomberman.activities.PlayerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
