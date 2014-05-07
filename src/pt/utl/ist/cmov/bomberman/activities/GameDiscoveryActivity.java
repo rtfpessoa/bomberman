@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pt.utl.ist.cmov.bomberman.R;
+import pt.utl.ist.cmov.bomberman.activities.adapters.GameAdapter;
 import pt.utl.ist.cmov.bomberman.activities.interfaces.MessageTarget;
 import pt.utl.ist.cmov.bomberman.controllers.GameDiscoveryController;
+import pt.utl.ist.cmov.bomberman.handlers.CommunicationManager;
 import pt.utl.ist.cmov.bomberman.handlers.PlayerSocketHandler;
 import pt.utl.ist.cmov.bomberman.handlers.ServerSocketHandler;
 import pt.utl.ist.cmov.bomberman.util.Constants;
@@ -25,8 +27,8 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class GameDiscoveryActivity extends FullScreenActivity implements
 		Handler.Callback, PeerListListener, ConnectionInfoListener,
@@ -39,6 +41,8 @@ public class GameDiscoveryActivity extends FullScreenActivity implements
 	private final IntentFilter intentFilter = new IntentFilter();
 	private Channel channel;
 	private GameDiscoveryController discoveryController = null;
+
+	private CommunicationManager commManager;
 
 	private Handler handler = new Handler(this);
 
@@ -76,6 +80,15 @@ public class GameDiscoveryActivity extends FullScreenActivity implements
 
 	public void refreshGames(View view) {
 		discoveryController.discoverPeers();
+
+		if (commManager != null) {
+			Toast.makeText(getApplicationContext(), "Sent!", Toast.LENGTH_SHORT)
+					.show();
+			commManager.write("isto e uma string".getBytes());
+		} else {
+			Toast.makeText(getApplicationContext(), "Not Sent!",
+					Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override
@@ -85,12 +98,13 @@ public class GameDiscoveryActivity extends FullScreenActivity implements
 			byte[] readBuf = (byte[]) msg.obj;
 			// construct a string from the valid bytes in the buffer
 			String readMessage = new String(readBuf, 0, msg.arg1);
-			Log.e("BOMBERMAN", readMessage);
+			Toast.makeText(getApplicationContext(), readMessage,
+					Toast.LENGTH_LONG).show();
 			break;
 
 		case Constants.MESSAGE_HANDLE:
 			Object obj = msg.obj;
-			/* SET THE MANAGER */
+			commManager = (CommunicationManager) obj;
 
 		}
 		return true;
@@ -144,8 +158,7 @@ public class GameDiscoveryActivity extends FullScreenActivity implements
 	}
 
 	public void loadPeers(List<WifiP2pDevice> peers) {
-		ArrayAdapter<WifiP2pDevice> adapter = new ArrayAdapter<WifiP2pDevice>(
-				this, R.layout.listview_line, peers);
+		GameAdapter adapter = new GameAdapter(this, peers);
 		ListView listView = (ListView) findViewById(R.id.list_levels);
 		listView.setAdapter(adapter);
 
