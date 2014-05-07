@@ -84,7 +84,7 @@ public class GameDiscoveryActivity extends FullScreenActivity implements
 		if (commManager != null) {
 			Toast.makeText(getApplicationContext(), "Sent!", Toast.LENGTH_SHORT)
 					.show();
-			commManager.write("isto e uma string".getBytes());
+			commManager.write("isto e uma string");
 		} else {
 			Toast.makeText(getApplicationContext(), "Not Sent!",
 					Toast.LENGTH_SHORT).show();
@@ -95,9 +95,9 @@ public class GameDiscoveryActivity extends FullScreenActivity implements
 	public boolean handleMessage(Message msg) {
 		switch (msg.what) {
 		case Constants.MESSAGE_READ:
-			byte[] readBuf = (byte[]) msg.obj;
+			String readMessage = (String) msg.obj;
 			// construct a string from the valid bytes in the buffer
-			String readMessage = new String(readBuf, 0, msg.arg1);
+			Log.e("BOMBERMAN-SOCKET", readMessage);
 			Toast.makeText(getApplicationContext(), readMessage,
 					Toast.LENGTH_LONG).show();
 			break;

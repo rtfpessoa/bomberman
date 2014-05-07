@@ -1,9 +1,12 @@
 package pt.utl.ist.cmov.bomberman.handlers;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 
 import pt.utl.ist.cmov.bomberman.util.Constants;
 import android.os.Handler;
@@ -27,25 +30,19 @@ public class CommunicationManager implements Runnable {
 	public void run() {
 		try {
 
+			socket.setTcpNoDelay(true);
 			iStream = socket.getInputStream();
 			oStream = socket.getOutputStream();
-			byte[] buffer = new byte[1024];
-			int bytes;
 			handler.obtainMessage(Constants.MESSAGE_HANDLE, this)
 					.sendToTarget();
 
 			while (true) {
 				try {
-					// Read from the InputStream
-					bytes = iStream.read(buffer);
-					if (bytes == -1) {
-						break;
-					}
+					DataInputStream in = new DataInputStream(iStream);
+					String str = in.readUTF();
 
-					// Send the obtained bytes to the UI Activity
-					Log.d(TAG, "Rec:" + String.valueOf(buffer));
-					handler.obtainMessage(Constants.MESSAGE_READ, bytes, -1,
-							buffer).sendToTarget();
+					handler.obtainMessage(Constants.MESSAGE_READ, -1, -1, str)
+							.sendToTarget();
 				} catch (IOException e) {
 					Log.e(TAG, "disconnected", e);
 				}
@@ -61,9 +58,10 @@ public class CommunicationManager implements Runnable {
 		}
 	}
 
-	public void write(byte[] buffer) {
+	public void write(String str) {
 		try {
-			oStream.write(buffer);
+			DataOutputStream out = new DataOutputStream(oStream);
+			out.writeUTF(str);
 		} catch (IOException e) {
 			Log.e(TAG, "Exception during write", e);
 		}
