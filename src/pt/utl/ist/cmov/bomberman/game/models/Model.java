@@ -1,18 +1,22 @@
 package pt.utl.ist.cmov.bomberman.game.models;
 
+import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
 import pt.utl.ist.cmov.bomberman.util.Position;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.view.MotionEvent;
 
 public abstract class Model {
 
 	protected Bitmap bitmap; // the actual bitmap
 	protected Position pos;
-	protected boolean touched;
 
-	public Model() {
+	public Model(int x, int y) {
 		super();
+
+		this.pos = new Position(MapMeasurements.SIDE_PADDING
+				+ MapMeasurements.POSITION_WIDTH * x,
+				MapMeasurements.UP_PADDING + MapMeasurements.POSITION_HEIGHT
+						* y);
 	}
 
 	public Bitmap getBitmap() {
@@ -28,43 +32,12 @@ public abstract class Model {
 	}
 
 	public void setPos(Position pos) {
-		this.pos = pos;
-	}
-
-	public boolean isTouched() {
-		return touched;
-	}
-
-	public void setTouched(boolean touched) {
-		this.touched = touched;
+		this.pos = new Position(MapMeasurements.SIDE_PADDING
+				+ MapMeasurements.POSITION_WIDTH * pos.x,
+				MapMeasurements.UP_PADDING + MapMeasurements.POSITION_HEIGHT
+						* pos.y);
 	}
 
 	public abstract void draw(Canvas canvas);
-
-	/**
-	 * Handles the {@link MotionEvent.ACTION_DOWN} event. If the event happens
-	 * on the bitmap surface then the touched state is set to <code>true</code>
-	 * otherwise to <code>false</code>
-	 * 
-	 * @param eventX
-	 *            - the event's X coordinate
-	 * @param eventY
-	 *            - the event's Y coordinate
-	 */
-	public void handleActionDown(int eventX, int eventY) {
-		if (eventX >= (pos.x - bitmap.getWidth() / 2)
-				&& (eventX <= (pos.x + bitmap.getWidth() / 2))) {
-			if (eventY >= (pos.y - bitmap.getHeight() / 2)
-					&& (pos.y <= (pos.y + bitmap.getHeight() / 2))) {
-				// droid touched
-				setTouched(true);
-			} else {
-				setTouched(false);
-			}
-		} else {
-			setTouched(false);
-		}
-
-	}
 
 }

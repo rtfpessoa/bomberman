@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.util.Log;
 import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
 import pt.utl.ist.cmov.bomberman.util.Direction;
+import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
 import pt.utl.ist.cmov.bomberman.util.Position;
 
 public abstract class Game {
@@ -14,17 +15,20 @@ public abstract class Game {
 	protected boolean bombToDraw;
 	protected Handler explosionTimeoutHandler;
 	protected Handler explosionDurationHandler;
+	protected Handler moveRobotsHandler;
+
 
 	public Game(Level level, MainGamePanel gamePanel, Integer bombermanId) {
 		super();
 		this.level = level;
 		this.gamePanel = gamePanel;
+		this.gamePanel.setGame(this);
 		this.bombToDraw = false;
 		this.explosionTimeoutHandler = new Handler();
 		this.explosionDurationHandler = new Handler();
 		this.bombermanPos = this.level.getBombermanInitialPos(bombermanId);
-		this.gamePanel.addBomberman(this.bombermanPos, bombermanId);
-
+		this.level.getMap().putBomberman(this.bombermanPos, bombermanId);
+		this.moveRobotsHandler = new Handler();
 	}
 
 	protected class BombExplosion implements Runnable {
@@ -65,23 +69,21 @@ public abstract class Game {
 
 	}
 
-	protected boolean canMoveBomberman(Direction dir) {
-		Position newPos = null;
+	protected class MoveRobots implements Runnable {
 
-		switch (dir) {
-		case UP:
-			newPos = new Position(this.bombermanPos.x, this.bombermanPos.y - 1);
-			break;
-		case DOWN:
-			newPos = new Position(this.bombermanPos.x, this.bombermanPos.y + 1);
-			break;
-		case LEFT:
-			newPos = new Position(this.bombermanPos.x - 1, this.bombermanPos.y);
-			break;
-		case RIGHT:
-			newPos = new Position(this.bombermanPos.x + 1, this.bombermanPos.y);
-			break;
+		public MoveRobots() {
+			super();
 		}
+
+		@Override
+		public void run() {
+			moveRobots();
+			moveRobotsHandler.postDelayed(this, 800);
+		}
+
+	}
+	protected boolean canMove(Direction dir, Position current) {
+		Position newPos = MapMeasurements.calculateNextPosition(dir, current);
 
 		if (this.level.getMap().getContent(newPos) == GameMap.EMPTY
 				|| this.level.getMap().getContent(newPos) == GameMap.EXPLODING)
@@ -90,7 +92,11 @@ public abstract class Game {
 			return false;
 	}
 
+	public abstract void init();
+	
 	public abstract void moveBomberman(Direction dir);
+	
+	public abstract void moveRobots();
 
 	public abstract void putBomb();
 

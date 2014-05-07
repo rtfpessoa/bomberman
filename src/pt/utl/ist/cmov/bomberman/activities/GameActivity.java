@@ -32,7 +32,7 @@ public class GameActivity extends FullScreenActivity {
 		String levelName = getIntent().getExtras().getString(
 				LevelChoiceActivity.LEVEL_MESSAGE);
 
-		Level level = LevelManager.loadLevel(context.getAssets(), levelName);
+		Level level = LevelManager.loadLevel(context, context.getAssets(), levelName);
 
 		this.gamePanel = (MainGamePanel) findViewById(R.id.game_panel);
 		this.gamePanel.setMap(level.getMap());

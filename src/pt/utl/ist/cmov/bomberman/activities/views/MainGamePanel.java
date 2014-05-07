@@ -1,19 +1,9 @@
 package pt.utl.ist.cmov.bomberman.activities.views;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import pt.utl.ist.cmov.bomberman.game.Game;
 import pt.utl.ist.cmov.bomberman.game.GameMap;
 import pt.utl.ist.cmov.bomberman.game.MainLoopThread;
-import pt.utl.ist.cmov.bomberman.game.models.BombModel;
-import pt.utl.ist.cmov.bomberman.game.models.BombermanModel;
-import pt.utl.ist.cmov.bomberman.game.models.EmptyModel;
-import pt.utl.ist.cmov.bomberman.game.models.Model;
-import pt.utl.ist.cmov.bomberman.game.models.ObstacleModel;
-import pt.utl.ist.cmov.bomberman.game.models.RobotModel;
-import pt.utl.ist.cmov.bomberman.game.models.WallModel;
 import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
-import pt.utl.ist.cmov.bomberman.util.Position;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -29,21 +19,12 @@ public class MainGamePanel extends SurfaceView implements
 
 	private MainLoopThread thread;
 
+	private Game game;
+
 	private GameMap map;
-
-	private List<List<Model>> modelsMap;
-	private Context context;
-
-	private Position bombermanToAdd;
-	private Integer idBombermanToAdd;
 
 	public MainGamePanel(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		this.context = context;
-		this.modelsMap = new ArrayList<List<Model>>();
-		this.bombermanToAdd = null;
-		this.idBombermanToAdd = null;
-
 		// adding the callback (this) to the surface holder to intercept events
 		getHolder().addCallback(this);
 
@@ -51,112 +32,16 @@ public class MainGamePanel extends SurfaceView implements
 		setFocusable(true);
 	}
 
+	public void setGame(Game game) {
+		this.game = game;
+	}
+
 	public void setMap(GameMap map) {
 		this.map = map;
 	}
 
-	public void addBomberman(Position pos, Integer id) {
-		if (this.modelsMap.size() == 0) {
-			this.bombermanToAdd = pos;
-			this.idBombermanToAdd = id;
-			return;
-		}
-		this.modelsMap.get(pos.y).set(
-				pos.x,
-				new BombermanModel(context, MapMeasurements.POSITION_HEIGHT,
-						MapMeasurements.POSITION_WIDTH,
-						MapMeasurements.SIDE_PADDING
-								+ MapMeasurements.POSITION_WIDTH * pos.x,
-						MapMeasurements.UP_PADDING
-								+ MapMeasurements.POSITION_HEIGHT * pos.y, id));
-	}
-
-	public void putEmpty(Position pos) {
-		this.modelsMap.get(pos.y).set(pos.x, new EmptyModel());
-	}
-
-	public void putExploding(Position pos) {
-		this.modelsMap.get(pos.y).set(pos.x, new EmptyModel());
-	}
-
-	public void putBomb(Position pos) {
-		this.modelsMap.get(pos.y).set(
-				pos.x,
-				new BombModel(this.context, MapMeasurements.POSITION_HEIGHT,
-						MapMeasurements.POSITION_WIDTH,
-						MapMeasurements.SIDE_PADDING
-								+ MapMeasurements.POSITION_WIDTH * pos.x,
-						MapMeasurements.UP_PADDING
-								+ MapMeasurements.POSITION_HEIGHT * pos.y));
-	}
-
-	public void move(Position orig, Position dest) {
-		Model modelDest = this.modelsMap.get(dest.y).get(dest.x);
-		Model modelOrig = this.modelsMap.get(orig.y).get(orig.x);
-		modelDest.setPos(new Position(MapMeasurements.SIDE_PADDING
-				+ MapMeasurements.POSITION_WIDTH * orig.x,
-				MapMeasurements.UP_PADDING + MapMeasurements.POSITION_HEIGHT
-						* orig.y));
-		modelOrig.setPos(new Position(MapMeasurements.SIDE_PADDING
-				+ MapMeasurements.POSITION_WIDTH * dest.x,
-				MapMeasurements.UP_PADDING + MapMeasurements.POSITION_HEIGHT
-						* dest.y));
-		this.modelsMap.get(dest.y).set(dest.x, modelOrig);
-		this.modelsMap.get(orig.y).set(orig.x, modelDest);
-	}
-
-	private void parseMap(int viewWidth, int viewHeight) {
-
-		int mapWidth = this.map.getWidth();
-		int mapHeight = this.map.getHeight();
-
-		MapMeasurements.updateMapMeasurements(viewWidth, viewHeight, mapWidth,
-				mapHeight);
-
-		for (Integer y = 0; y < mapHeight; y++) {
-			this.modelsMap.add(new ArrayList<Model>());
-
-			for (Integer x = 0; x < mapWidth; x++) {
-				List<Model> line = this.modelsMap.get(y);
-				Character content = this.map.getContent(x, y);
-
-				if (content == GameMap.WALL) {
-					line.add(new WallModel(context,
-							MapMeasurements.POSITION_HEIGHT,
-							MapMeasurements.POSITION_WIDTH,
-							MapMeasurements.SIDE_PADDING
-									+ MapMeasurements.POSITION_WIDTH * x,
-							MapMeasurements.UP_PADDING
-									+ MapMeasurements.POSITION_HEIGHT * y));
-				} else if (content == GameMap.OBSTACLE) {
-					line.add(new ObstacleModel(context,
-							MapMeasurements.POSITION_HEIGHT,
-							MapMeasurements.POSITION_WIDTH,
-							MapMeasurements.SIDE_PADDING
-									+ MapMeasurements.POSITION_WIDTH * x,
-							MapMeasurements.UP_PADDING
-									+ MapMeasurements.POSITION_HEIGHT * y));
-				} else if (content == GameMap.ROBOT) {
-					line.add(new RobotModel(context,
-							MapMeasurements.POSITION_HEIGHT,
-							MapMeasurements.POSITION_WIDTH,
-							MapMeasurements.SIDE_PADDING
-									+ MapMeasurements.POSITION_WIDTH * x,
-							MapMeasurements.UP_PADDING
-									+ MapMeasurements.POSITION_HEIGHT * y));
-				} else {
-					line.add(new EmptyModel());
-				}
-			}
-		}
-
-		if (this.bombermanToAdd != null) {
-			Position pos = this.bombermanToAdd;
-			Integer id = this.idBombermanToAdd;
-			this.bombermanToAdd = null;
-			this.idBombermanToAdd = null;
-			this.addBomberman(pos, id);
-		}
+	public GameMap getMap() {
+		return this.map;
 	}
 
 	@Override
@@ -171,8 +56,10 @@ public class MainGamePanel extends SurfaceView implements
 		thread = new MainLoopThread(getHolder(), this);
 
 		if (isNew) {
-			this.parseMap(this.getWidth(), this.getHeight());
-		}
+			MapMeasurements.updateMapMeasurements(this.getWidth(),
+					this.getHeight(), this.map.getWidth(), this.map.getHeight());
+			this.map.parseMap();
+			this.game.init();		}
 
 		thread.setRunning(true);
 		thread.start();
@@ -206,10 +93,7 @@ public class MainGamePanel extends SurfaceView implements
 		// fills the canvas with black
 		canvas.drawColor(Color.rgb(16, 120, 48));
 
-		for (List<Model> l : this.modelsMap) {
-			for (Model m : l)
-				m.draw(canvas);
-		}
+		map.draw(canvas);
 	}
 
 }

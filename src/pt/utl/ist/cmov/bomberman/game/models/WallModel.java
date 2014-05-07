@@ -1,18 +1,17 @@
 package pt.utl.ist.cmov.bomberman.game.models;
 
 import pt.utl.ist.cmov.bomberman.util.BitmapFactory;
-import pt.utl.ist.cmov.bomberman.util.Position;
+import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 public class WallModel extends Model {
 
-	public WallModel(Context context, int height, int width, int x, int y) {
-		super();
+	public WallModel(Context context, int x, int y) {
+		super(x, y);
 		Bitmap b = BitmapFactory.getBitmapFromAsset(context, "images/wall.png");
-		this.bitmap = Bitmap.createScaledBitmap(b, width, height, true);
-		this.pos = new Position(x, y);
+		this.bitmap = Bitmap.createScaledBitmap(b, MapMeasurements.POSITION_WIDTH, MapMeasurements.POSITION_HEIGHT, true);
 	}
 
 	@Override

@@ -8,9 +8,8 @@ import java.util.Map;
 import java.util.Scanner;
 
 import pt.utl.ist.cmov.bomberman.util.Position;
-
+import android.content.Context;
 import android.content.res.AssetManager;
-import android.util.Log;
 
 public class LevelManager {
 
@@ -54,7 +53,7 @@ public class LevelManager {
 		return map;
 	}
 
-	public static Level loadLevel(AssetManager assetManager, String levelName) {
+	public static Level loadLevel(Context ctx, AssetManager assetManager, String levelName) {
 		try {
 			Scanner levelInfo = new Scanner(assetManager.open(levelsPath + "/"
 					+ levelName));
@@ -67,7 +66,7 @@ public class LevelManager {
 			Integer pointsOpponent = levelInfo.nextInt();
 			levelInfo.nextLine();
 			Map<Integer, Position> bombermans = new HashMap<Integer, Position>();
-			GameMap map = new GameMap(readMap(levelInfo, bombermans));
+			GameMap map = new GameMap(ctx, readMap(levelInfo, bombermans));
 			levelInfo.close();
 			return new Level(gameDuration, explosionTimeout, explosionDuration,
 					explosionRange, robotSpeed, pointsRobot, pointsOpponent,
