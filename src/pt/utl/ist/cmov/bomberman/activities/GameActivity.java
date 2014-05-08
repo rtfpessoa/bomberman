@@ -9,8 +9,10 @@ import pt.utl.ist.cmov.bomberman.game.LevelManager;
 import pt.utl.ist.cmov.bomberman.listeners.DirectionButtonListener;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 public class GameActivity extends FullScreenActivity {
 
@@ -32,12 +34,13 @@ public class GameActivity extends FullScreenActivity {
 		String levelName = getIntent().getExtras().getString(
 				LevelChoiceActivity.LEVEL_MESSAGE);
 
-		Level level = LevelManager.loadLevel(context, context.getAssets(), levelName);
+		Level level = LevelManager.loadLevel(context, context.getAssets(),
+				levelName);
 
 		this.gamePanel = (MainGamePanel) findViewById(R.id.game_panel);
 		this.gamePanel.setMap(level.getMap());
 
-		this.game = new GameServer(level, gamePanel);
+		this.game = new GameServer(this, level, gamePanel);
 
 		this.findViewById(R.id.button_up).setOnTouchListener(
 				new DirectionButtonListener(Direction.UP, game));
@@ -54,6 +57,26 @@ public class GameActivity extends FullScreenActivity {
 
 	public void bombClick(View view) {
 		game.putBomb();
+	}
+
+	public void updateTime(Integer remainingTime) {
+		if (remainingTime <= 0) {
+			endGame();
+		}
+
+		TextView timerTextView = (TextView) this.findViewById(R.id.time_left);
+		timerTextView.setText(remainingTime.toString() + " s");
+	}
+
+	public void endGame() {
+		Intent intent = new Intent(this, EndGameActivity.class);
+
+		// TODO: get winner and points
+		intent.putExtra(EndGameActivity.INTENT_WINNER, "rtfpessoa");
+		intent.putExtra(EndGameActivity.INTENT_WINNER_POINTS, "69");
+		gamePanel.destroy();
+		finish();
+		startActivity(intent);
 	}
 
 	@Override

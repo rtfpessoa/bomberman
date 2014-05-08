@@ -1,0 +1,47 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e67e22"
+    android:orientation="vertical"
+    android:padding="10sp"
+    tools:context="pt.utl.ist.cmov.bomberman.MainActivity" >
+
+    <TextView
+        android:id="@+id/game_end_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:keepScreenOn="true"
+        android:text="Game Over"
+        android:textColor="#ecf0f1"
+        android:textSize="50sp"
+        android:textStyle="bold" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="50sp" />
+
+    <TextView
+        android:id="@+id/game_end_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:keepScreenOn="true"
+        android:textColor="#ecf0f1"
+        android:textSize="40sp" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="50sp" />
+
+    <TextView
+        android:id="@+id/game_end_points"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:keepScreenOn="true"
+        android:textColor="#ecf0f1"
+        android:textSize="30sp" />
+
+</LinearLayout>

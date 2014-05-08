@@ -3,16 +3,27 @@ package pt.utl.ist.cmov.bomberman.game;
 import java.util.ArrayList;
 import java.util.List;
 
+import pt.utl.ist.cmov.bomberman.activities.GameActivity;
 import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
 import pt.utl.ist.cmov.bomberman.game.models.RobotModel;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
 import pt.utl.ist.cmov.bomberman.util.Position;
+import android.os.Handler;
 
 public class GameServer extends Game {
 
-	public GameServer(Level level, MainGamePanel gamePanel) {
+	private GameActivity gameActivity;
+
+	private Handler timerHandler = new Handler();
+	private Runnable timerRunnable;
+	private int remainingTime;
+
+	public GameServer(GameActivity gameActivity, Level level,
+			MainGamePanel gamePanel) {
 		super(level, gamePanel, 1);
+		this.remainingTime = level.getGameDuration();
+		this.gameActivity = gameActivity;
 	}
 
 	private void bombermanKilled(Integer bombermanId) {
@@ -24,13 +35,23 @@ public class GameServer extends Game {
 
 	@Override
 	public void init() {
+		timerRunnable = new Runnable() {
+			@Override
+			public void run() {
+				gameActivity.updateTime(remainingTime--);
+				timerHandler.postDelayed(timerRunnable, 1000);
+			}
+		};
+		timerRunnable.run();
+
 		new MoveRobots().run();
 	}
 
 	@Override
 	public void moveBomberman(Direction dir) {
 		if (this.bombermanPos != null && this.canMove(dir, bombermanPos)) {
-			Position newPos = MapMeasurements.calculateNextPosition(dir, bombermanPos);
+			Position newPos = MapMeasurements.calculateNextPosition(dir,
+					bombermanPos);
 
 			if (this.level.getMap().getContent(newPos) == GameMap.EXPLODING) {
 				this.level.getMap().putEmpty(this.bombermanPos);
@@ -66,7 +87,8 @@ public class GameServer extends Game {
 					.getModelContent(pos);
 			Direction robotDirection = robot.getDirection();
 			if (canMove(robotDirection, pos)) {
-				Position newPos = MapMeasurements.calculateNextPosition(robotDirection, pos);
+				Position newPos = MapMeasurements.calculateNextPosition(
+						robotDirection, pos);
 
 				this.level.getMap().move(pos, newPos);
 			} else {
@@ -75,7 +97,8 @@ public class GameServer extends Game {
 					if (canMove(direction, pos)) {
 						robot.setDirection(direction);
 
-						Position newPos = MapMeasurements.calculateNextPosition(direction, pos);
+						Position newPos = MapMeasurements
+								.calculateNextPosition(direction, pos);
 
 						this.level.getMap().move(pos, newPos);
 					}

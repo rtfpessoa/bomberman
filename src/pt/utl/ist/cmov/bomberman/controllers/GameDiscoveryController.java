@@ -39,11 +39,10 @@ public class GameDiscoveryController extends BroadcastReceiver {
 		String action = intent.getAction();
 
 		if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
-			setupWifi();
-
 			int wifiDirectState = intent.getIntExtra(
 					WifiP2pManager.EXTRA_WIFI_STATE, -1);
 			if (wifiDirectState == WifiP2pManager.WIFI_P2P_STATE_DISABLED) {
+				setupWifi();
 				try {
 					Method enableWifiDirect = mManager.getClass().getMethod(
 							"enableP2p", Channel.class);
