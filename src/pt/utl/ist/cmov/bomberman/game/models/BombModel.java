@@ -1,5 +1,6 @@
 package pt.utl.ist.cmov.bomberman.game.models;
 
+import pt.utl.ist.cmov.bomberman.game.GameMap;
 import pt.utl.ist.cmov.bomberman.util.BitmapFactory;
 import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
 import android.content.Context;
@@ -9,7 +10,7 @@ import android.graphics.Canvas;
 public class BombModel extends Model {
 
 	public BombModel(Context context, int x, int y) {
-		super(x, y);
+		super(GameMap.BOMB, x, y);
 		Bitmap b = BitmapFactory.getBitmapFromAsset(context, "images/bomb.png");
 		this.bitmap = Bitmap.createScaledBitmap(b, MapMeasurements.POSITION_WIDTH, MapMeasurements.POSITION_HEIGHT, true);
 	}

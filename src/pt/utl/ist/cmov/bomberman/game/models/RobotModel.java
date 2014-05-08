@@ -1,5 +1,6 @@
 package pt.utl.ist.cmov.bomberman.game.models;
 
+import pt.utl.ist.cmov.bomberman.game.GameMap;
 import pt.utl.ist.cmov.bomberman.util.BitmapFactory;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
@@ -12,7 +13,7 @@ public class RobotModel extends Model {
 	private Direction direction = Direction.LEFT;
 
 	public RobotModel(Context context, int x, int y) {
-		super(x, y);
+		super(GameMap.ROBOT, x, y);
 		Bitmap b = BitmapFactory
 				.getBitmapFromAsset(context, "images/robot.png");
 		this.bitmap = Bitmap.createScaledBitmap(b,

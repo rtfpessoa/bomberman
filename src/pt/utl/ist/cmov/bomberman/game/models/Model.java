@@ -9,14 +9,20 @@ public abstract class Model {
 
 	protected Bitmap bitmap; // the actual bitmap
 	protected Position pos;
+	private final Character type;
 
-	public Model(int x, int y) {
+	public Model(Character type, int x, int y) {
 		super();
 
+		this.type = type;
 		this.pos = new Position(MapMeasurements.SIDE_PADDING
 				+ MapMeasurements.POSITION_WIDTH * x,
 				MapMeasurements.UP_PADDING + MapMeasurements.POSITION_HEIGHT
 						* y);
+	}
+
+	public Character getType() {
+		return type;
 	}
 
 	public Bitmap getBitmap() {

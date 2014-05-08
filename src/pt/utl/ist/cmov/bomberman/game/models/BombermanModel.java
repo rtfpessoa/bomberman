@@ -8,12 +8,14 @@ import android.graphics.Canvas;
 
 public class BombermanModel extends Model {
 
-	public BombermanModel(Context context, int x, int y,
-			int number) {
-		super(x, y);
+	public BombermanModel(Context context, int x, int y, int number) {
+		super(Character.forDigit(number, 10), x, y);
+		
 		Bitmap b = BitmapFactory.getBitmapFromAsset(context, "images/bomberman"
 				+ number + ".png");
-		this.bitmap = Bitmap.createScaledBitmap(b, MapMeasurements.POSITION_WIDTH, MapMeasurements.POSITION_HEIGHT, true);
+		this.bitmap = Bitmap.createScaledBitmap(b,
+				MapMeasurements.POSITION_WIDTH,
+				MapMeasurements.POSITION_HEIGHT, true);
 	}
 
 	@Override
