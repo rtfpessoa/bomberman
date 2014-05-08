@@ -78,7 +78,7 @@ public abstract class Game {
 		@Override
 		public void run() {
 			moveRobots();
-			moveRobotsHandler.postDelayed(this, 800);
+			moveRobotsHandler.postDelayed(this, level.getRobotSpeed());
 		}
 
 	}
