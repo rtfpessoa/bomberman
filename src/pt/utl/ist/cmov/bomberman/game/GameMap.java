@@ -24,10 +24,12 @@ public class GameMap {
 	public static final Character EMPTY = '-';
 	public static final Character EXPLODING = 'E';
 
-	private List<List<Character>> initialMap;
+	private final List<List<Character>> initialMap;
+	private final Integer height;
+	private final Integer width;
+
 	private List<List<Model>> modelMap = new ArrayList<List<Model>>();
-	private Integer height;
-	private Integer width;
+
 	private Context context;
 
 	private Position bombermanToAdd = null;
@@ -54,11 +56,11 @@ public class GameMap {
 	}
 
 	public Integer getHeight() {
-		return height;
+		return this.height;
 	}
 
 	public Integer getWidth() {
-		return width;
+		return this.width;
 	}
 
 	public boolean hasBomberman(Position pos) {
@@ -140,7 +142,6 @@ public class GameMap {
 				model.draw(canvas);
 			}
 		}
-
 	}
 
 }

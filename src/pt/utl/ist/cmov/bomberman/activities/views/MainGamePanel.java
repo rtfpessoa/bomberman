@@ -93,7 +93,7 @@ public class MainGamePanel extends SurfaceView implements
 		// fills the canvas with black
 		canvas.drawColor(Color.rgb(16, 120, 48));
 
-		map.draw(canvas);
+//		map.draw(canvas);
 	}
 
 }
