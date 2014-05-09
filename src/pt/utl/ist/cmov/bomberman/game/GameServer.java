@@ -7,7 +7,7 @@ import pt.utl.ist.cmov.bomberman.game.elements.BombermanElement;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.os.Handler;
 
-public class GameServer {
+public class GameServer implements IGameServer {
 
 	private Handler timerHandler = new Handler();
 	private Runnable timerRunnable;

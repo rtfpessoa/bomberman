@@ -4,6 +4,7 @@ import java.util.List;
 
 import pt.utl.ist.cmov.bomberman.game.GameClient;
 import pt.utl.ist.cmov.bomberman.game.IGameServer;
+import pt.utl.ist.cmov.bomberman.game.elements.Element;
 import pt.utl.ist.cmov.bomberman.handlers.CommunicationObject;
 import pt.utl.ist.cmov.bomberman.handlers.channels.ICommunicationChannel;
 import android.util.Log;
@@ -30,6 +31,11 @@ public class ClientCommunicationManager implements ICommunicationManager,
 		if (object.getType() == CommunicationObject.UPDATE_SCREEN) {
 			List<String> drawings = (List<String>) object.getMessage();
 			// this.gameClient.updateScreen(drawings);
+		}
+		if (object.getType() == CommunicationObject.INIT) {
+			List<List<Element>> elements = (List<List<Element>>) object
+					.getMessage();
+			this.gameClient.init(elements);
 		}
 	}
 

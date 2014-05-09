@@ -2,7 +2,6 @@ package pt.utl.ist.cmov.bomberman.activities.views;
 
 import pt.utl.ist.cmov.bomberman.game.GameClient;
 import pt.utl.ist.cmov.bomberman.game.MainLoopThread;
-import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -40,16 +39,7 @@ public class MainGamePanel extends SurfaceView implements
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		boolean isNew = thread == null;
-
 		thread = new MainLoopThread(getHolder(), this);
-
-		if (isNew) {
-			// TODO: Update measurements
-			MapMeasurements.updateMapMeasurements(this.getWidth(),
-					this.getHeight(), 1, 1);
-		}
-
 		thread.setRunning(true);
 		thread.start();
 	}

@@ -8,6 +8,8 @@ public class CommunicationObject {
 
 	public static final String DEBUG = "pt.utl.ist.cmov.bomberman.DEBUG";
 
+	public static final String INIT = "pt.utl.ist.cmov.bomberman.INIT";
+
 	private String type;
 	private Object message;
 
