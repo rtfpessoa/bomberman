@@ -54,6 +54,8 @@ public class PlayerActivity extends FullScreenActivity implements
 
 		this.gameClient.setGameServer((IGameServer) clientManager);
 
+		this.gamePanel.setGameClient(this.gameClient);
+
 		intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
 		intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
 		intentFilter
