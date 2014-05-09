@@ -199,10 +199,10 @@ public class Level {
 		this.height = initialMap.size();
 		this.width = initialMap.get(0).size();
 
-		for (int y = 0; y < height; y++) {
+		for (int y = 0; y < this.height; y++) {
 			List<Element> line = new ArrayList<Element>();
 
-			for (int x = 0; x < width; x++) {
+			for (int x = 0; x < this.width; x++) {
 				Character c = initialMap.get(y).get(x);
 				Integer id = this.elementIds++;
 
@@ -218,7 +218,7 @@ public class Level {
 					line.add(new EmptyElement(this, id, pos));
 			}
 
-			modelMap.add(line);
+			this.modelMap.add(line);
 		}
 
 		this.height = modelMap.size();
