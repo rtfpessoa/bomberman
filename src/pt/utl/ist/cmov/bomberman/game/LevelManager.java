@@ -66,12 +66,14 @@ public class LevelManager {
 			Integer pointsOpponent = levelInfo.nextInt();
 			levelInfo.nextLine();
 			Map<Integer, Position> bombermans = new HashMap<Integer, Position>();
-			levelInfo.close();
 			
 			Level level = new Level(gameDuration, explosionTimeout, explosionDuration,
 					explosionRange, robotSpeed, pointsRobot, pointsOpponent,
 					bombermans);
 			level.parseMap(readMap(levelInfo, bombermans));
+			
+			levelInfo.close();
+
 			return level;
 		} catch (IOException e) {
 			e.printStackTrace();

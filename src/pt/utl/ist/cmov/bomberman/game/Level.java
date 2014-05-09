@@ -35,8 +35,8 @@ public class Level {
 	public static final Character EXPLODING = 'E';
 	public static final Character BOMBERMAN = 'P';
 
-	private final Integer height;
-	private final Integer width;
+	private Integer height;
+	private Integer width;
 
 	private List<List<Element>> modelMap = new ArrayList<List<Element>>();
 
@@ -58,9 +58,6 @@ public class Level {
 		this.bombermansInitialPos = bombermansInitialPos;
 		this.maxBombermans = this.bombermansInitialPos.size();
 		this.elementIds = maxBombermans + 1;
-
-		this.height = modelMap.size();
-		this.width = modelMap.get(0).size();
 	}
 
 	public Integer getGameDuration() {
@@ -220,6 +217,9 @@ public class Level {
 
 			modelMap.add(line);
 		}
+		
+		this.height = modelMap.size();
+		this.width = modelMap.get(0).size();
 	}
 
 	public boolean isInDeathZone(Position testPosition) {
