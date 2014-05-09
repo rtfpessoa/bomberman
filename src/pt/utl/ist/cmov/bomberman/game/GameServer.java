@@ -59,6 +59,12 @@ public class GameServer extends Game {
 				return;
 			}
 
+			if (this.level.getMap().isInDeathZone()) {
+				this.level.getMap().putEmpty(this.bombermanPos);
+				this.bombermanKilled(1);
+				return;
+			}
+
 			this.level.getMap().move(this.bombermanPos, newPos);
 			if (bombToDraw) {
 				this.level.getMap().putBomb(this.bombermanPos);
@@ -86,9 +92,12 @@ public class GameServer extends Game {
 			RobotModel robot = (RobotModel) this.level.getMap()
 					.getModelContent(pos);
 			Direction robotDirection = robot.getDirection();
+			Position newPos = null;
+
 			if (canMove(robotDirection, pos)) {
-				Position newPos = MapMeasurements.calculateNextPosition(
-						robotDirection, pos);
+
+				newPos = MapMeasurements.calculateNextPosition(robotDirection,
+						pos);
 
 				this.level.getMap().move(pos, newPos);
 			} else {
@@ -97,12 +106,19 @@ public class GameServer extends Game {
 					if (canMove(direction, pos)) {
 						robot.setDirection(direction);
 
-						Position newPos = MapMeasurements
-								.calculateNextPosition(direction, pos);
+						newPos = MapMeasurements.calculateNextPosition(
+								direction, pos);
 
 						this.level.getMap().move(pos, newPos);
+						break;
 					}
 				}
+			}
+
+			if (newPos != null && this.level.getMap().isInDeathZone()) {
+				this.level.getMap().putEmpty(this.bombermanPos);
+				this.bombermanKilled(1);
+				return;
 			}
 		}
 	}

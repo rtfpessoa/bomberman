@@ -11,6 +11,8 @@ import pt.utl.ist.cmov.bomberman.game.models.Model;
 import pt.utl.ist.cmov.bomberman.game.models.ObstacleModel;
 import pt.utl.ist.cmov.bomberman.game.models.RobotModel;
 import pt.utl.ist.cmov.bomberman.game.models.WallModel;
+import pt.utl.ist.cmov.bomberman.util.Direction;
+import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
 import pt.utl.ist.cmov.bomberman.util.Position;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -142,6 +144,30 @@ public class GameMap {
 				model.draw(canvas);
 			}
 		}
+	}
+
+	public boolean isInDeathZone() {
+		List<Position> positions = new ArrayList<Position>();
+
+		for (int y = 0; y < this.getHeight(); y++) {
+			for (int x = 0; x < this.getWidth(); x++) {
+				if (this.getContent(new Position(x, y)) == GameMap.ROBOT) {
+					positions.add(new Position(x, y));
+					continue;
+				}
+			}
+		}
+
+		for (Position robot : positions) {
+			for (Direction direction : Direction.values()) {
+				Position nextPosition = MapMeasurements.calculateNextPosition(
+						direction, robot);
+				if (getModelContent(nextPosition) instanceof BombermanModel) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 }
