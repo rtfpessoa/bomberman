@@ -196,6 +196,9 @@ public class Level {
 	}
 
 	public void parseMap(List<List<Character>> initialMap) {
+		this.height = initialMap.size();
+		this.width = initialMap.get(0).size();
+
 		for (int y = 0; y < height; y++) {
 			List<Element> line = new ArrayList<Element>();
 
@@ -217,7 +220,7 @@ public class Level {
 
 			modelMap.add(line);
 		}
-		
+
 		this.height = modelMap.size();
 		this.width = modelMap.get(0).size();
 	}
