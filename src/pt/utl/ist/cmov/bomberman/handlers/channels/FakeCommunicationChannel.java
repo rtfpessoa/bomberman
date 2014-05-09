@@ -5,19 +5,15 @@ import pt.utl.ist.cmov.bomberman.handlers.managers.ICommunicationManager;
 
 public class FakeCommunicationChannel implements ICommunicationChannel {
 
-	private ICommunicationManager serverCommManager;
-	private ICommunicationManager clientCommManager;
+	private ICommunicationManager outCommManager;
 
-	public FakeCommunicationChannel(ICommunicationManager serverCommManager,
-			ICommunicationManager clientCommManager) {
-		this.serverCommManager = serverCommManager;
-		this.clientCommManager = clientCommManager;
+	public FakeCommunicationChannel(ICommunicationManager outCommManager) {
+		this.outCommManager = outCommManager;
 	}
 
 	@Override
 	public void send(CommunicationObject object) {
-		serverCommManager.deliver(object);
-		clientCommManager.deliver(object);
+		outCommManager.receive(object);
 	}
 
 }

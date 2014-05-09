@@ -4,6 +4,6 @@ import pt.utl.ist.cmov.bomberman.handlers.CommunicationObject;
 
 public interface ICommunicationManager {
 
-	public void deliver(CommunicationObject object);
+	public void receive(CommunicationObject object);
 
 }

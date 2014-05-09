@@ -21,7 +21,7 @@ public class ServerCommunicationManager implements ICommunicationManager,
 	}
 
 	@Override
-	public void deliver(CommunicationObject object) {
+	public void receive(CommunicationObject object) {
 		if (object.getType() == CommunicationObject.DEBUG) {
 			Log.d("CommunicationManager", (String) object.getMessage());
 		}
