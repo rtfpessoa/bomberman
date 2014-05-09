@@ -9,9 +9,10 @@ import pt.utl.ist.cmov.bomberman.R;
 import pt.utl.ist.cmov.bomberman.activities.adapters.GameAdapter;
 import pt.utl.ist.cmov.bomberman.activities.interfaces.CommunicationPeer;
 import pt.utl.ist.cmov.bomberman.controllers.GameDiscoveryController;
-import pt.utl.ist.cmov.bomberman.handlers.CommunicationManager;
+import pt.utl.ist.cmov.bomberman.handlers.CommunicationObject;
 import pt.utl.ist.cmov.bomberman.handlers.PlayerSocketHandler;
 import pt.utl.ist.cmov.bomberman.handlers.ServerSocketHandler;
+import pt.utl.ist.cmov.bomberman.handlers.channels.SocketCommunicationChannel;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -43,7 +44,7 @@ public class GameDiscoveryActivity extends FullScreenActivity implements
 	private Channel channel;
 	private GameDiscoveryController discoveryController = null;
 
-	private List<CommunicationManager> commManagers = new ArrayList<CommunicationManager>();
+	private List<SocketCommunicationChannel> commManagers = new ArrayList<SocketCommunicationChannel>();
 
 	private Handler handler = new Handler(this);
 
@@ -85,9 +86,11 @@ public class GameDiscoveryActivity extends FullScreenActivity implements
 		} else {
 			Toast.makeText(getApplicationContext(),
 					"Message successfuly sent!", Toast.LENGTH_SHORT).show();
-			for (Iterator<CommunicationManager> commManager = commManagers
+			for (Iterator<SocketCommunicationChannel> commManager = commManagers
 					.iterator(); commManager.hasNext();) {
-				commManager.next().write("Hello world!");
+				commManager.next().send(
+						new CommunicationObject(CommunicationObject.DEBUG,
+								"Hello world!"));
 			}
 		}
 	}
@@ -191,12 +194,12 @@ public class GameDiscoveryActivity extends FullScreenActivity implements
 	}
 
 	@Override
-	public void addCommunicationManager(CommunicationManager cManager) {
+	public void addCommunicationManager(SocketCommunicationChannel cManager) {
 		this.commManagers.add(cManager);
 	}
 
 	@Override
-	public List<CommunicationManager> getCommunicationManagers() {
+	public List<SocketCommunicationChannel> getCommunicationManagers() {
 		return commManagers;
 	}
 }

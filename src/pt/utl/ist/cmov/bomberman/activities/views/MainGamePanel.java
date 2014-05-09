@@ -1,7 +1,6 @@
 package pt.utl.ist.cmov.bomberman.activities.views;
 
-import pt.utl.ist.cmov.bomberman.game.Game;
-import pt.utl.ist.cmov.bomberman.game.GameMap;
+import pt.utl.ist.cmov.bomberman.game.GameClient;
 import pt.utl.ist.cmov.bomberman.game.MainLoopThread;
 import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
 import android.content.Context;
@@ -19,9 +18,7 @@ public class MainGamePanel extends SurfaceView implements
 
 	private MainLoopThread thread;
 
-	private Game game;
-
-	private GameMap map;
+	private GameClient gameClient;
 
 	public MainGamePanel(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -32,16 +29,8 @@ public class MainGamePanel extends SurfaceView implements
 		setFocusable(true);
 	}
 
-	public void setGame(Game game) {
-		this.game = game;
-	}
-
-	public void setMap(GameMap map) {
-		this.map = map;
-	}
-
-	public GameMap getMap() {
-		return this.map;
+	public void setGameClient(GameClient gameClient) {
+		this.gameClient = gameClient;
 	}
 
 	@Override
@@ -56,10 +45,10 @@ public class MainGamePanel extends SurfaceView implements
 		thread = new MainLoopThread(getHolder(), this);
 
 		if (isNew) {
+			// TODO: Update mesurements
 			MapMeasurements.updateMapMeasurements(this.getWidth(),
-					this.getHeight(), this.map.getWidth(), this.map.getHeight());
-			this.map.parseMap();
-			this.game.init();		}
+					this.getHeight(), 1, 1);
+		}
 
 		thread.setRunning(true);
 		thread.start();
@@ -93,7 +82,7 @@ public class MainGamePanel extends SurfaceView implements
 		// fills the canvas with black
 		canvas.drawColor(Color.rgb(16, 120, 48));
 
-//		map.draw(canvas);
+		// TODO: Draw map
 	}
 
 }

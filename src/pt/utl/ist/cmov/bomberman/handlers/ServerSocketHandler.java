@@ -7,6 +7,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import pt.utl.ist.cmov.bomberman.activities.interfaces.CommunicationPeer;
+import pt.utl.ist.cmov.bomberman.handlers.channels.SocketCommunicationChannel;
 import android.util.Log;
 
 public class ServerSocketHandler extends Thread {
@@ -39,7 +40,7 @@ public class ServerSocketHandler extends Thread {
 			try {
 				// A blocking operation. Initiate a ChatManager instance when
 				// there is a new connection
-				pool.execute(new CommunicationManager(socket.accept(), cPeer));
+				pool.execute(new SocketCommunicationChannel(socket.accept(), cPeer));
 				Log.d(TAG, "Launching the I/O handler");
 
 			} catch (IOException e) {

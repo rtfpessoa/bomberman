@@ -1,4 +1,4 @@
-package pt.utl.ist.cmov.bomberman.handlers;
+package pt.utl.ist.cmov.bomberman.handlers.channels;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,15 +8,17 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 import pt.utl.ist.cmov.bomberman.activities.interfaces.CommunicationPeer;
+import pt.utl.ist.cmov.bomberman.handlers.CommunicationObject;
 import pt.utl.ist.cmov.bomberman.util.Constants;
 import android.util.Log;
 
-public class CommunicationManager implements Runnable {
+public class SocketCommunicationChannel implements ICommunicationChannel,
+		Runnable {
 
 	private Socket socket = null;
 	private CommunicationPeer cPeer;
 
-	public CommunicationManager(Socket socket, CommunicationPeer cPeer) {
+	public SocketCommunicationChannel(Socket socket, CommunicationPeer cPeer) {
 		this.socket = socket;
 		this.cPeer = cPeer;
 	}
@@ -24,6 +26,11 @@ public class CommunicationManager implements Runnable {
 	private InputStream iStream;
 	private OutputStream oStream;
 	private static final String TAG = "CommunicationHandler";
+
+	@Override
+	public void send(CommunicationObject object) {
+		write(object);
+	}
 
 	@Override
 	public void run() {
@@ -58,7 +65,7 @@ public class CommunicationManager implements Runnable {
 		}
 	}
 
-	public void write(Object obj) {
+	private void write(Object obj) {
 		try {
 			ObjectOutputStream out = new ObjectOutputStream(oStream);
 			out.writeObject(obj);
@@ -66,4 +73,5 @@ public class CommunicationManager implements Runnable {
 			Log.e(TAG, "Exception during write", e);
 		}
 	}
+
 }
