@@ -60,6 +60,8 @@ public class GameActivity extends FullScreenActivity {
 		gameServer.setGameClient(serverManager);
 		gameClient.setGameServer(clientManager);
 
+		this.gamePanel.setGameClient(this.gameClient);
+
 		this.findViewById(R.id.button_up).setOnTouchListener(
 				new DirectionButtonListener(Direction.UP, gameClient));
 

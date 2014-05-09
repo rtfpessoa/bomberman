@@ -43,6 +43,8 @@ public class Level {
 	private Integer bombermanIds = 1;
 	private Integer elementIds;
 
+	private Boolean isPaused = false;
+
 	public Level(Integer gameDuration, Integer explosionTimeout,
 			Integer explosionDuration, Integer explosionRange,
 			Integer robotSpeed, Integer pointsRobot, Integer pointsOpponent,
@@ -145,18 +147,23 @@ public class Level {
 	}
 
 	public Boolean move(Element element, Direction direction) {
-		Position newPos = Position.calculateNext(direction, element.getPos());
+		if (!this.isPaused) {
+			Position newPos = Position.calculateNext(direction,
+					element.getPos());
 
-		Element destination = this.getElementContent(newPos);
-		if (destination.canMoveOver(element)) {
-			element.moveAction(destination);
-			destination.moveAction(element);
-			this.move(element.getPos(), newPos);
+			Element destination = this.getElementContent(newPos);
+			if (destination.canMoveOver(element)) {
+				element.moveAction(destination);
+				destination.moveAction(element);
+				this.move(element.getPos(), newPos);
+			} else {
+				return false;
+			}
+
+			return true;
 		} else {
 			return false;
 		}
-
-		return true;
 	}
 
 	private void move(Position orig, Position dest) {
@@ -196,6 +203,8 @@ public class Level {
 	}
 
 	public void parseMap(List<List<Character>> initialMap) {
+		this.isPaused = true;
+
 		this.height = initialMap.size();
 		this.width = initialMap.get(0).size();
 
@@ -221,8 +230,7 @@ public class Level {
 			this.modelMap.add(line);
 		}
 
-		this.height = modelMap.size();
-		this.width = modelMap.get(0).size();
+		this.isPaused = true;
 	}
 
 	public boolean isInDeathZone(Position testPosition) {
