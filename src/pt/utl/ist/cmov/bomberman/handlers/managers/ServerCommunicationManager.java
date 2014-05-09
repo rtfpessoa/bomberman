@@ -1,23 +1,28 @@
 package pt.utl.ist.cmov.bomberman.handlers.managers;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-import android.util.Log;
 import pt.utl.ist.cmov.bomberman.game.GameServer;
 import pt.utl.ist.cmov.bomberman.game.IGameClient;
 import pt.utl.ist.cmov.bomberman.handlers.CommunicationObject;
 import pt.utl.ist.cmov.bomberman.handlers.channels.ICommunicationChannel;
+import android.util.Log;
 
 public class ServerCommunicationManager implements ICommunicationManager,
 		IGameClient {
 
-	private ICommunicationChannel commChannel;
+	private List<ICommunicationChannel> commChannels;
 	private GameServer gameServer;
 
-	public ServerCommunicationManager(ICommunicationChannel commChannel,
-			GameServer gameServer) {
-		this.commChannel = commChannel;
+	public ServerCommunicationManager(GameServer gameServer) {
+		this.commChannels = new ArrayList<ICommunicationChannel>();
 		this.gameServer = gameServer;
+	}
+
+	public void addCommChannel(ICommunicationChannel commChannel) {
+		this.commChannels.add(commChannel);
 	}
 
 	@Override
@@ -34,7 +39,11 @@ public class ServerCommunicationManager implements ICommunicationManager,
 	public void updateScreen(List<String> drawings) {
 		CommunicationObject object = new CommunicationObject(
 				CommunicationObject.UPDATE_SCREEN, drawings);
-		commChannel.send(object);
+		for (Iterator<ICommunicationChannel> commChannel = commChannels
+				.iterator(); commChannel.hasNext();) {
+			commChannel.next().send(object);
+		}
+
 	}
 
 }

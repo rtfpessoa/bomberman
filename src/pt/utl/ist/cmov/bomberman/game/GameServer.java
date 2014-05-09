@@ -14,13 +14,13 @@ public class GameServer {
 	private Integer remainingTime;
 
 	private Level level;
-	// protected CommunicationChannel commChannel;
+	private IGameClient gameClientProxy;
 
 	private HashMap<String, BombElement> bombsToDraw;
 
 	private HashMap<String, BombermanElement> bombermans;
 
-	public GameServer(Level level/* , CommunicationChannel commChannel */) {
+	public GameServer(Level level) {
 		super();
 		this.level = level;
 		// this.commChannel = commChannel;
@@ -37,6 +37,10 @@ public class GameServer {
 			}
 		};
 		timerRunnable.run();
+	}
+
+	public void setGameClient(IGameClient gameClientProxy) {
+		this.gameClientProxy = gameClientProxy;
 	}
 
 	public void putBomberman(String username) {

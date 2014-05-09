@@ -8,7 +8,7 @@ public class GameClient {
 	private BombermanPlayer player;
 
 	private MainGamePanel gamePanel;
-	protected IGameServer gameServer;
+	protected IGameServer gameServerProxy;
 
 	public GameClient(String username, MainGamePanel gamePanel) {
 		super();
@@ -17,8 +17,12 @@ public class GameClient {
 		this.gamePanel = gamePanel;
 	}
 
+	public void setGameServer(IGameServer gameServer) {
+		this.gameServerProxy = gameServer;
+	}
+
 	public void putBomberman() {
-		gameServer.putBomberman(player.getUsername());
+		gameServerProxy.putBomberman(player.getUsername());
 	}
 
 	public void putBomb() {

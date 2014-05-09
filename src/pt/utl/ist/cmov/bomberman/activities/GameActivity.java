@@ -4,8 +4,13 @@ import pt.utl.ist.cmov.bomberman.R;
 import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
 import pt.utl.ist.cmov.bomberman.game.GameClient;
 import pt.utl.ist.cmov.bomberman.game.GameServer;
+import pt.utl.ist.cmov.bomberman.game.IGameClient;
+import pt.utl.ist.cmov.bomberman.game.IGameServer;
 import pt.utl.ist.cmov.bomberman.game.Level;
 import pt.utl.ist.cmov.bomberman.game.LevelManager;
+import pt.utl.ist.cmov.bomberman.handlers.channels.FakeCommunicationChannel;
+import pt.utl.ist.cmov.bomberman.handlers.managers.ClientCommunicationManager;
+import pt.utl.ist.cmov.bomberman.handlers.managers.ServerCommunicationManager;
 import pt.utl.ist.cmov.bomberman.listeners.DirectionButtonListener;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.content.Context;
@@ -43,6 +48,19 @@ public class GameActivity extends FullScreenActivity {
 		this.gameServer = new GameServer(level);
 		// TODO: replace username
 		this.gameClient = new GameClient("USERNAME", gamePanel);
+
+		ServerCommunicationManager serverManager = new ServerCommunicationManager(
+				this.gameServer);
+		ClientCommunicationManager clientManager = new ClientCommunicationManager(
+				this.gameClient);
+
+		serverManager
+				.addCommChannel(new FakeCommunicationChannel(clientManager));
+		clientManager
+				.setCommChannel(new FakeCommunicationChannel(serverManager));
+
+		gameServer.setGameClient((IGameClient) this.gameClient);
+		gameClient.setGameServer((IGameServer) this.gameServer);
 
 		this.findViewById(R.id.button_up).setOnTouchListener(
 				new DirectionButtonListener(Direction.UP, gameClient));
