@@ -24,19 +24,4 @@ public class MapMeasurements {
 		Log.d("MapMeasurements", "POSITION_WIDTH: " + POSITION_WIDTH);
 	}
 
-	public static Position calculateNextPosition(Direction dir, Position pos) {
-		switch (dir) {
-		case UP:
-			return new Position(pos.x, pos.y - 1);
-		case DOWN:
-			return new Position(pos.x, pos.y + 1);
-		case LEFT:
-			return new Position(pos.x - 1, pos.y);
-		case RIGHT:
-			return new Position(pos.x + 1, pos.y);
-		}
-
-		return null;
-	}
-
 }

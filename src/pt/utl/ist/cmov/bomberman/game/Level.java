@@ -13,7 +13,6 @@ import pt.utl.ist.cmov.bomberman.game.elements.ObstacleElement;
 import pt.utl.ist.cmov.bomberman.game.elements.RobotElement;
 import pt.utl.ist.cmov.bomberman.game.elements.WallElement;
 import pt.utl.ist.cmov.bomberman.util.Direction;
-import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
 import pt.utl.ist.cmov.bomberman.util.Position;
 
 public class Level {
@@ -149,8 +148,7 @@ public class Level {
 	}
 
 	public Boolean move(Element element, Direction direction) {
-		Position newPos = MapMeasurements.calculateNextPosition(direction,
-				element.getPos());
+		Position newPos = Position.calculateNext(direction, element.getPos());
 
 		Element destination = this.getElementContent(newPos);
 		if (destination.canMoveOver(element)) {
@@ -226,8 +224,8 @@ public class Level {
 
 	public boolean isInDeathZone(Position testPosition) {
 		for (Direction direction : Direction.values()) {
-			Position nextPosition = MapMeasurements.calculateNextPosition(
-					direction, testPosition);
+			Position nextPosition = Position.calculateNext(direction,
+					testPosition);
 			if (getElementContent(nextPosition).getType() == Level.ROBOT) {
 				return true;
 			}

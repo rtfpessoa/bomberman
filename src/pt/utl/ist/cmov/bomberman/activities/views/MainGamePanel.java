@@ -45,7 +45,7 @@ public class MainGamePanel extends SurfaceView implements
 		thread = new MainLoopThread(getHolder(), this);
 
 		if (isNew) {
-			// TODO: Update mesurements
+			// TODO: Update measurements
 			MapMeasurements.updateMapMeasurements(this.getWidth(),
 					this.getHeight(), 1, 1);
 		}
@@ -79,9 +79,7 @@ public class MainGamePanel extends SurfaceView implements
 
 	@Override
 	public void onDraw(Canvas canvas) {
-		// fills the canvas with black
 		canvas.drawColor(Color.rgb(16, 120, 48));
-
 		gameClient.draw(canvas);
 	}
 
