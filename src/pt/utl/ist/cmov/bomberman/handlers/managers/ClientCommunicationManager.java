@@ -40,4 +40,9 @@ public class ClientCommunicationManager implements ICommunicationManager,
 		commChannel.send(object);
 	}
 
+	@Override
+	public void addCommChannel(ICommunicationChannel commChannel) {
+		setCommChannel(commChannel);
+	}
+
 }

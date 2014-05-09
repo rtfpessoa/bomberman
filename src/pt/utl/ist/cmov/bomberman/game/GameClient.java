@@ -6,6 +6,7 @@ import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
 import pt.utl.ist.cmov.bomberman.game.drawings.Drawing;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.graphics.Canvas;
+import android.os.Handler;
 
 public class GameClient {
 
@@ -15,11 +16,17 @@ public class GameClient {
 	protected IGameServer gameServerProxy;
 	private HashMap<Integer, Drawing> drawings;
 
+	private Handler handler;
+
 	public GameClient(String username, MainGamePanel gamePanel) {
 		super();
 		this.player = new BombermanPlayer(username);
 		this.gamePanel = gamePanel;
 		this.drawings = new HashMap<Integer, Drawing>();
+	}
+
+	public Handler getHandler() {
+		return handler;
 	}
 
 	public void setGameServer(IGameServer gameServer) {

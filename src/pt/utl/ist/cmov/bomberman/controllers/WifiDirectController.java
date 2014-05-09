@@ -18,7 +18,7 @@ import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.util.Log;
 
-public class GameDiscoveryController extends BroadcastReceiver {
+public class WifiDirectController extends BroadcastReceiver {
 
 	private WifiP2pManager mManager;
 
@@ -26,7 +26,7 @@ public class GameDiscoveryController extends BroadcastReceiver {
 
 	private Activity activity;
 
-	public GameDiscoveryController(WifiP2pManager manager, Channel channel,
+	public WifiDirectController(WifiP2pManager manager, Channel channel,
 			Activity activity) {
 		super();
 		this.mManager = manager;

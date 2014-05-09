@@ -5,21 +5,21 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-import pt.utl.ist.cmov.bomberman.activities.interfaces.CommunicationPeer;
 import pt.utl.ist.cmov.bomberman.handlers.channels.SocketCommunicationChannel;
+import pt.utl.ist.cmov.bomberman.handlers.managers.ICommunicationManager;
 import pt.utl.ist.cmov.bomberman.util.Constants;
 import android.util.Log;
 
 public class PlayerSocketHandler extends Thread {
 
 	private static final String TAG = "ClientSocketHandler";
-	private CommunicationPeer cPeer;
-	private SocketCommunicationChannel chat;
+	private ICommunicationManager commManager;
+	private SocketCommunicationChannel channel;
 	private InetAddress mAddress;
 
-	public PlayerSocketHandler(CommunicationPeer cPeer,
+	public PlayerSocketHandler(ICommunicationManager commManager,
 			InetAddress groupOwnerAddress) {
-		this.cPeer = cPeer;
+		this.commManager = commManager;
 		this.mAddress = groupOwnerAddress;
 	}
 
@@ -31,8 +31,8 @@ public class PlayerSocketHandler extends Thread {
 			socket.connect(new InetSocketAddress(mAddress.getHostAddress(),
 					Constants.SERVER_PORT), 5000);
 			Log.d(TAG, "Launching the I/O handler");
-			chat = new SocketCommunicationChannel(socket, cPeer);
-			new Thread(chat).start();
+			channel = new SocketCommunicationChannel(socket, commManager);
+			new Thread(channel).start();
 		} catch (IOException e) {
 			e.printStackTrace();
 			try {
@@ -42,10 +42,6 @@ public class PlayerSocketHandler extends Thread {
 			}
 			return;
 		}
-	}
-
-	public SocketCommunicationChannel getChat() {
-		return chat;
 	}
 
 }
