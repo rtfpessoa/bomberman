@@ -20,6 +20,10 @@ public abstract class Drawing {
 		;
 	}
 
+	public Integer getId() {
+		return this.id;
+	}
+
 	public void draw(Canvas canvas) {
 		canvas.drawBitmap(bitmap, pos.x - (bitmap.getWidth() / 2), pos.y
 				- (bitmap.getHeight() / 2), null);

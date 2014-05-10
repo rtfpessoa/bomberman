@@ -20,11 +20,15 @@ public abstract class Element {
 	}
 
 	public Character getType() {
-		return type;
+		return this.type;
+	}
+
+	public Integer getId() {
+		return this.id;
 	}
 
 	public Position getPos() {
-		return pos;
+		return this.pos;
 	}
 
 	public abstract boolean canMoveOver(Element element);

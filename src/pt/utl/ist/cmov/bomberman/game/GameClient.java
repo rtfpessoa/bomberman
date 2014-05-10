@@ -5,6 +5,7 @@ import java.util.List;
 
 import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
 import pt.utl.ist.cmov.bomberman.game.drawings.Drawing;
+import pt.utl.ist.cmov.bomberman.game.drawings.DrawingFactory;
 import pt.utl.ist.cmov.bomberman.game.elements.Element;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
@@ -37,6 +38,14 @@ public class GameClient implements IGameClient {
 	}
 
 	public void init(List<List<Element>> elements) {
+		for (List<Element> line : elements) {
+			for (Element element : line) {
+				Drawing drawing = DrawingFactory.create(gamePanel.getContext(),
+						element);
+				drawings.put(drawing.getId(), drawing);
+			}
+		}
+
 		MapMeasurements.updateMapMeasurements(gamePanel.getWidth(),
 				gamePanel.getHeight(), elements.get(0).size(), elements.size());
 	}

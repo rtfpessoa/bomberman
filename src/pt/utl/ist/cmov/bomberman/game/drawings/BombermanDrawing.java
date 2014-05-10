@@ -8,11 +8,10 @@ import android.graphics.Bitmap;
 
 public class BombermanDrawing extends Drawing {
 
-	public BombermanDrawing(Context context, Integer id, Position pos,
-			Integer bombermanId) {
+	public BombermanDrawing(Context context, Integer id, Position pos) {
 		super(id, pos);
 		Bitmap b = BitmapFactory.getBitmapFromAsset(context, "images/bomberman"
-				+ bombermanId + ".png");
+				+ id + ".png");
 		this.bitmap = Bitmap.createScaledBitmap(b,
 				MapMeasurements.POSITION_WIDTH,
 				MapMeasurements.POSITION_HEIGHT, true);
