@@ -1,6 +1,7 @@
 package pt.utl.ist.cmov.bomberman.game.drawings;
 
 import pt.utl.ist.cmov.bomberman.game.Level;
+import pt.utl.ist.cmov.bomberman.game.elements.BombermanElement;
 import pt.utl.ist.cmov.bomberman.game.elements.Element;
 import android.content.Context;
 
@@ -11,8 +12,10 @@ public class DrawingFactory {
 			return new BombDrawing(context, element.getId(), element.getPos());
 		}
 		if (element.getType() == Level.BOMBERMAN) {
+			BombermanElement bomberman = (BombermanElement) element;
+
 			return new BombermanDrawing(context, element.getId(),
-					element.getPos());
+					element.getPos(), bomberman.getBombermanId());
 		}
 		if (element.getType() == Level.EMPTY) {
 			return new EmptyDrawing(element.getId(), element.getPos());

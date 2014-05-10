@@ -182,26 +182,30 @@ public class Level implements Serializable {
 	}
 
 	public void putEmpty(Position pos) {
-		Integer id = this.elementIds++;
-		this.modelMap.get(pos.y).set(pos.x, new EmptyElement(this, id, pos));
+		Element current = this.modelMap.get(pos.y).get(pos.x);
+
+		this.modelMap.get(pos.y).set(pos.x,
+				new EmptyElement(this, current.getId(), pos));
 	}
 
 	public void putExploding(BombElement model, Position pos) {
-		Integer id = this.elementIds++;
+		Element current = this.modelMap.get(pos.y).get(pos.x);
+
 		this.modelMap.get(pos.y).set(pos.x,
-				new ExplosionElement(this, id, pos, model));
+				new ExplosionElement(this, current.getId(), pos, model));
 	}
 
 	public BombElement putBomb(BombermanElement bomberman) {
-		Integer id = this.elementIds++;
 		Position pos = bomberman.getPos();
-		return new BombElement(this, id, pos, bomberman);
+
+		return new BombElement(this, bomberman.getId(), pos, bomberman);
 	}
 
 	public BombermanElement putBomberman() {
 		Integer id = bombermanIds++;
 		Position pos = this.getBombermanInitialPos(id);
-		BombermanElement bomberman = new BombermanElement(this, id, pos);
+		Element current = this.getMap().get(pos.y).get(pos.x);
+		BombermanElement bomberman = new BombermanElement(this, current.getId(), pos, id);
 		this.modelMap.get(pos.y).set(pos.x, bomberman);
 		return bomberman;
 	}

@@ -10,6 +10,7 @@ import pt.utl.ist.cmov.bomberman.game.drawings.DrawingFactory;
 import pt.utl.ist.cmov.bomberman.game.elements.Element;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
+import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Handler;
 
@@ -21,7 +22,7 @@ public class GameClient implements IGameClient {
 	private MainGamePanel gamePanel;
 	protected IGameServer gameServerProxy;
 	private ConcurrentHashMap<Integer, Drawing> drawings;
-	private ArrayList<ArrayList<Element>> initialElements;
+	private ArrayList<ArrayList<Drawing>> initialElements;
 
 	private Handler handler;
 
@@ -55,7 +56,7 @@ public class GameClient implements IGameClient {
 		this.gameServerProxy = gameServer;
 	}
 
-	public void init(ArrayList<ArrayList<Element>> elements) {
+	public void init(ArrayList<ArrayList<Drawing>> elements) {
 		initialElements = elements;
 	}
 
@@ -65,7 +66,7 @@ public class GameClient implements IGameClient {
 					gamePanel.getHeight(), initialElements.get(0).size(),
 					initialElements.size());
 
-			for (ArrayList<Element> line : initialElements) {
+			for (ArrayList<Drawing> line : initialElements) {
 				updateScreen(line);
 			}
 		} else {
@@ -86,10 +87,8 @@ public class GameClient implements IGameClient {
 	}
 
 	@Override
-	public void updateScreen(ArrayList<Element> drawings) {
-		for (Element element : drawings) {
-			Drawing drawing = DrawingFactory.create(gamePanel.getContext(),
-					element);
+	public void updateScreen(ArrayList<Drawing> drawings) {
+		for (Drawing drawing : drawings) {
 			this.drawings.put(drawing.getId(), drawing);
 		}
 	}
@@ -99,9 +98,9 @@ public class GameClient implements IGameClient {
 		this.players = players;
 	}
 
-	public void draw(Canvas canvas) {
+	public void draw(Context context, Canvas canvas) {
 		for (Drawing d : drawings.values()) {
-			d.draw(canvas);
+			d.draw(context, canvas);
 		}
 	}
 

@@ -19,6 +19,8 @@ public class MainGamePanel extends SurfaceView implements
 
 	private GameClient gameClient;
 
+	private Context context;
+
 	public MainGamePanel(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		// adding the callback (this) to the surface holder to intercept events
@@ -26,6 +28,8 @@ public class MainGamePanel extends SurfaceView implements
 
 		// make the GamePanel focusable so it can handle events
 		setFocusable(true);
+
+		this.context = context;
 	}
 
 	public void setGameClient(GameClient gameClient) {
@@ -71,7 +75,7 @@ public class MainGamePanel extends SurfaceView implements
 	@Override
 	public void onDraw(Canvas canvas) {
 		canvas.drawColor(Color.rgb(16, 120, 48));
-		gameClient.draw(canvas);
+		gameClient.draw(context, canvas);
 	}
 
 }

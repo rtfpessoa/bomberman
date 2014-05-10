@@ -6,7 +6,7 @@ import java.util.HashMap;
 import pt.utl.ist.cmov.bomberman.game.BombermanPlayer;
 import pt.utl.ist.cmov.bomberman.game.GameClient;
 import pt.utl.ist.cmov.bomberman.game.IGameServer;
-import pt.utl.ist.cmov.bomberman.game.elements.Element;
+import pt.utl.ist.cmov.bomberman.game.drawings.Drawing;
 import pt.utl.ist.cmov.bomberman.handlers.CommunicationObject;
 import pt.utl.ist.cmov.bomberman.handlers.channels.ICommunicationChannel;
 import pt.utl.ist.cmov.bomberman.util.Direction;
@@ -33,7 +33,7 @@ public class ClientCommunicationManager implements ICommunicationManager,
 			Log.d("CommunicationManager", (String) object.getMessage());
 		}
 		if (object.getType() == CommunicationObject.UPDATE_SCREEN) {
-			ArrayList<Element> drawings = (ArrayList<Element>) object
+			ArrayList<Drawing> drawings = (ArrayList<Drawing>) object
 					.getMessage();
 			this.gameClient.updateScreen(drawings);
 		}
@@ -43,9 +43,9 @@ public class ClientCommunicationManager implements ICommunicationManager,
 			this.gameClient.updatePlayers(players);
 		}
 		if (object.getType() == CommunicationObject.INIT) {
-			ArrayList<ArrayList<Element>> elements = (ArrayList<ArrayList<Element>>) object
+			ArrayList<ArrayList<Drawing>> drawings = (ArrayList<ArrayList<Drawing>>) object
 					.getMessage();
-			this.gameClient.init(elements);
+			this.gameClient.init(drawings);
 		}
 	}
 

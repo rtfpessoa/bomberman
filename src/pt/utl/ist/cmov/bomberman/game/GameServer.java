@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import pt.utl.ist.cmov.bomberman.game.drawings.Drawing;
+import pt.utl.ist.cmov.bomberman.game.drawings.DrawingFactory;
 import pt.utl.ist.cmov.bomberman.game.elements.BombElement;
 import pt.utl.ist.cmov.bomberman.game.elements.BombermanElement;
 import pt.utl.ist.cmov.bomberman.game.elements.Element;
 import pt.utl.ist.cmov.bomberman.util.Direction;
+import pt.utl.ist.cmov.bomberman.util.Position;
+import android.content.Context;
 import android.os.Handler;
 
 public class GameServer implements IGameServer {
@@ -25,8 +29,11 @@ public class GameServer implements IGameServer {
 	private Runnable refreshRunnable;
 	private Integer remainingTime;
 
-	public GameServer(Level level) {
+	private Context context;
+
+	public GameServer(Context context, Level level) {
 		super();
+		this.context = context;
 		this.level = level;
 		this.remainingTime = level.getGameDuration();
 
@@ -48,7 +55,20 @@ public class GameServer implements IGameServer {
 	}
 
 	public void initClient() {
-		gameClientProxy.init(this.level.getMap());
+		ArrayList<ArrayList<Drawing>> drawings = new ArrayList<ArrayList<Drawing>>();
+
+		for (List<Element> line : this.level.getMap()) {
+			ArrayList<Drawing> drawingsLine = new ArrayList<Drawing>();
+			
+			for (Element element : line) {
+				Drawing drawing = DrawingFactory.create(context, element);
+				drawingsLine.add(drawing);
+			}
+			
+			drawings.add(drawingsLine);
+		}
+		
+		gameClientProxy.init(drawings);
 	}
 
 	public void setGameClient(IGameClient gameClientProxy) {
@@ -70,8 +90,15 @@ public class GameServer implements IGameServer {
 
 	public void move(String username, Direction dir) {
 		BombermanElement bomberman = bombermans.get(username);
+		Position bombPos = bomberman.getPos();
 
 		level.move(bomberman, dir);
+
+		BombElement bomb = bombsToDraw.get(username);
+		if (bomb != null) {
+			this.level.getMap().get(bombPos.y).set(bombPos.x, bomb);
+			bombsToDraw.put(username, null);
+		}
 	}
 
 	@Override
@@ -85,15 +112,16 @@ public class GameServer implements IGameServer {
 	}
 
 	private void updateScreen() {
-		ArrayList<Element> elements = new ArrayList<Element>();
+		ArrayList<Drawing> drawings = new ArrayList<Drawing>();
 
 		for (List<Element> line : this.level.getMap()) {
 			for (Element element : line) {
-				elements.add(element);
+				Drawing drawing = DrawingFactory.create(context, element);
+				drawings.add(drawing);
 			}
 		}
 
-		this.gameClientProxy.updateScreen(elements);
+		this.gameClientProxy.updateScreen(drawings);
 	}
 
 	public void decrementTime() {

@@ -8,7 +8,7 @@ import java.util.List;
 import pt.utl.ist.cmov.bomberman.game.BombermanPlayer;
 import pt.utl.ist.cmov.bomberman.game.GameServer;
 import pt.utl.ist.cmov.bomberman.game.IGameClient;
-import pt.utl.ist.cmov.bomberman.game.elements.Element;
+import pt.utl.ist.cmov.bomberman.game.drawings.Drawing;
 import pt.utl.ist.cmov.bomberman.handlers.CommunicationObject;
 import pt.utl.ist.cmov.bomberman.handlers.channels.ICommunicationChannel;
 import pt.utl.ist.cmov.bomberman.util.Direction;
@@ -57,7 +57,7 @@ public class ServerCommunicationManager implements ICommunicationManager,
 	}
 
 	@Override
-	public void updateScreen(ArrayList<Element> drawings) {
+	public void updateScreen(ArrayList<Drawing> drawings) {
 		CommunicationObject object = new CommunicationObject(
 				CommunicationObject.UPDATE_SCREEN, drawings);
 
@@ -65,9 +65,9 @@ public class ServerCommunicationManager implements ICommunicationManager,
 	}
 
 	@Override
-	public void init(ArrayList<ArrayList<Element>> elements) {
+	public void init(ArrayList<ArrayList<Drawing>> drawings) {
 		CommunicationObject object = new CommunicationObject(
-				CommunicationObject.INIT, elements);
+				CommunicationObject.INIT, drawings);
 
 		broadcast(object);
 	}

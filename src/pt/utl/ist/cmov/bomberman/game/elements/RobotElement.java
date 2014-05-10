@@ -13,7 +13,17 @@ public class RobotElement extends Element {
 
 	public RobotElement(Level level, Integer id, Position pos) {
 		super(level, Level.ROBOT, id, pos);
-		this.robotRunnable = new MoveRobots();
+		this.robotRunnable = new Runnable() {
+
+			@Override
+			public void run() {
+				move();
+				resetMoveRunnable();
+			}
+
+		};
+
+		this.robotRunnable.run();
 	}
 
 	public Direction getDirection() {
@@ -35,23 +45,15 @@ public class RobotElement extends Element {
 		if (!level.move(this, direction)) {
 			for (Direction newDirection : Direction.values()) {
 				if (level.move(this, newDirection)) {
+					this.setDirection(newDirection);
 					return;
 				}
 			}
 		}
 	}
 
-	protected class MoveRobots implements Runnable {
-
-		public MoveRobots() {
-			super();
-			this.run();
-		}
-
-		@Override
-		public void run() {
-			move();
-			robotHandler.postDelayed(robotRunnable, level.getRobotSpeed());
-		}
+	private void resetMoveRunnable() {
+		robotHandler.postDelayed(robotRunnable, level.getRobotSpeed());
 	}
+
 }

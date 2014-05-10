@@ -5,8 +5,17 @@ import pt.utl.ist.cmov.bomberman.util.Position;
 
 public class BombermanElement extends Element {
 
-	public BombermanElement(Level level, Integer id, Position pos) {
+	private Integer bombermanId;
+
+	public BombermanElement(Level level, Integer id, Position pos,
+			Integer bombermanId) {
 		super(level, Level.BOMBERMAN, id, pos);
+
+		this.bombermanId = bombermanId;
+	}
+
+	public Integer getBombermanId() {
+		return this.bombermanId;
 	}
 
 	@Override
