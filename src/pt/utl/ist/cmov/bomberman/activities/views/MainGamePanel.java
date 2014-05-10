@@ -39,6 +39,7 @@ public class MainGamePanel extends SurfaceView implements
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
+		gameClient.init();
 		thread = new MainLoopThread(getHolder(), this);
 		thread.setRunning(true);
 		thread.start();

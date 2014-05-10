@@ -52,13 +52,13 @@ public class GameActivity extends FullScreenActivity {
 		ClientCommunicationManager clientManager = new ClientCommunicationManager(
 				this.gameClient);
 
-		serverManager
-				.addCommChannel(new FakeCommunicationChannel(clientManager));
-		clientManager
-				.setCommChannel(new FakeCommunicationChannel(serverManager));
-
 		gameServer.setGameClient(serverManager);
 		gameClient.setGameServer(clientManager);
+
+		clientManager
+				.setCommChannel(new FakeCommunicationChannel(serverManager));
+		serverManager
+				.addCommChannel(new FakeCommunicationChannel(clientManager));
 
 		this.gamePanel.setGameClient(this.gameClient);
 

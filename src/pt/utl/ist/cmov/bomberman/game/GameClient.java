@@ -19,6 +19,7 @@ public class GameClient implements IGameClient {
 	private MainGamePanel gamePanel;
 	protected IGameServer gameServerProxy;
 	private HashMap<Integer, Drawing> drawings;
+	private List<List<Element>> initialElements;
 
 	private Handler handler;
 
@@ -38,16 +39,20 @@ public class GameClient implements IGameClient {
 	}
 
 	public void init(List<List<Element>> elements) {
-		for (List<Element> line : elements) {
+		initialElements = elements;
+	}
+	
+	public void init() {
+		MapMeasurements.updateMapMeasurements(gamePanel.getWidth(),
+				gamePanel.getHeight(), initialElements.get(0).size(), initialElements.size());
+
+		for (List<Element> line : initialElements) {
 			for (Element element : line) {
 				Drawing drawing = DrawingFactory.create(gamePanel.getContext(),
 						element);
 				drawings.put(drawing.getId(), drawing);
 			}
 		}
-
-		MapMeasurements.updateMapMeasurements(gamePanel.getWidth(),
-				gamePanel.getHeight(), elements.get(0).size(), elements.size());
 	}
 
 	public void putBomberman() {

@@ -24,6 +24,7 @@ public class ServerCommunicationManager implements ICommunicationManager,
 
 	public void addCommChannel(ICommunicationChannel commChannel) {
 		this.commChannels.add(commChannel);
+		this.gameServer.initClient();
 	}
 
 	@Override

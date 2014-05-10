@@ -23,7 +23,6 @@ public class GameServer implements IGameServer {
 	public GameServer(Level level) {
 		super();
 		this.level = level;
-		// this.commChannel = commChannel;
 		this.remainingTime = level.getGameDuration();
 
 		this.bombsToDraw = new HashMap<String, BombElement>();
@@ -37,6 +36,10 @@ public class GameServer implements IGameServer {
 			}
 		};
 		timerRunnable.run();
+	}
+
+	public void initClient() {
+		gameClientProxy.init(this.level.getMap());
 	}
 
 	public void setGameClient(IGameClient gameClientProxy) {

@@ -244,4 +244,8 @@ public class Level {
 		return false;
 	}
 
+	public List<List<Element>> getMap() {
+		return modelMap;
+	}
+
 }
