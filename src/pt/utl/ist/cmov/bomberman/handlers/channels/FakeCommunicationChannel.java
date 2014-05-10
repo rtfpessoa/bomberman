@@ -1,6 +1,5 @@
 package pt.utl.ist.cmov.bomberman.handlers.channels;
 
-import pt.utl.ist.cmov.bomberman.handlers.CommunicationObject;
 import pt.utl.ist.cmov.bomberman.handlers.managers.ICommunicationManager;
 
 public class FakeCommunicationChannel implements ICommunicationChannel {
@@ -12,7 +11,7 @@ public class FakeCommunicationChannel implements ICommunicationChannel {
 	}
 
 	@Override
-	public void send(CommunicationObject object) {
+	public void send(String object) {
 		outCommManager.receive(object);
 	}
 

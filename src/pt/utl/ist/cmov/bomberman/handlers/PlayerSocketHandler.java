@@ -30,7 +30,7 @@ public class PlayerSocketHandler extends Thread {
 			socket.bind(null);
 			socket.connect(new InetSocketAddress(mAddress.getHostAddress(),
 					Constants.SERVER_PORT), 5000);
-			Log.d(TAG, "Launching the I/O handler");
+			Log.i(TAG, "Launching the I/O handler");
 			channel = new SocketCommunicationChannel(socket, commManager);
 			new Thread(channel).start();
 		} catch (IOException e) {

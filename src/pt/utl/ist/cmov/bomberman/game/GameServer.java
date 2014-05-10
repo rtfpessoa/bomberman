@@ -55,20 +55,17 @@ public class GameServer implements IGameServer {
 	}
 
 	public void initClient() {
-		ArrayList<ArrayList<Drawing>> drawings = new ArrayList<ArrayList<Drawing>>();
+		ArrayList<ArrayList<Element>> elements = this.level.getMap();
 
-		for (List<Element> line : this.level.getMap()) {
-			ArrayList<Drawing> drawingsLine = new ArrayList<Drawing>();
-			
+		ArrayList<Drawing> drawings = new ArrayList<Drawing>();
+		for (List<Element> line : elements) {
 			for (Element element : line) {
 				Drawing drawing = DrawingFactory.create(context, element);
-				drawingsLine.add(drawing);
+				drawings.add(drawing);
 			}
-			
-			drawings.add(drawingsLine);
 		}
-		
-		gameClientProxy.init(drawings);
+
+		gameClientProxy.init(elements.size(), elements.get(0).size(), drawings);
 	}
 
 	public void setGameClient(IGameClient gameClientProxy) {

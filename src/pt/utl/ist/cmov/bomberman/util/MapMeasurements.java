@@ -16,12 +16,12 @@ public class MapMeasurements {
 		SIDE_PADDING = POSITION_WIDTH / 2;
 		UP_PADDING = POSITION_HEIGHT / 2;
 
-		Log.d("MapMeasurements", "screenWidth: " + viewWidth);
-		Log.d("MapMeasurements", "screenHeigth: " + viewHeight);
-		Log.d("MapMeasurements", "SIDE_PADDING: " + SIDE_PADDING);
-		Log.d("MapMeasurements", "UP_PADDING: " + UP_PADDING);
-		Log.d("MapMeasurements", "POSITION_HEIGHT: " + POSITION_HEIGHT);
-		Log.d("MapMeasurements", "POSITION_WIDTH: " + POSITION_WIDTH);
+		Log.i("MapMeasurements", "screenWidth: " + viewWidth);
+		Log.i("MapMeasurements", "screenHeigth: " + viewHeight);
+		Log.i("MapMeasurements", "SIDE_PADDING: " + SIDE_PADDING);
+		Log.i("MapMeasurements", "UP_PADDING: " + UP_PADDING);
+		Log.i("MapMeasurements", "POSITION_HEIGHT: " + POSITION_HEIGHT);
+		Log.i("MapMeasurements", "POSITION_WIDTH: " + POSITION_WIDTH);
 	}
 
 }

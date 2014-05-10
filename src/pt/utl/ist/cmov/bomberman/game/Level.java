@@ -1,6 +1,5 @@
 package pt.utl.ist.cmov.bomberman.game;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,9 +15,7 @@ import pt.utl.ist.cmov.bomberman.game.elements.WallElement;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import pt.utl.ist.cmov.bomberman.util.Position;
 
-public class Level implements Serializable {
-
-	private static final long serialVersionUID = 2489498958594571180L;
+public class Level {
 
 	private Integer gameDuration;
 	private Integer explosionTimeout;
@@ -205,7 +202,8 @@ public class Level implements Serializable {
 		Integer id = bombermanIds++;
 		Position pos = this.getBombermanInitialPos(id);
 		Element current = this.getMap().get(pos.y).get(pos.x);
-		BombermanElement bomberman = new BombermanElement(this, current.getId(), pos, id);
+		BombermanElement bomberman = new BombermanElement(this,
+				current.getId(), pos, id);
 		this.modelMap.get(pos.y).set(pos.x, bomberman);
 		return bomberman;
 	}

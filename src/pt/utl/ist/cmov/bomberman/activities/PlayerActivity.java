@@ -121,7 +121,7 @@ public class PlayerActivity extends WifiDirectActivity implements
 		if (p2pInfo.isGroupOwner) {
 			Log.e("BOMBERMAN", "This device should not be the groupd owner!");
 		} else {
-			Log.d("BOMBERMAN", "Connected as peer");
+			Log.i("BOMBERMAN", "Connected as peer");
 			handler = new PlayerSocketHandler(this.clientManager,
 					p2pInfo.groupOwnerAddress);
 			handler.start();

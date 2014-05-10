@@ -21,9 +21,9 @@ public class CommunicationObject implements Serializable {
 	public static final String UPDATE_PLAYERS = "pt.utl.ist.cmov.bomberman.UPDATE_PLAYERS";
 
 	private String type;
-	private Object message;
+	private String message;
 
-	public CommunicationObject(String type, Object message) {
+	public CommunicationObject(String type, String message) {
 		this.type = type;
 		this.message = message;
 	}
@@ -32,7 +32,7 @@ public class CommunicationObject implements Serializable {
 		return type;
 	}
 
-	public Object getMessage() {
+	public String getMessage() {
 		return message;
 	}
 

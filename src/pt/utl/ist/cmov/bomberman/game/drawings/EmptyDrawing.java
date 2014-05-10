@@ -6,6 +6,12 @@ import android.graphics.Canvas;
 
 public class EmptyDrawing extends Drawing {
 
+	private static final long serialVersionUID = 5952570574618061269L;
+
+	public EmptyDrawing() {
+		super();
+	}
+
 	public EmptyDrawing(Integer id, Position pos) {
 		super(id, pos, null);
 	}

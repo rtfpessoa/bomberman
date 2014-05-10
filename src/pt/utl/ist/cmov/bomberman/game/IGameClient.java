@@ -7,7 +7,7 @@ import pt.utl.ist.cmov.bomberman.game.drawings.Drawing;
 
 public interface IGameClient {
 
-	public void init(ArrayList<ArrayList<Drawing>> elements);
+	public void init(Integer lines, Integer cols, ArrayList<Drawing> elements);
 
 	public void updateScreen(ArrayList<Drawing> drawings);
 

@@ -13,6 +13,7 @@ import pt.utl.ist.cmov.bomberman.handlers.CommunicationObject;
 import pt.utl.ist.cmov.bomberman.handlers.channels.ICommunicationChannel;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.util.Log;
+import com.google.gson.Gson;
 
 public class ServerCommunicationManager implements ICommunicationManager,
 		IGameClient {
@@ -31,56 +32,76 @@ public class ServerCommunicationManager implements ICommunicationManager,
 	}
 
 	@Override
-	public void receive(CommunicationObject object) {
-		if (object.getType() == CommunicationObject.DEBUG) {
-			Log.d("CommunicationManager", (String) object.getMessage());
-		}
-		if (object.getType() == CommunicationObject.PUT_BOMBERMAN) {
-			this.gameServer.putBomberman((String) object.getMessage());
-		}
-		if (object.getType() == CommunicationObject.PUT_BOMB) {
-			this.gameServer.putBomb((String) object.getMessage());
-		}
-		if (object.getType() == CommunicationObject.PAUSE) {
-			this.gameServer.pause((String) object.getMessage());
-		}
-		if (object.getType() == CommunicationObject.QUIT) {
-			this.gameServer.quit((String) object.getMessage());
-		}
-		if (object.getType() == CommunicationObject.MOVE) {
-			HashMap<String, Object> params = (HashMap<String, Object>) object
-					.getMessage();
-
-			this.gameServer.move((String) params.get("username"),
-					(Direction) params.get("direction"));
-		}
+	public void receive(String object) {
+//		if (object.getType() == CommunicationObject.DEBUG) {
+//			Log.i("CommunicationManager", (String) object.getMessage());
+//		}
+//		if (object.getType() == CommunicationObject.PUT_BOMBERMAN) {
+//			this.gameServer.putBomberman((String) object.getMessage());
+//		}
+//		if (object.getType() == CommunicationObject.PUT_BOMB) {
+//			this.gameServer.putBomb((String) object.getMessage());
+//		}
+//		if (object.getType() == CommunicationObject.PAUSE) {
+//			this.gameServer.pause((String) object.getMessage());
+//		}
+//		if (object.getType() == CommunicationObject.QUIT) {
+//			this.gameServer.quit((String) object.getMessage());
+//		}
+//		if (object.getType() == CommunicationObject.MOVE) {
+//			HashMap<String, Object> params = (HashMap<String, Object>) object
+//					.getMessage();
+//
+//			this.gameServer.move((String) params.get("username"),
+//					(Direction) params.get("direction"));
+//		}
 	}
 
 	@Override
 	public void updateScreen(ArrayList<Drawing> drawings) {
-		CommunicationObject object = new CommunicationObject(
-				CommunicationObject.UPDATE_SCREEN, drawings);
+		Gson gson = new Gson();
+		String innerJson = gson.toJson(drawings);
 
-		broadcast(object);
+		CommunicationObject object = new CommunicationObject(
+				CommunicationObject.UPDATE_SCREEN, innerJson);
+
+		String json = gson.toJson(object);
+
+		broadcast(CommunicationObject.UPDATE_SCREEN + "±" + json);
 	}
 
 	@Override
-	public void init(ArrayList<ArrayList<Drawing>> drawings) {
-		CommunicationObject object = new CommunicationObject(
-				CommunicationObject.INIT, drawings);
+	public void init(Integer lines, Integer cols, ArrayList<Drawing> drawings) {
+		HashMap<String, Object> message = new HashMap<String, Object>();
+		message.put("lines", lines);
+		message.put("cols", cols);
+		message.put("drawings", drawings);
 
-		broadcast(object);
+		Gson gson = new Gson();
+		String innerJson = gson.toJson(message);
+
+		CommunicationObject object = new CommunicationObject(
+				CommunicationObject.INIT, innerJson);
+
+		String json = gson.toJson(object);
+
+		broadcast(CommunicationObject.INIT + "±" + json);
 	}
 
 	@Override
 	public void updatePlayers(HashMap<String, BombermanPlayer> players) {
-		CommunicationObject object = new CommunicationObject(
-				CommunicationObject.UPDATE_PLAYERS, players);
+		Gson gson = new Gson();
+		String innerJson = gson.toJson(players);
 
-		broadcast(object);
+		CommunicationObject object = new CommunicationObject(
+				CommunicationObject.UPDATE_PLAYERS, innerJson);
+
+		String json = gson.toJson(object);
+
+		broadcast(CommunicationObject.UPDATE_PLAYERS + "±" + json);
 	}
 
-	private void broadcast(CommunicationObject object) {
+	private void broadcast(String object) {
 		for (Iterator<ICommunicationChannel> commChannel = commChannels
 				.iterator(); commChannel.hasNext();) {
 			commChannel.next().send(object);

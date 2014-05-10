@@ -6,8 +6,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
 import pt.utl.ist.cmov.bomberman.game.drawings.Drawing;
-import pt.utl.ist.cmov.bomberman.game.drawings.DrawingFactory;
-import pt.utl.ist.cmov.bomberman.game.elements.Element;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
 import android.content.Context;
@@ -22,7 +20,9 @@ public class GameClient implements IGameClient {
 	private MainGamePanel gamePanel;
 	protected IGameServer gameServerProxy;
 	private ConcurrentHashMap<Integer, Drawing> drawings;
-	private ArrayList<ArrayList<Drawing>> initialElements;
+	private ArrayList<Drawing> initialElements;
+	private Integer lines;
+	private Integer cols;
 
 	private Handler handler;
 
@@ -56,19 +56,18 @@ public class GameClient implements IGameClient {
 		this.gameServerProxy = gameServer;
 	}
 
-	public void init(ArrayList<ArrayList<Drawing>> elements) {
-		initialElements = elements;
+	public void init(Integer lines, Integer cols, ArrayList<Drawing> elements) {
+		this.initialElements = elements;
+		this.lines = lines;
+		this.cols = cols;
 	}
 
 	public void init() {
 		if (initialElements != null) {
 			MapMeasurements.updateMapMeasurements(gamePanel.getWidth(),
-					gamePanel.getHeight(), initialElements.get(0).size(),
-					initialElements.size());
+					gamePanel.getHeight(), cols, lines);
 
-			for (ArrayList<Drawing> line : initialElements) {
-				updateScreen(line);
-			}
+			updateScreen(initialElements);
 		} else {
 			this.initHandler.postDelayed(this.initRunnable, 1000);
 		}

@@ -83,7 +83,7 @@ public class WifiDirectController extends BroadcastReceiver {
 		mManager.discoverPeers(mChannel, new ActionListener() {
 			@Override
 			public void onSuccess() {
-				Log.d("BOMBERMAN", "Discovered peers successfully!");
+				Log.i("BOMBERMAN", "Discovered peers successfully!");
 			}
 
 			@Override
@@ -101,12 +101,12 @@ public class WifiDirectController extends BroadcastReceiver {
 		mManager.connect(mChannel, config, new ActionListener() {
 			@Override
 			public void onSuccess() {
-				Log.d("BOMBERMAN", "Connected successfully!");
+				Log.i("BOMBERMAN", "Connected successfully!");
 			}
 
 			@Override
 			public void onFailure(int reason) {
-				Log.d("BOMBERMAN", "Failed to connect!");
+				Log.i("BOMBERMAN", "Failed to connect!");
 			}
 		});
 	}

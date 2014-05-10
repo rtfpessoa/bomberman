@@ -1,10 +1,8 @@
 package pt.utl.ist.cmov.bomberman.handlers.channels;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 
 import pt.utl.ist.cmov.bomberman.handlers.CommunicationObject;
@@ -23,32 +21,33 @@ public class SocketCommunicationChannel implements ICommunicationChannel,
 		this.commManager = commManager;
 	}
 
-	private InputStream iStream;
-	private OutputStream oStream;
+	private ObjectInputStream iStream;
+	private ObjectOutputStream oStream;
 	private static final String TAG = "CommunicationHandler";
 
 	@Override
-	public void send(CommunicationObject object) {
+	public void send(String object) {
 		write(object);
 	}
 
 	@Override
 	public void run() {
 		try {
+			String object;
 
 			socket.setTcpNoDelay(true);
-			iStream = socket.getInputStream();
-			oStream = socket.getOutputStream();
+			oStream = new ObjectOutputStream(socket.getOutputStream());
+			oStream.flush();
+			iStream = new ObjectInputStream(socket.getInputStream());
 
 			commManager.addCommChannel(this);
 
 			while (true) {
 				try {
-					ObjectInputStream in = new ObjectInputStream(iStream);
-					CommunicationObject object = (CommunicationObject) in
-							.readObject();
-
-					commManager.receive(object);
+					object = (String) iStream.readObject();
+					if (object != null) {
+						commManager.receive(object);
+					}
 				} catch (ClassNotFoundException e) {
 					Log.e(TAG, "disconnected", e);
 				}
@@ -66,8 +65,7 @@ public class SocketCommunicationChannel implements ICommunicationChannel,
 
 	private void write(Object obj) {
 		try {
-			ObjectOutputStream out = new ObjectOutputStream(oStream);
-			out.writeObject(obj);
+			oStream.writeObject(obj);
 		} catch (IOException e) {
 			Log.e(TAG, "Exception during write", e);
 		}

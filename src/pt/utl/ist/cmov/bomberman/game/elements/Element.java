@@ -1,13 +1,9 @@
 package pt.utl.ist.cmov.bomberman.game.elements;
 
-import java.io.Serializable;
-
 import pt.utl.ist.cmov.bomberman.game.Level;
 import pt.utl.ist.cmov.bomberman.util.Position;
 
-public abstract class Element implements Serializable {
-
-	private static final long serialVersionUID = -6958193175944759916L;
+public abstract class Element {
 
 	protected Level level;
 	protected Position pos;

@@ -9,11 +9,9 @@ import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
-import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -38,26 +36,6 @@ public class GameDiscoveryActivity extends WifiDirectActivity implements
 		this.wifiDirectController.discoverPeers();
 		Toast.makeText(getApplicationContext(), "Discovering peers...",
 				Toast.LENGTH_SHORT).show();
-	}
-
-	@Override
-	public void onStop() {
-		if (manager != null && channel != null) {
-			manager.removeGroup(channel, new ActionListener() {
-
-				@Override
-				public void onFailure(int reasonCode) {
-					Log.d("BOMBERMAN", "Disconnect failed. Reason :"
-							+ reasonCode);
-				}
-
-				@Override
-				public void onSuccess() {
-				}
-
-			});
-		}
-		super.onStop();
 	}
 
 	@Override

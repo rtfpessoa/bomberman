@@ -1,7 +1,6 @@
 package pt.utl.ist.cmov.bomberman.util;
 
-import java.io.Serializable;
 
-public enum Direction implements Serializable {
+public enum Direction {
 	UP, DOWN, LEFT, RIGHT
 }

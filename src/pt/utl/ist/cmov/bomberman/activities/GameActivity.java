@@ -156,7 +156,7 @@ public class GameActivity extends WifiDirectActivity implements
 		Thread handler = null;
 
 		if (!hasStartedServer && p2pInfo.isGroupOwner) {
-			Log.d("BOMBERMAN", "Connected as peer");
+			Log.i("BOMBERMAN", "Connected as GroupOwner");
 			try {
 				handler = new ServerSocketHandler(this.serverManager);
 			} catch (IOException e) {

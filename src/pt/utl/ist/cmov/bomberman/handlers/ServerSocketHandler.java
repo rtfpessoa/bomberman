@@ -22,7 +22,7 @@ public class ServerSocketHandler extends Thread {
 		try {
 			socket = new ServerSocket(4545);
 			this.commManager = commManager;
-			Log.d("GroupOwnerSocketHandler", "Socket Started");
+			Log.i("GroupOwnerSocketHandler", "Socket Started");
 		} catch (IOException e) {
 			e.printStackTrace();
 			pool.shutdownNow();
@@ -43,7 +43,7 @@ public class ServerSocketHandler extends Thread {
 				// there is a new connection
 				pool.execute(new SocketCommunicationChannel(socket.accept(),
 						commManager));
-				Log.d(TAG, "Launching the I/O handler");
+				Log.i(TAG, "Launching the I/O handler");
 
 			} catch (IOException e) {
 				try {

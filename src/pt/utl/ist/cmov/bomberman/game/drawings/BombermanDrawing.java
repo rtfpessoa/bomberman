@@ -5,6 +5,12 @@ import android.content.Context;
 
 public class BombermanDrawing extends Drawing {
 
+	private static final long serialVersionUID = -1384653994352488443L;
+
+	public BombermanDrawing() {
+		super();
+	}
+
 	public BombermanDrawing(Context context, Integer id, Position pos,
 			Integer bombermanId) {
 		super(id, pos, "images/bomberman" + bombermanId + ".png");

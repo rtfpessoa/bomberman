@@ -9,13 +9,21 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
-public abstract class Drawing implements Serializable {
+public class Drawing implements Serializable {
+
+	private static final long serialVersionUID = 2182656568468191715L;
 
 	protected Integer id;
-	protected Bitmap bitmap;
 	private Position pos;
 	private Boolean isConverted = false;
 	private String bitmapName;
+
+	public Drawing() {
+		super();
+		this.id = null;
+		this.pos = null;
+		this.bitmapName = null;
+	}
 
 	public Drawing(Integer id, Position pos, String bitmapName) {
 		this.id = id;
@@ -32,11 +40,6 @@ public abstract class Drawing implements Serializable {
 				+ MapMeasurements.POSITION_WIDTH * pos.x,
 				MapMeasurements.UP_PADDING + MapMeasurements.POSITION_HEIGHT
 						* pos.y);
-
-		Bitmap b = BitmapFactory.getBitmapFromAsset(context, bitmapName);
-		this.bitmap = Bitmap.createScaledBitmap(b,
-				MapMeasurements.POSITION_WIDTH,
-				MapMeasurements.POSITION_HEIGHT, true);
 	}
 
 	public void draw(Context context, Canvas canvas) {
@@ -44,6 +47,9 @@ public abstract class Drawing implements Serializable {
 			init(context);
 			this.isConverted = true;
 		}
+
+		Bitmap bitmap = BitmapFactory.getInstance(context).getBitmapFromAsset(
+				bitmapName);
 
 		canvas.drawBitmap(bitmap, pos.x - (bitmap.getWidth() / 2), pos.y
 				- (bitmap.getHeight() / 2), null);
