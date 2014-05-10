@@ -1,5 +1,6 @@
 package pt.utl.ist.cmov.bomberman.game;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,9 @@ import pt.utl.ist.cmov.bomberman.game.elements.WallElement;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import pt.utl.ist.cmov.bomberman.util.Position;
 
-public class Level {
+public class Level implements Serializable {
+
+	private static final long serialVersionUID = 2489498958594571180L;
 
 	private Integer gameDuration;
 	private Integer explosionTimeout;
@@ -38,7 +41,7 @@ public class Level {
 	private Integer height;
 	private Integer width;
 
-	private List<List<Element>> modelMap;
+	private ArrayList<ArrayList<Element>> modelMap;
 
 	private Integer bombermanIds;
 	private Integer elementIds;
@@ -57,7 +60,7 @@ public class Level {
 		this.robotSpeed = robotSpeed;
 		this.pointsRobot = pointsRobot;
 		this.pointsOpponent = pointsOpponent;
-		this.modelMap = new ArrayList<List<Element>>();
+		this.modelMap = new ArrayList<ArrayList<Element>>();
 		this.bombermansInitialPos = bombermansInitialPos;
 		this.bombermanIds = 1;
 		this.isPaused = false;
@@ -213,7 +216,7 @@ public class Level {
 		this.elementIds = maxBombermans + 1;
 
 		for (int y = 0; y < this.height; y++) {
-			List<Element> line = new ArrayList<Element>();
+			ArrayList<Element> line = new ArrayList<Element>();
 
 			for (int x = 0; x < this.width; x++) {
 				Character c = initialMap.get(y).get(x);
@@ -248,7 +251,7 @@ public class Level {
 		return false;
 	}
 
-	public List<List<Element>> getMap() {
+	public ArrayList<ArrayList<Element>> getMap() {
 		return modelMap;
 	}
 

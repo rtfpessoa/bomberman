@@ -1,5 +1,7 @@
 package pt.utl.ist.cmov.bomberman.activities;
 
+import java.io.IOException;
+
 import pt.utl.ist.cmov.bomberman.R;
 import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
 import pt.utl.ist.cmov.bomberman.game.BombermanPlayer;
@@ -7,6 +9,7 @@ import pt.utl.ist.cmov.bomberman.game.GameClient;
 import pt.utl.ist.cmov.bomberman.game.GameServer;
 import pt.utl.ist.cmov.bomberman.game.Level;
 import pt.utl.ist.cmov.bomberman.game.LevelManager;
+import pt.utl.ist.cmov.bomberman.handlers.ServerSocketHandler;
 import pt.utl.ist.cmov.bomberman.handlers.channels.FakeCommunicationChannel;
 import pt.utl.ist.cmov.bomberman.handlers.managers.ClientCommunicationManager;
 import pt.utl.ist.cmov.bomberman.handlers.managers.ServerCommunicationManager;
@@ -14,18 +17,26 @@ import pt.utl.ist.cmov.bomberman.listeners.DirectionButtonListener;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.p2p.WifiP2pDeviceList;
+import android.net.wifi.p2p.WifiP2pInfo;
+import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
+import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-public class GameActivity extends FullScreenActivity {
+public class GameActivity extends WifiDirectActivity implements
+		PeerListListener, ConnectionInfoListener {
 
 	private static Context context;
 
 	private MainGamePanel gamePanel;
 	private GameServer gameServer;
 	private GameClient gameClient;
+	private ServerCommunicationManager serverManager;
+	private ClientCommunicationManager clientManager;
 
 	private Handler timerHandler = new Handler();
 	private Runnable timerRunnable;
@@ -34,6 +45,8 @@ public class GameActivity extends FullScreenActivity {
 	private TextView playerName;
 	private TextView score;
 	private TextView playerNumber;
+
+	private Boolean hasStartedServer = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +68,8 @@ public class GameActivity extends FullScreenActivity {
 		// TODO: replace username
 		this.gameClient = new GameClient("USERNAME", gamePanel);
 
-		ServerCommunicationManager serverManager = new ServerCommunicationManager(
-				this.gameServer);
-		ClientCommunicationManager clientManager = new ClientCommunicationManager(
-				this.gameClient);
+		this.serverManager = new ServerCommunicationManager(this.gameServer);
+		this.clientManager = new ClientCommunicationManager(this.gameClient);
 
 		gameServer.setGameClient(serverManager);
 		gameClient.setGameServer(clientManager);
@@ -138,5 +149,28 @@ public class GameActivity extends FullScreenActivity {
 
 		String playerString = player.getPlayers() + " players";
 		playerNumber.setText(playerString);
+	}
+
+	@Override
+	public void onConnectionInfoAvailable(WifiP2pInfo p2pInfo) {
+		Thread handler = null;
+
+		if (!hasStartedServer && p2pInfo.isGroupOwner) {
+			Log.d("BOMBERMAN", "Connected as peer");
+			try {
+				handler = new ServerSocketHandler(this.serverManager);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			handler.start();
+			hasStartedServer = true;
+		} else {
+			Log.e("BOMBERMAN", "This device must be the groupd owner!");
+		}
+	}
+
+	@Override
+	public void onPeersAvailable(WifiP2pDeviceList peers) {
+		// INFO: this is not needed
 	}
 }

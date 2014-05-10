@@ -57,7 +57,7 @@ public class ServerCommunicationManager implements ICommunicationManager,
 	}
 
 	@Override
-	public void updateScreen(List<Element> drawings) {
+	public void updateScreen(ArrayList<Element> drawings) {
 		CommunicationObject object = new CommunicationObject(
 				CommunicationObject.UPDATE_SCREEN, drawings);
 
@@ -65,7 +65,7 @@ public class ServerCommunicationManager implements ICommunicationManager,
 	}
 
 	@Override
-	public void init(List<List<Element>> elements) {
+	public void init(ArrayList<ArrayList<Element>> elements) {
 		CommunicationObject object = new CommunicationObject(
 				CommunicationObject.INIT, elements);
 

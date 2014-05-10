@@ -1,6 +1,10 @@
 package pt.utl.ist.cmov.bomberman.game;
 
-public class BombermanPlayer {
+import java.io.Serializable;
+
+public class BombermanPlayer implements Serializable {
+
+	private static final long serialVersionUID = -1116953100184613328L;
 
 	private String username;
 	private Integer score;

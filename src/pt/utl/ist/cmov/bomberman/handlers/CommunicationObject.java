@@ -1,6 +1,10 @@
 package pt.utl.ist.cmov.bomberman.handlers;
 
-public class CommunicationObject {
+import java.io.Serializable;
+
+public class CommunicationObject implements Serializable {
+
+	private static final long serialVersionUID = -3749194449598125192L;
 
 	public static final String DEBUG = "pt.utl.ist.cmov.bomberman.DEBUG";
 

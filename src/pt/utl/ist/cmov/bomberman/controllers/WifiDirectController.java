@@ -41,15 +41,15 @@ public class WifiDirectController extends BroadcastReceiver {
 		if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
 			int wifiDirectState = intent.getIntExtra(
 					WifiP2pManager.EXTRA_WIFI_STATE, -1);
-			if (wifiDirectState == WifiP2pManager.WIFI_P2P_STATE_DISABLED) {
-				setupWifi();
-				try {
-					Method enableWifiDirect = mManager.getClass().getMethod(
-							"enableP2p", Channel.class);
-					enableWifiDirect.invoke(mManager, mChannel);
-				} catch (Exception ignore) {
-				}
-			}
+//			if (wifiDirectState == WifiP2pManager.WIFI_P2P_STATE_DISABLED) {
+//				setupWifi();
+//				try {
+//					Method enableWifiDirect = mManager.getClass().getMethod(
+//							"enableP2p", Channel.class);
+//					enableWifiDirect.invoke(mManager, mChannel);
+//				} catch (Exception ignore) {
+//				}
+//			}
 		} else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
 			if (mManager != null) {
 				mManager.requestPeers(mChannel, (PeerListListener) activity);
@@ -71,12 +71,12 @@ public class WifiDirectController extends BroadcastReceiver {
 	}
 
 	public void setupWifi() {
-		WifiManager wifi = (WifiManager) activity
-				.getSystemService(Context.WIFI_SERVICE);
-
-		if (!wifi.isWifiEnabled()) {
-			wifi.setWifiEnabled(true);
-		}
+//		WifiManager wifi = (WifiManager) activity
+//				.getSystemService(Context.WIFI_SERVICE);
+//
+//		if (!wifi.isWifiEnabled()) {
+//			wifi.setWifiEnabled(true);
+//		}
 	}
 
 	public void discoverPeers() {
@@ -97,6 +97,7 @@ public class WifiDirectController extends BroadcastReceiver {
 		WifiP2pConfig config = new WifiP2pConfig();
 		config.deviceAddress = device.deviceAddress;
 		config.wps.setup = WpsInfo.PBC;
+		config.groupOwnerIntent = 0;
 		mManager.connect(mChannel, config, new ActionListener() {
 			@Override
 			public void onSuccess() {

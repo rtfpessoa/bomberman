@@ -2,7 +2,6 @@ package pt.utl.ist.cmov.bomberman.activities;
 
 import pt.utl.ist.cmov.bomberman.R;
 import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
-import pt.utl.ist.cmov.bomberman.controllers.WifiDirectController;
 import pt.utl.ist.cmov.bomberman.game.BombermanPlayer;
 import pt.utl.ist.cmov.bomberman.game.GameClient;
 import pt.utl.ist.cmov.bomberman.game.IGameServer;
@@ -10,45 +9,40 @@ import pt.utl.ist.cmov.bomberman.handlers.PlayerSocketHandler;
 import pt.utl.ist.cmov.bomberman.handlers.managers.ClientCommunicationManager;
 import pt.utl.ist.cmov.bomberman.listeners.DirectionButtonListener;
 import pt.utl.ist.cmov.bomberman.util.Direction;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
-import android.net.wifi.p2p.WifiP2pManager;
-import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
+import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-public class PlayerActivity extends FullScreenActivity implements
-		ConnectionInfoListener {
+public class PlayerActivity extends WifiDirectActivity implements
+		PeerListListener, ConnectionInfoListener {
 
 	private MainGamePanel gamePanel;
 	private GameClient gameClient;
 	private ClientCommunicationManager clientManager;
-
-	private WifiP2pManager manager;
-	private final IntentFilter intentFilter = new IntentFilter();
-	private Channel channel;
-	private WifiDirectController wifiDirectController;
 
 	private WifiP2pDevice wifiP2pManagerDevice;
 
 	private Handler timerHandler = new Handler();
 	private Runnable timerRunnable;
 
+	private TextView timeLeft;
+	private TextView playerName;
+	private TextView score;
+	private TextView playerNumber;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_game);
-
-		this.wifiP2pManagerDevice = getIntent().getExtras().getParcelable(
-				GameDiscoveryActivity.DEVICE_MESSAGE);
 
 		this.gamePanel = (MainGamePanel) findViewById(R.id.game_panel);
 
@@ -61,22 +55,9 @@ public class PlayerActivity extends FullScreenActivity implements
 
 		this.gamePanel.setGameClient(this.gameClient);
 
-		intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
-		intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
-		intentFilter
-				.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
-		intentFilter
-				.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
-
-		manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
-		channel = manager.initialize(this, getMainLooper(), null);
-
-		this.wifiDirectController = new WifiDirectController(manager, channel,
-				this);
-
-		wifiDirectController.setupWifi();
-
-		wifiDirectController.connect(wifiP2pManagerDevice);
+		this.wifiP2pManagerDevice = getIntent().getExtras().getParcelable(
+				GameDiscoveryActivity.DEVICE_MESSAGE);
+		this.wifiDirectController.connect(wifiP2pManagerDevice);
 
 		this.findViewById(R.id.button_up).setOnTouchListener(
 				new DirectionButtonListener(Direction.UP, gameClient));
@@ -89,6 +70,11 @@ public class PlayerActivity extends FullScreenActivity implements
 
 		this.findViewById(R.id.button_right).setOnTouchListener(
 				new DirectionButtonListener(Direction.RIGHT, gameClient));
+
+		timeLeft = (TextView) this.findViewById(R.id.time_left);
+		playerName = (TextView) this.findViewById(R.id.player_name);
+		score = (TextView) this.findViewById(R.id.player_score);
+		playerNumber = (TextView) this.findViewById(R.id.player_number);
 
 		this.timerRunnable = new Runnable() {
 			@Override
@@ -143,17 +129,21 @@ public class PlayerActivity extends FullScreenActivity implements
 	}
 
 	private void update(BombermanPlayer player) {
-		TextView timeLeft = (TextView) this.findViewById(R.id.time_left);
-		timeLeft.setText(player.getTime().toString() + " s");
+		String timeString = player.getTime().toString() + " s";
+		timeLeft.setText(timeString);
 
-		TextView playerName = (TextView) this.findViewById(R.id.player_name);
-		playerName.setText(player.getUsername());
+		String usernameString = player.getUsername();
+		playerName.setText(usernameString);
 
-		TextView score = (TextView) this.findViewById(R.id.player_score);
-		score.setText(player.getScore());
+		String scoreString = player.getScore() + " pts";
+		score.setText(scoreString);
 
-		TextView playerNumber = (TextView) this
-				.findViewById(R.id.player_number);
-		playerNumber.setText(player.getScore());
+		String playerString = player.getPlayers() + " players";
+		playerNumber.setText(playerString);
+	}
+
+	@Override
+	public void onPeersAvailable(WifiP2pDeviceList peers) {
+		// INFO: this is not needed
 	}
 }

@@ -1,7 +1,7 @@
 package pt.utl.ist.cmov.bomberman.handlers.managers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import pt.utl.ist.cmov.bomberman.game.BombermanPlayer;
 import pt.utl.ist.cmov.bomberman.game.GameClient;
@@ -24,6 +24,7 @@ public class ClientCommunicationManager implements ICommunicationManager,
 
 	public void setCommChannel(ICommunicationChannel commChannel) {
 		this.commChannel = commChannel;
+		gameClient.putBomberman();
 	}
 
 	@Override
@@ -32,7 +33,8 @@ public class ClientCommunicationManager implements ICommunicationManager,
 			Log.d("CommunicationManager", (String) object.getMessage());
 		}
 		if (object.getType() == CommunicationObject.UPDATE_SCREEN) {
-			List<Element> drawings = (List<Element>) object.getMessage();
+			ArrayList<Element> drawings = (ArrayList<Element>) object
+					.getMessage();
 			this.gameClient.updateScreen(drawings);
 		}
 		if (object.getType() == CommunicationObject.UPDATE_PLAYERS) {
@@ -41,7 +43,7 @@ public class ClientCommunicationManager implements ICommunicationManager,
 			this.gameClient.updatePlayers(players);
 		}
 		if (object.getType() == CommunicationObject.INIT) {
-			List<List<Element>> elements = (List<List<Element>>) object
+			ArrayList<ArrayList<Element>> elements = (ArrayList<ArrayList<Element>>) object
 					.getMessage();
 			this.gameClient.init(elements);
 		}

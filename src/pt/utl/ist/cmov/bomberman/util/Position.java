@@ -1,6 +1,10 @@
 package pt.utl.ist.cmov.bomberman.util;
 
-public class Position {
+import java.io.Serializable;
+
+public class Position implements Serializable {
+
+	private static final long serialVersionUID = 3586915855280960564L;
 
 	public Integer x;
 	public Integer y;
@@ -9,7 +13,7 @@ public class Position {
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	public static Position calculateNext(Direction dir, Position pos) {
 		switch (dir) {
 		case UP:

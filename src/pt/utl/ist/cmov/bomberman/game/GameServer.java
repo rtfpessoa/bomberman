@@ -85,7 +85,7 @@ public class GameServer implements IGameServer {
 	}
 
 	private void updateScreen() {
-		List<Element> elements = new ArrayList<Element>();
+		ArrayList<Element> elements = new ArrayList<Element>();
 
 		for (List<Element> line : this.level.getMap()) {
 			for (Element element : line) {

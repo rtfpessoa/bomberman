@@ -1,7 +1,7 @@
 package pt.utl.ist.cmov.bomberman.game;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
@@ -21,9 +21,12 @@ public class GameClient implements IGameClient {
 	private MainGamePanel gamePanel;
 	protected IGameServer gameServerProxy;
 	private ConcurrentHashMap<Integer, Drawing> drawings;
-	private List<List<Element>> initialElements;
+	private ArrayList<ArrayList<Element>> initialElements;
 
 	private Handler handler;
+
+	private Handler initHandler;
+	private Runnable initRunnable;
 
 	public GameClient(String username, MainGamePanel gamePanel) {
 		super();
@@ -33,6 +36,15 @@ public class GameClient implements IGameClient {
 
 		this.players = new HashMap<String, BombermanPlayer>();
 		this.players.put(username, new BombermanPlayer(username));
+
+		this.initHandler = new Handler();
+		this.initRunnable = new Runnable() {
+
+			@Override
+			public void run() {
+				init();
+			}
+		};
 	}
 
 	public Handler getHandler() {
@@ -43,19 +55,21 @@ public class GameClient implements IGameClient {
 		this.gameServerProxy = gameServer;
 	}
 
-	public void init(List<List<Element>> elements) {
+	public void init(ArrayList<ArrayList<Element>> elements) {
 		initialElements = elements;
 	}
 
 	public void init() {
-		putBomberman();
+		if (initialElements != null) {
+			MapMeasurements.updateMapMeasurements(gamePanel.getWidth(),
+					gamePanel.getHeight(), initialElements.get(0).size(),
+					initialElements.size());
 
-		MapMeasurements.updateMapMeasurements(gamePanel.getWidth(),
-				gamePanel.getHeight(), initialElements.get(0).size(),
-				initialElements.size());
-
-		for (List<Element> line : initialElements) {
-			updateScreen(line);
+			for (ArrayList<Element> line : initialElements) {
+				updateScreen(line);
+			}
+		} else {
+			this.initHandler.postDelayed(this.initRunnable, 1000);
 		}
 	}
 
@@ -72,7 +86,7 @@ public class GameClient implements IGameClient {
 	}
 
 	@Override
-	public void updateScreen(List<Element> drawings) {
+	public void updateScreen(ArrayList<Element> drawings) {
 		for (Element element : drawings) {
 			Drawing drawing = DrawingFactory.create(gamePanel.getContext(),
 					element);
