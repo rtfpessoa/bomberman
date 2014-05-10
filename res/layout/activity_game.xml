@@ -4,8 +4,7 @@
     android:layout_height="match_parent"
     android:background="#e67e22"
     android:columnCount="1"
-    android:orientation="horizontal"
-    tools:context="pt.utl.ist.cmov.bomberman.activities.GameActivity" >
+    android:orientation="horizontal" >
 
     <RelativeLayout
         android:layout_width="120sp"

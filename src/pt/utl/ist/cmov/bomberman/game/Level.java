@@ -38,12 +38,12 @@ public class Level {
 	private Integer height;
 	private Integer width;
 
-	private List<List<Element>> modelMap = new ArrayList<List<Element>>();
+	private List<List<Element>> modelMap;
 
-	private Integer bombermanIds = 1;
+	private Integer bombermanIds;
 	private Integer elementIds;
 
-	private Boolean isPaused = false;
+	private Boolean isPaused;
 
 	public Level(Integer gameDuration, Integer explosionTimeout,
 			Integer explosionDuration, Integer explosionRange,
@@ -57,9 +57,10 @@ public class Level {
 		this.robotSpeed = robotSpeed;
 		this.pointsRobot = pointsRobot;
 		this.pointsOpponent = pointsOpponent;
+		this.modelMap = new ArrayList<List<Element>>();
 		this.bombermansInitialPos = bombermansInitialPos;
-		this.maxBombermans = this.bombermansInitialPos.size();
-		this.elementIds = maxBombermans + 1;
+		this.bombermanIds = 1;
+		this.isPaused = false;
 	}
 
 	public Integer getGameDuration() {
@@ -208,6 +209,9 @@ public class Level {
 		this.height = initialMap.size();
 		this.width = initialMap.get(0).size();
 
+		this.maxBombermans = this.bombermansInitialPos.size();
+		this.elementIds = maxBombermans + 1;
+
 		for (int y = 0; y < this.height; y++) {
 			List<Element> line = new ArrayList<Element>();
 
@@ -230,7 +234,7 @@ public class Level {
 			this.modelMap.add(line);
 		}
 
-		this.isPaused = true;
+		this.isPaused = false;
 	}
 
 	public boolean isInDeathZone(Position testPosition) {

@@ -1,17 +1,18 @@
 package pt.utl.ist.cmov.bomberman.game;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import pt.utl.ist.cmov.bomberman.game.elements.BombElement;
 import pt.utl.ist.cmov.bomberman.game.elements.BombermanElement;
+import pt.utl.ist.cmov.bomberman.game.elements.Element;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.os.Handler;
 
 public class GameServer implements IGameServer {
 
-	private Handler timerHandler = new Handler();
-	private Runnable timerRunnable;
-	private Integer remainingTime;
+	private HashMap<String, BombermanPlayer> players;
 
 	private Level level;
 	private IGameClient gameClientProxy;
@@ -20,22 +21,30 @@ public class GameServer implements IGameServer {
 
 	private HashMap<String, BombermanElement> bombermans;
 
+	private Handler refreshHandler = new Handler();
+	private Runnable refreshRunnable;
+	private Integer remainingTime;
+
 	public GameServer(Level level) {
 		super();
 		this.level = level;
 		this.remainingTime = level.getGameDuration();
 
+		this.players = new HashMap<String, BombermanPlayer>();
 		this.bombsToDraw = new HashMap<String, BombElement>();
 		this.bombermans = new HashMap<String, BombermanElement>();
 
-		timerRunnable = new Runnable() {
+		this.refreshRunnable = new Runnable() {
 			@Override
 			public void run() {
-				remainingTime--;
-				timerHandler.postDelayed(timerRunnable, 1000);
+				if (gameClientProxy != null) {
+					updateScreen();
+				}
+
+				refreshHandler.postDelayed(refreshRunnable, 100);
 			}
 		};
-		timerRunnable.run();
+		this.refreshRunnable.run();
 	}
 
 	public void initClient() {
@@ -47,6 +56,8 @@ public class GameServer implements IGameServer {
 	}
 
 	public void putBomberman(String username) {
+		this.players.put(username, new BombermanPlayer(username));
+
 		BombermanElement element = this.level.putBomberman();
 		bombermans.put(username, element);
 	}
@@ -61,6 +72,37 @@ public class GameServer implements IGameServer {
 		BombermanElement bomberman = bombermans.get(username);
 
 		level.move(bomberman, dir);
+	}
+
+	@Override
+	public void pause(String username) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void quit(String username) {
+		// TODO Auto-generated method stub
+	}
+
+	private void updateScreen() {
+		List<Element> elements = new ArrayList<Element>();
+
+		for (List<Element> line : this.level.getMap()) {
+			for (Element element : line) {
+				elements.add(element);
+			}
+		}
+
+		this.gameClientProxy.updateScreen(elements);
+	}
+
+	public void decrementTime() {
+		this.remainingTime--;
+
+		for (BombermanPlayer player : this.players.values()) {
+			player.setTime(this.remainingTime);
+			player.setPlayers(players.size());
+		}
 	}
 
 }

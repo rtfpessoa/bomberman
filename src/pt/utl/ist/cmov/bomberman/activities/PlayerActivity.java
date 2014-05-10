@@ -3,6 +3,7 @@ package pt.utl.ist.cmov.bomberman.activities;
 import pt.utl.ist.cmov.bomberman.R;
 import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
 import pt.utl.ist.cmov.bomberman.controllers.WifiDirectController;
+import pt.utl.ist.cmov.bomberman.game.BombermanPlayer;
 import pt.utl.ist.cmov.bomberman.game.GameClient;
 import pt.utl.ist.cmov.bomberman.game.IGameServer;
 import pt.utl.ist.cmov.bomberman.handlers.PlayerSocketHandler;
@@ -18,6 +19,7 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -35,6 +37,9 @@ public class PlayerActivity extends FullScreenActivity implements
 	private WifiDirectController wifiDirectController;
 
 	private WifiP2pDevice wifiP2pManagerDevice;
+
+	private Handler timerHandler = new Handler();
+	private Runnable timerRunnable;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,19 +89,20 @@ public class PlayerActivity extends FullScreenActivity implements
 
 		this.findViewById(R.id.button_right).setOnTouchListener(
 				new DirectionButtonListener(Direction.RIGHT, gameClient));
+
+		this.timerRunnable = new Runnable() {
+			@Override
+			public void run() {
+				update(gameClient.getPlayer());
+
+				timerHandler.postDelayed(timerRunnable, 1000);
+			}
+		};
+		this.timerRunnable.run();
 	}
 
 	public void bombClick(View view) {
 		gameClient.putBomb();
-	}
-
-	public void updateTime(Integer remainingTime) {
-		if (remainingTime <= 0) {
-			endGame();
-		}
-
-		TextView timerTextView = (TextView) this.findViewById(R.id.time_left);
-		timerTextView.setText(remainingTime.toString() + " s");
 	}
 
 	public void endGame() {
@@ -134,5 +140,20 @@ public class PlayerActivity extends FullScreenActivity implements
 					p2pInfo.groupOwnerAddress);
 			handler.start();
 		}
+	}
+
+	private void update(BombermanPlayer player) {
+		TextView timeLeft = (TextView) this.findViewById(R.id.time_left);
+		timeLeft.setText(player.getTime().toString() + " s");
+
+		TextView playerName = (TextView) this.findViewById(R.id.player_name);
+		playerName.setText(player.getUsername());
+
+		TextView score = (TextView) this.findViewById(R.id.player_score);
+		score.setText(player.getScore());
+
+		TextView playerNumber = (TextView) this
+				.findViewById(R.id.player_number);
+		playerNumber.setText(player.getScore());
 	}
 }
