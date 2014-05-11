@@ -31,7 +31,7 @@ public class Drawing implements Serializable {
 		return this.id;
 	}
 
-	private void init(Context context) {
+	private void init() {
 		this.pos = new Position(MapMeasurements.SIDE_PADDING
 				+ MapMeasurements.POSITION_WIDTH * pos.x,
 				MapMeasurements.UP_PADDING + MapMeasurements.POSITION_HEIGHT
@@ -44,7 +44,7 @@ public class Drawing implements Serializable {
 		}
 
 		if (!isConverted) {
-			init(context);
+			init();
 			this.isConverted = true;
 		}
 

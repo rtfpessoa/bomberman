@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import pt.utl.ist.cmov.bomberman.game.drawings.Drawing;
+import pt.utl.ist.cmov.bomberman.game.drawings.DrawingFactory;
 import pt.utl.ist.cmov.bomberman.game.elements.BombElement;
 import pt.utl.ist.cmov.bomberman.game.elements.BombermanElement;
 import pt.utl.ist.cmov.bomberman.game.elements.Element;
@@ -45,6 +47,8 @@ public class Level {
 
 	private Boolean isPaused;
 
+	private ArrayList<Drawing> updatesBuffer;
+
 	public Level(Integer gameDuration, Integer explosionTimeout,
 			Integer explosionDuration, Integer explosionRange,
 			Integer robotSpeed, Integer pointsRobot, Integer pointsOpponent,
@@ -61,6 +65,7 @@ public class Level {
 		this.bombermansInitialPos = bombermansInitialPos;
 		this.bombermanIds = 1;
 		this.isPaused = false;
+		this.updatesBuffer = new ArrayList<Drawing>();
 	}
 
 	public Integer getGameDuration() {
@@ -128,14 +133,14 @@ public class Level {
 	}
 
 	public Character getContent(Integer x, Integer y) {
-		return this.modelMap.get(y).get(x).getType();
+		return getOnMap(new Position(x, y)).getType();
 	}
 
 	public Character getContent(Position pos) {
-		return this.modelMap.get(pos.y).get(pos.x).getType();
+		return getOnMap(pos).getType();
 	}
 
-	public Element getElementContent(Position pos) {
+	public Element getOnMap(Position pos) {
 		return this.modelMap.get(pos.y).get(pos.x);
 	}
 
@@ -147,49 +152,57 @@ public class Level {
 		return this.width;
 	}
 
-	public Boolean move(Element element, Direction direction) {
+	public Element move(Element element, Direction direction) {
 		if (!this.isPaused) {
 			Position newPos = Position.calculateNext(direction,
 					element.getPos());
 
-			Element destination = this.getElementContent(newPos);
+			Element destination = this.getOnMap(newPos);
 			if (destination.canMoveOver(element)) {
 				element.moveAction(destination);
 				destination.moveAction(element);
 				this.move(element.getPos(), newPos);
 			} else {
-				return false;
+				return null;
 			}
 
-			return true;
+			return destination;
 		} else {
-			return false;
+			return null;
 		}
 	}
 
 	private void move(Position orig, Position dest) {
-		Element model = this.modelMap.get(dest.y).get(dest.x);
-		Element otherModel = this.modelMap.get(orig.y).get(orig.x);
+		Element model = getOnMap(dest);
+		Element otherModel = getOnMap(orig);
 
 		model.setPos(orig);
 		otherModel.setPos(dest);
 
-		this.modelMap.get(dest.y).set(dest.x, otherModel);
-		this.modelMap.get(orig.y).set(orig.x, model);
+		setOnMap(dest, otherModel);
+		setOnMap(orig, model);
+
+		updatesBuffer.add(DrawingFactory.create(model));
+		updatesBuffer.add(DrawingFactory.create(otherModel));
 	}
 
 	public void putEmpty(Position pos) {
-		Element current = this.modelMap.get(pos.y).get(pos.x);
+		Element current = getOnMap(pos);
 
-		this.modelMap.get(pos.y).set(pos.x,
-				new EmptyElement(this, current.getId(), pos));
+		EmptyElement empty = new EmptyElement(this, current.getId(), pos);
+		setOnMap(pos, empty);
+
+		updatesBuffer.add(DrawingFactory.create(empty));
 	}
 
 	public void putExploding(BombElement model, Position pos) {
-		Element current = this.modelMap.get(pos.y).get(pos.x);
+		Element current = getOnMap(pos);
 
-		this.modelMap.get(pos.y).set(pos.x,
-				new ExplosionElement(this, current.getId(), pos, model));
+		ExplosionElement explosion = new ExplosionElement(this,
+				current.getId(), pos, model);
+		setOnMap(pos, explosion);
+
+		updatesBuffer.add(DrawingFactory.create(explosion));
 	}
 
 	public BombElement createBomb(BombermanElement bomberman) {
@@ -199,12 +212,11 @@ public class Level {
 	}
 
 	public void putBomb(BombElement bomb) {
-		Element previous = this.modelMap.get(bomb.getPos().y).get(
-				bomb.getPos().x);
+		Element previous = getOnMap(bomb.getPos());
 
 		bomb.setId(previous.getId());
 
-		this.modelMap.get(bomb.getPos().y).set(bomb.getPos().x, bomb);
+		setOnMap(bomb.getPos(), bomb);
 	}
 
 	public BombermanElement putBomberman() {
@@ -213,7 +225,10 @@ public class Level {
 		Element current = this.getMap().get(pos.y).get(pos.x);
 		BombermanElement bomberman = new BombermanElement(this,
 				current.getId(), pos, id);
-		this.modelMap.get(pos.y).set(pos.x, bomberman);
+		setOnMap(pos, bomberman);
+
+		updatesBuffer.add(DrawingFactory.create(bomberman));
+
 		return bomberman;
 	}
 
@@ -255,7 +270,7 @@ public class Level {
 		for (Direction direction : Direction.values()) {
 			Position nextPosition = Position.calculateNext(direction,
 					testPosition);
-			if (getElementContent(nextPosition).getType() == Level.ROBOT) {
+			if (getOnMap(nextPosition).getType() == Level.ROBOT) {
 				return true;
 			}
 		}
@@ -264,6 +279,20 @@ public class Level {
 
 	public ArrayList<ArrayList<Element>> getMap() {
 		return modelMap;
+	}
+
+	public ArrayList<Drawing> getLatestUpdates() {
+		ArrayList<Drawing> currentDrawings = new ArrayList<Drawing>(
+				updatesBuffer);
+		this.updatesBuffer = new ArrayList<Drawing>();
+
+		return currentDrawings;
+	}
+
+	private void setOnMap(Position position, Element element) {
+		this.modelMap.get(position.y).set(position.x, element);
+
+		updatesBuffer.add(DrawingFactory.create(element));
 	}
 
 }

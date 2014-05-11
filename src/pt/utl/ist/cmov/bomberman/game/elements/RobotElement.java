@@ -42,9 +42,9 @@ public class RobotElement extends Element {
 	private void move() {
 		Direction direction = this.getDirection();
 
-		if (!level.move(this, direction)) {
+		if (level.move(this, direction) == null) {
 			for (Direction newDirection : Direction.values()) {
-				if (level.move(this, newDirection)) {
+				if (level.move(this, newDirection) != null) {
 					this.setDirection(newDirection);
 					return;
 				}

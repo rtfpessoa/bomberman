@@ -70,7 +70,7 @@ public class GameActivity extends WifiDirectActivity implements
 
 		this.gamePanel = (MainGamePanel) findViewById(R.id.game_panel);
 
-		this.gameServer = new GameServer(context, level);
+		this.gameServer = new GameServer(level);
 		this.gameClient = new GameClient(username);
 
 		this.serverManager = new ServerCommunicationManager(this.gameServer);

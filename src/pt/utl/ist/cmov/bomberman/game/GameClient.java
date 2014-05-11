@@ -9,6 +9,7 @@ import pt.utl.ist.cmov.bomberman.util.Direction;
 import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.Log;
 
 public class GameClient implements IGameClient {
 
@@ -54,6 +55,7 @@ public class GameClient implements IGameClient {
 
 	@Override
 	public void updateScreen(ArrayList<Drawing> drawings) {
+		Log.e("BOMBERMAN", "UpdatedScreen with : " + drawings.size());
 		for (Drawing drawing : drawings) {
 			this.drawings.put(drawing.getId(), drawing);
 		}

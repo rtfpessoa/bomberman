@@ -3,36 +3,33 @@ package pt.utl.ist.cmov.bomberman.game.drawings;
 import pt.utl.ist.cmov.bomberman.game.Level;
 import pt.utl.ist.cmov.bomberman.game.elements.BombermanElement;
 import pt.utl.ist.cmov.bomberman.game.elements.Element;
-import android.content.Context;
 
 public class DrawingFactory {
 
-	public static Drawing create(Context context, Element element) {
+	public static Drawing create(Element element) {
 		if (element.getType() == Level.BOMB) {
-			return new BombDrawing(context, element.getId(), element.getPos());
+			return new BombDrawing(element.getId(), element.getPos());
 		}
 		if (element.getType() == Level.BOMBERMAN) {
 			BombermanElement bomberman = (BombermanElement) element;
 
-			return new BombermanDrawing(context, element.getId(),
-					element.getPos(), bomberman.getBombermanId());
+			return new BombermanDrawing(element.getId(), element.getPos(),
+					bomberman.getBombermanId());
 		}
 		if (element.getType() == Level.EMPTY) {
 			return new EmptyDrawing(element.getId(), element.getPos());
 		}
 		if (element.getType() == Level.EXPLODING) {
-			return new ExplosionDrawing(context, element.getId(),
-					element.getPos());
+			return new ExplosionDrawing(element.getId(), element.getPos());
 		}
 		if (element.getType() == Level.OBSTACLE) {
-			return new ObstacleDrawing(context, element.getId(),
-					element.getPos());
+			return new ObstacleDrawing(element.getId(), element.getPos());
 		}
 		if (element.getType() == Level.ROBOT) {
-			return new RobotDrawing(context, element.getId(), element.getPos());
+			return new RobotDrawing(element.getId(), element.getPos());
 		}
 		if (element.getType() == Level.WALL) {
-			return new WallDrawing(context, element.getId(), element.getPos());
+			return new WallDrawing(element.getId(), element.getPos());
 		}
 		return null;
 	}

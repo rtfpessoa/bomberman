@@ -10,7 +10,6 @@ import pt.utl.ist.cmov.bomberman.game.elements.BombElement;
 import pt.utl.ist.cmov.bomberman.game.elements.BombermanElement;
 import pt.utl.ist.cmov.bomberman.game.elements.Element;
 import pt.utl.ist.cmov.bomberman.util.Direction;
-import android.content.Context;
 import android.os.Handler;
 
 public class GameServer implements IGameServer {
@@ -28,11 +27,8 @@ public class GameServer implements IGameServer {
 	private Runnable refreshRunnable;
 	private Integer remainingTime;
 
-	private Context context;
-
-	public GameServer(Context context, Level level) {
+	public GameServer(Level level) {
 		super();
-		this.context = context;
 		this.level = level;
 		this.remainingTime = level.getGameDuration();
 
@@ -59,7 +55,7 @@ public class GameServer implements IGameServer {
 		ArrayList<Drawing> drawings = new ArrayList<Drawing>();
 		for (List<Element> line : elements) {
 			for (Element element : line) {
-				Drawing drawing = DrawingFactory.create(context, element);
+				Drawing drawing = DrawingFactory.create(element);
 				drawings.add(drawing);
 			}
 		}
@@ -89,8 +85,8 @@ public class GameServer implements IGameServer {
 
 		level.move(bomberman, dir);
 
-		BombElement bomb = bombsToDraw.get(username);
-		if (bomb != null) {
+		if (bombsToDraw.containsKey(username)) {
+			BombElement bomb = bombsToDraw.get(username);
 			this.level.putBomb(bomb);
 			bombsToDraw.put(username, null);
 		}
@@ -107,16 +103,9 @@ public class GameServer implements IGameServer {
 	}
 
 	private void updateScreen() {
-		ArrayList<Drawing> drawings = new ArrayList<Drawing>();
-
-		for (List<Element> line : this.level.getMap()) {
-			for (Element element : line) {
-				Drawing drawing = DrawingFactory.create(context, element);
-				drawings.add(drawing);
-			}
-		}
-
-		this.gameClientProxy.updateScreen(drawings);
+		ArrayList<Drawing> currentDrawings = new ArrayList<Drawing>(
+				level.getLatestUpdates());
+		this.gameClientProxy.updateScreen(currentDrawings);
 	}
 
 	public void decrementTime() {
