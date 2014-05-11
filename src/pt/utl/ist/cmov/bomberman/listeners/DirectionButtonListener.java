@@ -37,12 +37,12 @@ public class DirectionButtonListener implements View.OnTouchListener {
 	public boolean onTouch(View v, MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			if (!pressed) {
-				Log.i(TAG, "Pressed " + this.direction);
+				Log.v(TAG, "Pressed " + this.direction);
 				this.pressed = true;
 				moveBomberman.run();
 			}
 		} else if (event.getAction() == MotionEvent.ACTION_UP) {
-			Log.i(TAG, "UnPressed " + this.direction);
+			Log.v(TAG, "UnPressed " + this.direction);
 			this.pressed = false;
 		}
 

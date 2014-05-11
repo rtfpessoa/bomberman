@@ -173,17 +173,16 @@ public class Level {
 	}
 
 	private void move(Position orig, Position dest) {
-		Element model = getOnMap(dest);
-		Element otherModel = getOnMap(orig);
+		synchronized (this.modelMap) {
+			Element model = getOnMap(dest);
+			Element otherModel = getOnMap(orig);
 
-		model.setPos(orig);
-		otherModel.setPos(dest);
+			model.setPos(orig);
+			otherModel.setPos(dest);
 
-		setOnMap(dest, otherModel);
-		setOnMap(orig, model);
-
-		updatesBuffer.add(DrawingFactory.create(model));
-		updatesBuffer.add(DrawingFactory.create(otherModel));
+			setOnMap(dest, otherModel);
+			setOnMap(orig, model);
+		}
 	}
 
 	public void putEmpty(Position pos) {
@@ -191,8 +190,6 @@ public class Level {
 
 		EmptyElement empty = new EmptyElement(this, current.getId(), pos);
 		setOnMap(pos, empty);
-
-		updatesBuffer.add(DrawingFactory.create(empty));
 	}
 
 	public void putExploding(BombElement model, Position pos) {
@@ -201,8 +198,6 @@ public class Level {
 		ExplosionElement explosion = new ExplosionElement(this,
 				current.getId(), pos, model);
 		setOnMap(pos, explosion);
-
-		updatesBuffer.add(DrawingFactory.create(explosion));
 	}
 
 	public BombElement createBomb(BombermanElement bomberman) {
@@ -226,8 +221,6 @@ public class Level {
 		BombermanElement bomberman = new BombermanElement(this,
 				current.getId(), pos, id);
 		setOnMap(pos, bomberman);
-
-		updatesBuffer.add(DrawingFactory.create(bomberman));
 
 		return bomberman;
 	}
@@ -291,8 +284,6 @@ public class Level {
 
 	private void setOnMap(Position position, Element element) {
 		this.modelMap.get(position.y).set(position.x, element);
-
 		updatesBuffer.add(DrawingFactory.create(element));
 	}
-
 }
