@@ -10,7 +10,6 @@ import pt.utl.ist.cmov.bomberman.game.elements.BombElement;
 import pt.utl.ist.cmov.bomberman.game.elements.BombermanElement;
 import pt.utl.ist.cmov.bomberman.game.elements.Element;
 import pt.utl.ist.cmov.bomberman.util.Direction;
-import pt.utl.ist.cmov.bomberman.util.Position;
 import android.content.Context;
 import android.os.Handler;
 
@@ -81,19 +80,18 @@ public class GameServer implements IGameServer {
 
 	public void putBomb(String username) {
 		BombermanElement bomberman = bombermans.get(username);
-		BombElement element = this.level.putBomb(bomberman);
+		BombElement element = this.level.createBomb(bomberman);
 		bombsToDraw.put(username, element);
 	}
 
 	public void move(String username, Direction dir) {
 		BombermanElement bomberman = bombermans.get(username);
-		Position bombPos = bomberman.getPos();
 
 		level.move(bomberman, dir);
 
 		BombElement bomb = bombsToDraw.get(username);
 		if (bomb != null) {
-			this.level.getMap().get(bombPos.y).set(bombPos.x, bomb);
+			this.level.putBomb(bomb);
 			bombsToDraw.put(username, null);
 		}
 	}

@@ -192,10 +192,19 @@ public class Level {
 				new ExplosionElement(this, current.getId(), pos, model));
 	}
 
-	public BombElement putBomb(BombermanElement bomberman) {
+	public BombElement createBomb(BombermanElement bomberman) {
 		Position pos = bomberman.getPos();
 
 		return new BombElement(this, bomberman.getId(), pos, bomberman);
+	}
+
+	public void putBomb(BombElement bomb) {
+		Element previous = this.modelMap.get(bomb.getPos().y).get(
+				bomb.getPos().x);
+
+		bomb.setId(previous.getId());
+
+		this.modelMap.get(bomb.getPos().y).set(bomb.getPos().x, bomb);
 	}
 
 	public BombermanElement putBomberman() {

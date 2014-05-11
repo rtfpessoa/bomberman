@@ -33,6 +33,10 @@ public class BombElement extends Element {
 		bombHandler.postDelayed(bombRunnable, level.getExplosionTimeout());
 	}
 
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	public BombermanElement getBomberman() {
 		return this.bomberman;
 	}

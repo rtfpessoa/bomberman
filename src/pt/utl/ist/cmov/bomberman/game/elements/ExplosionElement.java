@@ -23,6 +23,7 @@ public class ExplosionElement extends Element {
 		if (model.getType() == Level.BOMBERMAN) {
 			// TODO: Bomberman Killed
 			// TODO: Bomberman gets PO points
+			bomb.getBomberman();
 
 			return;
 		}
