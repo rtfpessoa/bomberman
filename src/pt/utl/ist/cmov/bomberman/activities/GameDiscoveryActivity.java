@@ -3,6 +3,7 @@ package pt.utl.ist.cmov.bomberman.activities;
 import java.util.ArrayList;
 import java.util.List;
 
+import pt.utl.ist.cmov.bomberman.MainActivity;
 import pt.utl.ist.cmov.bomberman.R;
 import pt.utl.ist.cmov.bomberman.activities.adapters.GameAdapter;
 import android.content.Intent;
@@ -72,6 +73,9 @@ public class GameDiscoveryActivity extends WifiDirectActivity implements
 
 		Intent intent = new Intent(this, PlayerActivity.class);
 		intent.putExtra(DEVICE_MESSAGE, device);
+		String username = getIntent().getExtras().getString(
+				MainActivity.INTENT_USERNAME);
+		intent.putExtra(MainActivity.INTENT_USERNAME, username);
 		startActivity(intent);
 	}
 

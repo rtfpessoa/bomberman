@@ -21,6 +21,17 @@
         android:layout_width="match_parent"
         android:layout_height="50sp" />
 
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:ems="10" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="30sp" />
+
     <Button
         android:id="@+id/button_new_game"
         android:layout_width="match_parent"
@@ -32,7 +43,7 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="10sp" />
+        android:layout_height="12sp" />
 
     <Button
         android:id="@+id/button_multiplayer_game"

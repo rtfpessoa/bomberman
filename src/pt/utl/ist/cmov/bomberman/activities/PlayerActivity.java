@@ -1,5 +1,6 @@
 package pt.utl.ist.cmov.bomberman.activities;
 
+import pt.utl.ist.cmov.bomberman.MainActivity;
 import pt.utl.ist.cmov.bomberman.R;
 import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
 import pt.utl.ist.cmov.bomberman.game.BombermanPlayer;
@@ -45,8 +46,10 @@ public class PlayerActivity extends WifiDirectActivity implements
 
 		this.gamePanel = (MainGamePanel) findViewById(R.id.game_panel);
 
-		// TODO: replace username
-		this.gameClient = new GameClient("USERNAME2");
+		String username = getIntent().getExtras().getString(
+				MainActivity.INTENT_USERNAME);
+
+		this.gameClient = new GameClient(username);
 
 		this.clientManager = new ClientCommunicationManager(this.gameClient);
 

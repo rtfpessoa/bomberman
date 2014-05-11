@@ -2,6 +2,7 @@ package pt.utl.ist.cmov.bomberman.activities;
 
 import java.io.IOException;
 
+import pt.utl.ist.cmov.bomberman.MainActivity;
 import pt.utl.ist.cmov.bomberman.R;
 import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
 import pt.utl.ist.cmov.bomberman.game.BombermanPlayer;
@@ -58,6 +59,9 @@ public class GameActivity extends WifiDirectActivity implements
 
 		this.wifiDirectController.startGroup();
 
+		String username = getIntent().getExtras().getString(
+				MainActivity.INTENT_USERNAME);
+
 		String levelName = getIntent().getExtras().getString(
 				LevelChoiceActivity.LEVEL_MESSAGE);
 
@@ -67,8 +71,7 @@ public class GameActivity extends WifiDirectActivity implements
 		this.gamePanel = (MainGamePanel) findViewById(R.id.game_panel);
 
 		this.gameServer = new GameServer(context, level);
-		// TODO: replace username
-		this.gameClient = new GameClient("USERNAME1");
+		this.gameClient = new GameClient(username);
 
 		this.serverManager = new ServerCommunicationManager(this.gameServer);
 		this.clientManager = new ClientCommunicationManager(this.gameClient);

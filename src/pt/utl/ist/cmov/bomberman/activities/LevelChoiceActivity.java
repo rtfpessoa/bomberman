@@ -1,5 +1,6 @@
 package pt.utl.ist.cmov.bomberman.activities;
 
+import pt.utl.ist.cmov.bomberman.MainActivity;
 import pt.utl.ist.cmov.bomberman.R;
 import pt.utl.ist.cmov.bomberman.game.LevelManager;
 import android.content.Intent;
@@ -46,6 +47,9 @@ public class LevelChoiceActivity extends FullScreenActivity {
 
 		Intent intent = new Intent(this, GameActivity.class);
 		intent.putExtra(LEVEL_MESSAGE, levelName);
+		String username = getIntent().getExtras().getString(
+				MainActivity.INTENT_USERNAME);
+		intent.putExtra(MainActivity.INTENT_USERNAME, username);
 		startActivity(intent);
 	}
 }
