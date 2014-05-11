@@ -88,7 +88,7 @@ public class GameServer implements IGameServer {
 		if (bombsToDraw.containsKey(username)) {
 			BombElement bomb = bombsToDraw.get(username);
 			this.level.putBomb(bomb);
-			bombsToDraw.put(username, null);
+			bombsToDraw.remove(username);
 		}
 	}
 
