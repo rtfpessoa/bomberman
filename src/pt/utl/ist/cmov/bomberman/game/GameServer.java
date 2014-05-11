@@ -115,6 +115,8 @@ public class GameServer implements IGameServer {
 			player.setTime(this.remainingTime);
 			player.setPlayers(players.size());
 		}
+
+		this.gameClientProxy.updatePlayers(players);
 	}
 
 }

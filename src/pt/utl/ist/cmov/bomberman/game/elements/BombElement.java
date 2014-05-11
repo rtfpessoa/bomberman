@@ -9,10 +9,10 @@ public class BombElement extends Element {
 
 	private BombermanElement bomberman;
 
-	private Handler bombHandler = new Handler();
+	private Handler bombHandler;
 	private Runnable bombRunnable;
 
-	private Boolean hasExploded = false;
+	private Boolean hasExploded;
 	private int[] efectiveRange;
 
 	public BombElement(Level level, Integer id, Position pos,
@@ -20,7 +20,8 @@ public class BombElement extends Element {
 		super(level, Level.BOMB, id, pos);
 
 		this.bomberman = bomberman;
-
+		this.hasExploded = false;
+		this.bombHandler = new Handler();
 		this.bombRunnable = new Runnable() {
 
 			@Override
