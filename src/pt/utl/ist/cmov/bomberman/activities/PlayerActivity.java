@@ -10,7 +10,6 @@ import pt.utl.ist.cmov.bomberman.handlers.managers.ClientCommunicationManager;
 import pt.utl.ist.cmov.bomberman.listeners.DirectionButtonListener;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.content.Intent;
-import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
@@ -27,8 +26,6 @@ public class PlayerActivity extends WifiDirectActivity implements
 	private MainGamePanel gamePanel;
 	private GameClient gameClient;
 	private ClientCommunicationManager clientManager;
-
-	private WifiP2pDevice wifiP2pManagerDevice;
 
 	private Handler timerHandler = new Handler();
 	private Runnable timerRunnable;
@@ -57,9 +54,9 @@ public class PlayerActivity extends WifiDirectActivity implements
 
 		this.gamePanel.setGameClient(this.gameClient);
 
-		this.wifiP2pManagerDevice = getIntent().getExtras().getParcelable(
+		this.wifiP2pGroupOwner = getIntent().getExtras().getParcelable(
 				GameDiscoveryActivity.DEVICE_MESSAGE);
-		this.wifiDirectController.connect(wifiP2pManagerDevice);
+		this.wifiDirectController.connect(wifiP2pGroupOwner);
 
 		this.findViewById(R.id.button_up).setOnTouchListener(
 				new DirectionButtonListener(Direction.UP, gameClient));

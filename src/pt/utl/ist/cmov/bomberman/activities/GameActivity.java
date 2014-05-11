@@ -161,13 +161,15 @@ public class GameActivity extends WifiDirectActivity implements
 			Log.i("BOMBERMAN", "Connected as GroupOwner");
 			try {
 				handler = new ServerSocketHandler(this.serverManager);
+				handler.start();
+				hasStartedServer = true;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			handler.start();
-			hasStartedServer = true;
-		} else {
+		} else if (!p2pInfo.isGroupOwner) {
 			Log.e("BOMBERMAN", "This device must be the groupd owner!");
+		} else {
+			Log.e("BOMBERMAN", "This device already has a server!");
 		}
 	}
 

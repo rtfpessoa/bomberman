@@ -3,6 +3,7 @@ package pt.utl.ist.cmov.bomberman.activities;
 import pt.utl.ist.cmov.bomberman.controllers.WifiDirectController;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.os.Bundle;
@@ -13,6 +14,9 @@ public class WifiDirectActivity extends FullScreenActivity {
 	protected final IntentFilter intentFilter = new IntentFilter();
 	protected Channel channel;
 	protected WifiDirectController wifiDirectController;
+	protected WifiP2pDevice wifiP2pGroupOwner;
+
+	private Boolean intentRegistered = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +44,25 @@ public class WifiDirectActivity extends FullScreenActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		this.wifiDirectController = new WifiDirectController(manager, channel,
-				this);
-		registerReceiver(wifiDirectController, intentFilter);
+		prepareIntentReceiver();
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		unregisterReceiver(this.wifiDirectController);
+		prepareIntentReceiver();
 	}
+
+	private void prepareIntentReceiver() {
+		if (!this.intentRegistered) {
+			this.wifiDirectController = new WifiDirectController(manager,
+					channel, this);
+			registerReceiver(wifiDirectController, intentFilter);
+			this.intentRegistered = true;
+		} else {
+			unregisterReceiver(this.wifiDirectController);
+			this.intentRegistered = false;
+		}
+	}
+
 }

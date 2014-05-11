@@ -36,8 +36,8 @@ public class WifiDirectController extends BroadcastReceiver {
 		String action = intent.getAction();
 
 		if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
-			int wifiDirectState = intent.getIntExtra(
-					WifiP2pManager.EXTRA_WIFI_STATE, -1);
+			// int wifiDirectState = intent.getIntExtra(
+			// WifiP2pManager.EXTRA_WIFI_STATE, -1);
 			// if (wifiDirectState == WifiP2pManager.WIFI_P2P_STATE_DISABLED) {
 			// setupWifi();
 			// try {
