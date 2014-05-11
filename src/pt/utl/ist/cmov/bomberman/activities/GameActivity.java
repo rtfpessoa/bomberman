@@ -39,7 +39,7 @@ public class GameActivity extends WifiDirectActivity implements
 	private ServerCommunicationManager serverManager;
 	private ClientCommunicationManager clientManager;
 
-	private Handler timerHandler = new Handler();
+	private Handler timerHandler;
 	private Runnable timerRunnable;
 
 	private TextView timeLeft;
@@ -47,7 +47,7 @@ public class GameActivity extends WifiDirectActivity implements
 	private TextView score;
 	private TextView playerNumber;
 
-	private Boolean hasStartedServer = false;
+	private Boolean hasStartedServer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +56,8 @@ public class GameActivity extends WifiDirectActivity implements
 		context = getApplicationContext();
 
 		setContentView(R.layout.activity_game);
+
+		this.hasStartedServer = false;
 
 		this.wifiDirectController.startGroup();
 
@@ -103,6 +105,7 @@ public class GameActivity extends WifiDirectActivity implements
 		score = (TextView) this.findViewById(R.id.player_score);
 		playerNumber = (TextView) this.findViewById(R.id.player_number);
 
+		this.timerHandler = new Handler();
 		this.timerRunnable = new Runnable() {
 			@Override
 			public void run() {

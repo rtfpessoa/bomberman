@@ -30,7 +30,6 @@ public class BombElement extends Element {
 			}
 
 		};
-
 		bombHandler.postDelayed(bombRunnable, level.getExplosionTimeout());
 	}
 

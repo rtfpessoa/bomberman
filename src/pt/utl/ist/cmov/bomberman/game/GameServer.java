@@ -23,7 +23,7 @@ public class GameServer implements IGameServer {
 
 	private HashMap<String, BombermanElement> bombermans;
 
-	private Handler refreshHandler = new Handler();
+	private Handler refreshHandler;
 	private Runnable refreshRunnable;
 	private Integer remainingTime;
 
@@ -36,6 +36,7 @@ public class GameServer implements IGameServer {
 		this.bombsToDraw = new HashMap<String, BombElement>();
 		this.bombermans = new HashMap<String, BombermanElement>();
 
+		this.refreshHandler = new Handler();
 		this.refreshRunnable = new Runnable() {
 			@Override
 			public void run() {
