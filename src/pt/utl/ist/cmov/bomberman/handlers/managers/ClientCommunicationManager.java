@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import pt.utl.ist.cmov.bomberman.game.BombermanPlayer;
 import pt.utl.ist.cmov.bomberman.game.GameClient;
 import pt.utl.ist.cmov.bomberman.game.IGameServer;
@@ -16,6 +13,9 @@ import pt.utl.ist.cmov.bomberman.handlers.CommunicationObject;
 import pt.utl.ist.cmov.bomberman.handlers.channels.ICommunicationChannel;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class ClientCommunicationManager implements ICommunicationManager,
 		IGameServer {
@@ -36,33 +36,43 @@ public class ClientCommunicationManager implements ICommunicationManager,
 	public void receive(String object) {
 		Gson gson = new Gson();
 
-		String[] parts = object.split("±");
-
-		CommunicationObject obj = gson.fromJson(parts[1],
+		CommunicationObject obj = gson.fromJson(object,
 				CommunicationObject.class);
 
 		if (obj.getType().equals(CommunicationObject.DEBUG)) {
-			Log.i("CommunicationManager", (String) obj.getMessage());
+			Log.i("CommunicationManager", obj.getMessage());
 		}
 		if (obj.getType().equals(CommunicationObject.UPDATE_SCREEN)) {
-			Type collectionType = new TypeToken<Collection<Drawing>>(){}.getType();
+			Type collectionType = new TypeToken<Collection<Drawing>>() {
+			}.getType();
 
-			ArrayList<Drawing> drawings = (ArrayList<Drawing>) gson.fromJson(obj.getMessage(),
-					collectionType);
+			ArrayList<Drawing> drawings = (ArrayList<Drawing>) gson.fromJson(
+					obj.getMessage(), collectionType);
 			this.gameClient.updateScreen(drawings);
 		}
-		if (obj.getType() == CommunicationObject.UPDATE_PLAYERS) {
-//			HashMap<String, BombermanPlayer> players = (HashMap<String, BombermanPlayer>) obj
-//					.getMessage();
-//			this.gameClient.updatePlayers(players);
+		if (obj.getType().equals(CommunicationObject.UPDATE_PLAYERS)) {
+			Type collectionType = new TypeToken<HashMap<String, BombermanPlayer>>() {
+			}.getType();
+
+			HashMap<String, BombermanPlayer> players = (HashMap<String, BombermanPlayer>) gson
+					.fromJson(obj.getMessage(), collectionType);
+			this.gameClient.updatePlayers(players);
 		}
-		if (obj.getType() == CommunicationObject.INIT) {
-//			HashMap<String, Object> message = (HashMap<String, Object>) obj
-//					.getMessage();
-//
-//			this.gameClient.init((Integer) message.get("lines"),
-//					(Integer) message.get("cols"),
-//					(ArrayList<Drawing>) message.get("drawings"));
+		if (obj.getType().equals(CommunicationObject.INIT)) {
+			Type hashType = new TypeToken<HashMap<String, Integer>>() {
+			}.getType();
+
+			Type collectionType = new TypeToken<ArrayList<Drawing>>() {
+			}.getType();
+
+			ArrayList<Drawing> drawings = (ArrayList<Drawing>) gson.fromJson(
+					obj.getMessage(), collectionType);
+
+			HashMap<String, Integer> mesurements = (HashMap<String, Integer>) gson
+					.fromJson(obj.getExtraMessage(), hashType);
+
+			this.gameClient.init(mesurements.get("lines"),
+					mesurements.get("cols"), drawings);
 		}
 	}
 
@@ -78,8 +88,7 @@ public class ClientCommunicationManager implements ICommunicationManager,
 
 		Gson gson = new Gson();
 		String json = gson.toJson(object);
-;;;
-		commChannel.send(CommunicationObject.PUT_BOMBERMAN + "±" + json);
+		commChannel.send(json);
 	}
 
 	@Override
@@ -90,24 +99,19 @@ public class ClientCommunicationManager implements ICommunicationManager,
 		Gson gson = new Gson();
 		String json = gson.toJson(object);
 
-		commChannel.send(CommunicationObject.PUT_BOMB + "±" + json);
+		commChannel.send(json);
 	}
 
 	@Override
 	public void move(String username, Direction direction) {
-		HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put("username", username);
-		params.put("direction", direction);
-
 		Gson gson = new Gson();
-		String innerJson = gson.toJson(params);
+		String extraMessageJson = gson.toJson(direction);
 
 		CommunicationObject object = new CommunicationObject(
-				CommunicationObject.MOVE, innerJson);
+				CommunicationObject.MOVE, username, extraMessageJson);
 
 		String json = gson.toJson(object);
-
-		commChannel.send(CommunicationObject.MOVE + "±" + json);
+		commChannel.send(json);
 	}
 
 	@Override

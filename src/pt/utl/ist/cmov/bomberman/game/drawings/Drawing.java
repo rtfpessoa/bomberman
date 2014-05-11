@@ -15,14 +15,10 @@ public class Drawing implements Serializable {
 
 	protected Integer id;
 	private Position pos;
-	private Boolean isConverted = false;
 	private String bitmapName;
+	private Boolean isConverted = false;
 
 	public Drawing() {
-		super();
-		this.id = null;
-		this.pos = null;
-		this.bitmapName = null;
 	}
 
 	public Drawing(Integer id, Position pos, String bitmapName) {
@@ -43,6 +39,10 @@ public class Drawing implements Serializable {
 	}
 
 	public void draw(Context context, Canvas canvas) {
+		if (bitmapName == null) {
+			return;
+		}
+
 		if (!isConverted) {
 			init(context);
 			this.isConverted = true;

@@ -20,12 +20,20 @@ public class CommunicationObject implements Serializable {
 	public static final String UPDATE_SCREEN = "pt.utl.ist.cmov.bomberman.UPDATE_SCREEN";
 	public static final String UPDATE_PLAYERS = "pt.utl.ist.cmov.bomberman.UPDATE_PLAYERS";
 
-	private String type;
-	private String message;
+	private final String type;
+	private final String message;
+	private final String extraMessage;
 
 	public CommunicationObject(String type, String message) {
 		this.type = type;
 		this.message = message;
+		this.extraMessage = null;
+	}
+
+	public CommunicationObject(String type, String message, String extraMessage) {
+		this.type = type;
+		this.message = message;
+		this.extraMessage = extraMessage;
 	}
 
 	public String getType() {
@@ -34,6 +42,10 @@ public class CommunicationObject implements Serializable {
 
 	public String getMessage() {
 		return message;
+	}
+
+	public String getExtraMessage() {
+		return extraMessage;
 	}
 
 }

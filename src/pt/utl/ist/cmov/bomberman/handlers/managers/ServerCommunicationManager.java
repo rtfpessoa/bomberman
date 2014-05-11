@@ -13,6 +13,7 @@ import pt.utl.ist.cmov.bomberman.handlers.CommunicationObject;
 import pt.utl.ist.cmov.bomberman.handlers.channels.ICommunicationChannel;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.util.Log;
+
 import com.google.gson.Gson;
 
 public class ServerCommunicationManager implements ICommunicationManager,
@@ -33,28 +34,32 @@ public class ServerCommunicationManager implements ICommunicationManager,
 
 	@Override
 	public void receive(String object) {
-//		if (object.getType() == CommunicationObject.DEBUG) {
-//			Log.i("CommunicationManager", (String) object.getMessage());
-//		}
-//		if (object.getType() == CommunicationObject.PUT_BOMBERMAN) {
-//			this.gameServer.putBomberman((String) object.getMessage());
-//		}
-//		if (object.getType() == CommunicationObject.PUT_BOMB) {
-//			this.gameServer.putBomb((String) object.getMessage());
-//		}
-//		if (object.getType() == CommunicationObject.PAUSE) {
-//			this.gameServer.pause((String) object.getMessage());
-//		}
-//		if (object.getType() == CommunicationObject.QUIT) {
-//			this.gameServer.quit((String) object.getMessage());
-//		}
-//		if (object.getType() == CommunicationObject.MOVE) {
-//			HashMap<String, Object> params = (HashMap<String, Object>) object
-//					.getMessage();
-//
-//			this.gameServer.move((String) params.get("username"),
-//					(Direction) params.get("direction"));
-//		}
+		Gson gson = new Gson();
+
+		CommunicationObject obj = gson.fromJson(object,
+				CommunicationObject.class);
+
+		if (obj.getType().equals(CommunicationObject.DEBUG)) {
+			Log.i("CommunicationManager", obj.getMessage());
+		}
+		if (obj.getType().equals(CommunicationObject.PUT_BOMBERMAN)) {
+			this.gameServer.putBomberman(obj.getMessage());
+		}
+		if (obj.getType().equals(CommunicationObject.PUT_BOMB)) {
+			this.gameServer.putBomb(obj.getMessage());
+		}
+		if (obj.getType().equals(CommunicationObject.PAUSE)) {
+			this.gameServer.pause(obj.getMessage());
+		}
+		if (obj.getType().equals(CommunicationObject.QUIT)) {
+			this.gameServer.quit(obj.getMessage());
+		}
+		if (obj.getType().equals(CommunicationObject.MOVE)) {
+			Direction direction = (Direction) gson.fromJson(
+					obj.getExtraMessage(), Direction.class);
+
+			this.gameServer.move(obj.getMessage(), direction);
+		}
 	}
 
 	@Override
@@ -66,26 +71,24 @@ public class ServerCommunicationManager implements ICommunicationManager,
 				CommunicationObject.UPDATE_SCREEN, innerJson);
 
 		String json = gson.toJson(object);
-
-		broadcast(CommunicationObject.UPDATE_SCREEN + "±" + json);
+		broadcast(json);
 	}
 
 	@Override
 	public void init(Integer lines, Integer cols, ArrayList<Drawing> drawings) {
-		HashMap<String, Object> message = new HashMap<String, Object>();
-		message.put("lines", lines);
-		message.put("cols", cols);
-		message.put("drawings", drawings);
+		HashMap<String, Integer> extraMessage = new HashMap<String, Integer>();
+		extraMessage.put("lines", lines);
+		extraMessage.put("cols", cols);
 
 		Gson gson = new Gson();
-		String innerJson = gson.toJson(message);
+		String messageJson = gson.toJson(drawings);
+		String extraMessageJson = gson.toJson(extraMessage);
 
 		CommunicationObject object = new CommunicationObject(
-				CommunicationObject.INIT, innerJson);
+				CommunicationObject.INIT, messageJson, extraMessageJson);
 
 		String json = gson.toJson(object);
-
-		broadcast(CommunicationObject.INIT + "±" + json);
+		broadcast(json);
 	}
 
 	@Override
@@ -98,7 +101,7 @@ public class ServerCommunicationManager implements ICommunicationManager,
 
 		String json = gson.toJson(object);
 
-		broadcast(CommunicationObject.UPDATE_PLAYERS + "±" + json);
+		broadcast(json);
 	}
 
 	private void broadcast(String object) {

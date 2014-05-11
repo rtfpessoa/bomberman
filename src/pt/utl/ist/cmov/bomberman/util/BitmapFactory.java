@@ -7,6 +7,7 @@ import java.util.HashMap;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 public class BitmapFactory {
 
@@ -50,6 +51,8 @@ public class BitmapFactory {
 					MapMeasurements.POSITION_HEIGHT, true);
 		} catch (IOException e) {
 			return null;
+		} catch (Exception e) {
+			Log.e("BOMBERMAN", "Could not load «" + strName + "«");
 		}
 
 		return bitmap;
