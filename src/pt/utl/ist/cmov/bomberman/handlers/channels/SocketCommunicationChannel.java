@@ -5,7 +5,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import pt.utl.ist.cmov.bomberman.handlers.CommunicationObject;
 import pt.utl.ist.cmov.bomberman.handlers.managers.ICommunicationManager;
 import android.util.Log;
 
@@ -26,14 +25,14 @@ public class SocketCommunicationChannel implements ICommunicationChannel,
 	private static final String TAG = "CommunicationHandler";
 
 	@Override
-	public void send(String object) {
+	public void send(Object object) {
 		write(object);
 	}
 
 	@Override
 	public void run() {
 		try {
-			String object;
+			Object object;
 
 			socket.setTcpNoDelay(true);
 			oStream = new ObjectOutputStream(socket.getOutputStream());
@@ -44,7 +43,7 @@ public class SocketCommunicationChannel implements ICommunicationChannel,
 
 			while (true) {
 				try {
-					object = (String) iStream.readObject();
+					object = iStream.readObject();
 					if (object != null) {
 						commManager.receive(object);
 					}

@@ -1,13 +1,10 @@
 package pt.utl.ist.cmov.bomberman.controllers;
 
-import java.lang.reflect.Method;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiManager;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -41,15 +38,15 @@ public class WifiDirectController extends BroadcastReceiver {
 		if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
 			int wifiDirectState = intent.getIntExtra(
 					WifiP2pManager.EXTRA_WIFI_STATE, -1);
-//			if (wifiDirectState == WifiP2pManager.WIFI_P2P_STATE_DISABLED) {
-//				setupWifi();
-//				try {
-//					Method enableWifiDirect = mManager.getClass().getMethod(
-//							"enableP2p", Channel.class);
-//					enableWifiDirect.invoke(mManager, mChannel);
-//				} catch (Exception ignore) {
-//				}
-//			}
+			// if (wifiDirectState == WifiP2pManager.WIFI_P2P_STATE_DISABLED) {
+			// setupWifi();
+			// try {
+			// Method enableWifiDirect = mManager.getClass().getMethod(
+			// "enableP2p", Channel.class);
+			// enableWifiDirect.invoke(mManager, mChannel);
+			// } catch (Exception ignore) {
+			// }
+			// }
 		} else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
 			if (mManager != null) {
 				mManager.requestPeers(mChannel, (PeerListListener) activity);
@@ -71,12 +68,12 @@ public class WifiDirectController extends BroadcastReceiver {
 	}
 
 	public void setupWifi() {
-//		WifiManager wifi = (WifiManager) activity
-//				.getSystemService(Context.WIFI_SERVICE);
-//
-//		if (!wifi.isWifiEnabled()) {
-//			wifi.setWifiEnabled(true);
-//		}
+		// WifiManager wifi = (WifiManager) activity
+		// .getSystemService(Context.WIFI_SERVICE);
+		//
+		// if (!wifi.isWifiEnabled()) {
+		// wifi.setWifiEnabled(true);
+		// }
 	}
 
 	public void discoverPeers() {
@@ -107,6 +104,20 @@ public class WifiDirectController extends BroadcastReceiver {
 			@Override
 			public void onFailure(int reason) {
 				Log.i("BOMBERMAN", "Failed to connect!");
+			}
+		});
+	}
+
+	public void startGroup() {
+		mManager.createGroup(mChannel, new ActionListener() {
+			@Override
+			public void onSuccess() {
+				Log.i("BOMBERMAN", "Created wifiP2p group successfully!");
+			}
+
+			@Override
+			public void onFailure(int reason) {
+				Log.i("BOMBERMAN", "Failed to wifiP2p group!");
 			}
 		});
 	}

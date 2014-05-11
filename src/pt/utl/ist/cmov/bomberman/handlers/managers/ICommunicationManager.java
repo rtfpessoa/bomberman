@@ -6,6 +6,6 @@ public interface ICommunicationManager {
 	
 	public void addCommChannel(ICommunicationChannel commChannel);
 
-	public void receive(String object);
+	public void receive(Object object);
 
 }

@@ -48,6 +48,14 @@ public class GameDiscoveryActivity extends WifiDirectActivity implements
 	}
 
 	public void loadPeers(List<WifiP2pDevice> peers) {
+		List<WifiP2pDevice> gameOwners = new ArrayList<WifiP2pDevice>();
+
+		for (WifiP2pDevice device : peers) {
+			if (device.isGroupOwner()) {
+				gameOwners.add(device);
+			}
+		}
+
 		GameAdapter adapter = new GameAdapter(this, peers);
 		ListView listView = (ListView) findViewById(R.id.list_levels);
 		listView.setAdapter(adapter);

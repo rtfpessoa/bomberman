@@ -33,11 +33,10 @@ public class ClientCommunicationManager implements ICommunicationManager,
 	}
 
 	@Override
-	public void receive(String object) {
+	public void receive(Object object) {
 		Gson gson = new Gson();
 
-		CommunicationObject obj = gson.fromJson(object,
-				CommunicationObject.class);
+		CommunicationObject obj = (CommunicationObject) object;
 
 		if (obj.getType().equals(CommunicationObject.DEBUG)) {
 			Log.i("CommunicationManager", obj.getMessage());
@@ -86,9 +85,7 @@ public class ClientCommunicationManager implements ICommunicationManager,
 		CommunicationObject object = new CommunicationObject(
 				CommunicationObject.PUT_BOMBERMAN, username);
 
-		Gson gson = new Gson();
-		String json = gson.toJson(object);
-		commChannel.send(json);
+		commChannel.send(object);
 	}
 
 	@Override
@@ -96,10 +93,7 @@ public class ClientCommunicationManager implements ICommunicationManager,
 		CommunicationObject object = new CommunicationObject(
 				CommunicationObject.PUT_BOMB, username);
 
-		Gson gson = new Gson();
-		String json = gson.toJson(object);
-
-		commChannel.send(json);
+		commChannel.send(object);
 	}
 
 	@Override
@@ -110,8 +104,7 @@ public class ClientCommunicationManager implements ICommunicationManager,
 		CommunicationObject object = new CommunicationObject(
 				CommunicationObject.MOVE, username, extraMessageJson);
 
-		String json = gson.toJson(object);
-		commChannel.send(json);
+		commChannel.send(object);
 	}
 
 	@Override

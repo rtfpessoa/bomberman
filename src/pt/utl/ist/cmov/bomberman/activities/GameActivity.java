@@ -56,6 +56,8 @@ public class GameActivity extends WifiDirectActivity implements
 
 		setContentView(R.layout.activity_game);
 
+		this.wifiDirectController.startGroup();
+
 		String levelName = getIntent().getExtras().getString(
 				LevelChoiceActivity.LEVEL_MESSAGE);
 

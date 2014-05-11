@@ -1,6 +1,7 @@
 package pt.utl.ist.cmov.bomberman.handlers.managers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -23,7 +24,8 @@ public class ServerCommunicationManager implements ICommunicationManager,
 	private GameServer gameServer;
 
 	public ServerCommunicationManager(GameServer gameServer) {
-		this.commChannels = new ArrayList<ICommunicationChannel>();
+		this.commChannels = Collections
+				.synchronizedList(new ArrayList<ICommunicationChannel>());
 		this.gameServer = gameServer;
 	}
 
@@ -33,11 +35,10 @@ public class ServerCommunicationManager implements ICommunicationManager,
 	}
 
 	@Override
-	public void receive(String object) {
+	public void receive(Object object) {
 		Gson gson = new Gson();
 
-		CommunicationObject obj = gson.fromJson(object,
-				CommunicationObject.class);
+		CommunicationObject obj = (CommunicationObject) object;
 
 		if (obj.getType().equals(CommunicationObject.DEBUG)) {
 			Log.i("CommunicationManager", obj.getMessage());
@@ -70,8 +71,7 @@ public class ServerCommunicationManager implements ICommunicationManager,
 		CommunicationObject object = new CommunicationObject(
 				CommunicationObject.UPDATE_SCREEN, innerJson);
 
-		String json = gson.toJson(object);
-		broadcast(json);
+		broadcast(object);
 	}
 
 	@Override
@@ -87,8 +87,7 @@ public class ServerCommunicationManager implements ICommunicationManager,
 		CommunicationObject object = new CommunicationObject(
 				CommunicationObject.INIT, messageJson, extraMessageJson);
 
-		String json = gson.toJson(object);
-		broadcast(json);
+		broadcast(object);
 	}
 
 	@Override
@@ -99,15 +98,15 @@ public class ServerCommunicationManager implements ICommunicationManager,
 		CommunicationObject object = new CommunicationObject(
 				CommunicationObject.UPDATE_PLAYERS, innerJson);
 
-		String json = gson.toJson(object);
-
-		broadcast(json);
+		broadcast(object);
 	}
 
-	private void broadcast(String object) {
-		for (Iterator<ICommunicationChannel> commChannel = commChannels
-				.iterator(); commChannel.hasNext();) {
-			commChannel.next().send(object);
+	private void broadcast(Object object) {
+		synchronized (commChannels) {
+			for (Iterator<ICommunicationChannel> commChannel = commChannels
+					.iterator(); commChannel.hasNext();) {
+				commChannel.next().send(object);
+			}
 		}
 	}
 
