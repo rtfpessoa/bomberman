@@ -147,8 +147,8 @@ public class BombElement extends Element {
 	}
 
 	private void bombTimer() {
-		Log.i("BombExplosion", "Explosion");
 		if (!hasExploded) {
+			Log.i("BombExplosion", "Explosion");
 			this.efectiveRange = explode();
 			this.hasExploded = true;
 			bombHandler.postDelayed(bombRunnable, level.getExplosionDuration());
