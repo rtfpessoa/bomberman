@@ -16,6 +16,7 @@ import pt.utl.ist.cmov.bomberman.game.elements.RobotElement;
 import pt.utl.ist.cmov.bomberman.game.elements.WallElement;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import pt.utl.ist.cmov.bomberman.util.Position;
+import android.os.Handler;
 
 public class Level {
 
@@ -49,6 +50,8 @@ public class Level {
 
 	private ArrayList<Drawing> updatesBuffer;
 
+	private Handler handler;
+
 	public Level(Integer gameDuration, Integer explosionTimeout,
 			Integer explosionDuration, Integer explosionRange,
 			Integer robotSpeed, Integer pointsRobot, Integer pointsOpponent,
@@ -66,6 +69,11 @@ public class Level {
 		this.bombermanIds = 1;
 		this.isPaused = false;
 		this.updatesBuffer = new ArrayList<Drawing>();
+		this.handler = new Handler();
+	}
+
+	public Handler getHandler() {
+		return this.handler;
 	}
 
 	public Integer getGameDuration() {

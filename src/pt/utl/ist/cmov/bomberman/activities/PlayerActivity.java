@@ -28,7 +28,7 @@ public class PlayerActivity extends WifiDirectActivity implements
 	private GameClient gameClient;
 	private ClientCommunicationManager clientManager;
 
-	private Handler timerHandler = new Handler();
+	private Handler timerHandler;
 	private Runnable timerRunnable;
 
 	private TextView timeLeft;
@@ -43,6 +43,8 @@ public class PlayerActivity extends WifiDirectActivity implements
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_game);
+
+		this.timerHandler = new Handler();
 
 		this.gamePanel = (MainGamePanel) findViewById(R.id.game_panel);
 

@@ -14,15 +14,35 @@ public class SocketCommunicationChannel implements ICommunicationChannel,
 	private Socket socket = null;
 	private ICommunicationManager commManager;
 
+	private ObjectInputStream iStream;
+	private ObjectOutputStream oStream;
+	private static final String TAG = "CommunicationHandler";
+
+	private Object object;
+
+	private Boolean isRunning;
+
 	public SocketCommunicationChannel(Socket socket,
 			ICommunicationManager commManager) {
 		this.socket = socket;
 		this.commManager = commManager;
+		this.isRunning = true;
+
+		setupStreams();
 	}
 
-	private ObjectInputStream iStream;
-	private ObjectOutputStream oStream;
-	private static final String TAG = "CommunicationHandler";
+	private void setupStreams() {
+		try {
+			socket.setTcpNoDelay(true);
+			oStream = new ObjectOutputStream(socket.getOutputStream());
+			oStream.flush();
+			iStream = new ObjectInputStream(socket.getInputStream());
+
+			commManager.addCommChannel(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	public void send(Object object) {
@@ -32,16 +52,7 @@ public class SocketCommunicationChannel implements ICommunicationChannel,
 	@Override
 	public void run() {
 		try {
-			Object object;
-
-			socket.setTcpNoDelay(true);
-			oStream = new ObjectOutputStream(socket.getOutputStream());
-			oStream.flush();
-			iStream = new ObjectInputStream(socket.getInputStream());
-
-			commManager.addCommChannel(this);
-
-			while (true) {
+			while (isRunning) {
 				try {
 					object = iStream.readObject();
 					if (object != null) {
@@ -60,6 +71,7 @@ public class SocketCommunicationChannel implements ICommunicationChannel,
 				e.printStackTrace();
 			}
 		}
+
 	}
 
 	private void write(Object obj) {

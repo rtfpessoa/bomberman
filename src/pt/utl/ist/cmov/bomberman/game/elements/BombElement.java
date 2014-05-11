@@ -13,7 +13,7 @@ public class BombElement extends Element {
 
 	private BombermanElement bomberman;
 
-	private Handler bombHandler = new Handler();
+	private Handler bombHandler;
 	private Runnable bombRunnable;
 
 	private Boolean hasExploded;
@@ -23,17 +23,16 @@ public class BombElement extends Element {
 			BombermanElement bomberman) {
 		super(level, Level.BOMB, id, pos);
 
+		this.bombHandler = level.getHandler();
 		this.bomberman = bomberman;
 		this.hasExploded = false;
 		this.positionsToExplode = new LinkedList<Position>();
 
 		this.bombRunnable = new Runnable() {
-
 			@Override
 			public void run() {
 				bombTimer();
 			}
-
 		};
 		bombHandler.postDelayed(bombRunnable, level.getExplosionTimeout());
 	}
