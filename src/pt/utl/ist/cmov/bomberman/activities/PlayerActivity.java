@@ -47,7 +47,7 @@ public class PlayerActivity extends WifiDirectActivity implements
 		this.gamePanel = (MainGamePanel) findViewById(R.id.game_panel);
 
 		// TODO: replace username
-		this.gameClient = new GameClient("USERNAME", gamePanel);
+		this.gameClient = new GameClient("USERNAME2");
 
 		this.clientManager = new ClientCommunicationManager(this.gameClient);
 

@@ -66,7 +66,7 @@ public class GameActivity extends WifiDirectActivity implements
 
 		this.gameServer = new GameServer(context, level);
 		// TODO: replace username
-		this.gameClient = new GameClient("USERNAME", gamePanel);
+		this.gameClient = new GameClient("USERNAME1");
 
 		this.serverManager = new ServerCommunicationManager(this.gameServer);
 		this.clientManager = new ClientCommunicationManager(this.gameClient);
