@@ -42,9 +42,9 @@ public class RobotModel extends Model {
 	private void move() {
 		Direction direction = this.getDirection();
 
-		if (level.move(this, direction) == null) {
+		if (!level.move(this, direction)) {
 			for (Direction newDirection : Direction.values()) {
-				if (level.move(this, newDirection) != null) {
+				if (level.move(this, newDirection)) {
 					this.setDirection(newDirection);
 					return;
 				}

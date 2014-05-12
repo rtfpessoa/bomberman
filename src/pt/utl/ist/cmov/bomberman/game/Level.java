@@ -160,7 +160,7 @@ public class Level {
 		return this.width;
 	}
 
-	public Model move(Model model, Direction direction) {
+	public boolean move(Model model, Direction direction) {
 		if (!this.isPaused) {
 			Position newPos = Position.calculateNext(direction, model.getPos());
 
@@ -170,12 +170,12 @@ public class Level {
 				destination.moveAction(model);
 				this.move(model.getPos(), newPos);
 			} else {
-				return null;
+				return false;
 			}
 
-			return destination;
+			return true;
 		} else {
-			return null;
+			return false;
 		}
 	}
 
