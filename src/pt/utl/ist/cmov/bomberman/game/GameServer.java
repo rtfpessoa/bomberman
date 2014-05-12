@@ -44,7 +44,7 @@ public class GameServer implements IGameServer {
 					updateScreen();
 				}
 
-				refreshHandler.postDelayed(refreshRunnable, 50);
+				refreshHandler.postDelayed(refreshRunnable, 200);
 			}
 		};
 		this.refreshRunnable.run();
