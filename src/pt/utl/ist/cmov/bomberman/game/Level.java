@@ -232,6 +232,10 @@ public class Level {
 
 		return bomberman;
 	}
+	
+	public void putBomberman(BombermanElement bomberman) {
+		setOnMap(bomberman.getPos(), bomberman);
+	}
 
 	public void parseMap(List<List<Character>> initialMap) {
 		this.isPaused = true;

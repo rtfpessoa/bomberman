@@ -109,8 +109,10 @@ public class ClientCommunicationManager implements ICommunicationManager,
 
 	@Override
 	public void pause(String username) {
-		// TODO Auto-generated method stub
+		CommunicationObject object = new CommunicationObject(
+				CommunicationObject.PAUSE, username);
 
+		commChannel.send(object);
 	}
 
 	@Override

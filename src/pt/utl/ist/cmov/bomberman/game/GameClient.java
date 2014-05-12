@@ -51,6 +51,10 @@ public class GameClient implements IGameClient {
 	public void move(Direction direction) {
 		gameServerProxy.move(this.username, direction);
 	}
+	
+	public void pause() {
+		gameServerProxy.pause(this.username);
+	}
 
 	@Override
 	public void updateScreen(ArrayList<Drawing> drawings) {

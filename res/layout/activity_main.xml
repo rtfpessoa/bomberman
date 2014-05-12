@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#e67e22"
+    android:background="#eeeeee"
     android:orientation="vertical"
     android:padding="10sp"
     tools:context="pt.utl.ist.cmov.bomberman.MainActivity" >
@@ -13,7 +13,7 @@
         android:gravity="center"
         android:keepScreenOn="true"
         android:text="@string/app_name"
-        android:textColor="#ecf0f1"
+        android:textColor="#444444"
         android:textSize="50sp"
         android:textStyle="bold" />
 
@@ -26,6 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
+        android:textColor="#444444"
         android:ems="10" />
 
     <Space
@@ -39,7 +40,9 @@
         android:layout_gravity="center"
         android:onClick="newGameAction"
         android:text="@string/new_game"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:textColor="#ffffff"
+        android:background="#4283c5" />
 
     <Space
         android:layout_width="match_parent"
@@ -52,6 +55,8 @@
         android:layout_gravity="center"
         android:onClick="multiplayerAction"
         android:text="@string/multiplayer_game"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:textColor="#ffffff"
+        android:background="#cf4737" />
 
 </LinearLayout>

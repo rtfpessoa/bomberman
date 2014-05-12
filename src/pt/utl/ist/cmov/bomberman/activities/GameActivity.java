@@ -126,6 +126,10 @@ public class GameActivity extends WifiDirectActivity implements
 	public void bombClick(View view) {
 		gameClient.putBomb();
 	}
+	
+	public void pauseClick(View view) {
+		gameClient.pause();
+	}
 
 	public void endGame() {
 		Intent intent = new Intent(this, EndGameActivity.class);
@@ -147,6 +151,12 @@ public class GameActivity extends WifiDirectActivity implements
 	public void onDestroy() {
 		super.onDestroy();
 		stopAll();
+	}
+	
+	@Override
+	public void onBackPressed()
+	{
+	    gameClient.pause();
 	}
 
 	private void update(BombermanPlayer player) {

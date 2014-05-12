@@ -121,6 +121,12 @@ public class PlayerActivity extends WifiDirectActivity implements
 		super.onDestroy();
 		stopAll();
 	}
+	
+	@Override
+	public void onBackPressed()
+	{
+	    gameClient.pause();
+	}
 
 	@Override
 	public void onConnectionInfoAvailable(WifiP2pInfo p2pInfo) {

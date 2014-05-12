@@ -77,12 +77,21 @@ public class GameServer implements IGameServer {
 
 	public void putBomb(String username) {
 		BombermanElement bomberman = bombermans.get(username);
+		
+		if (bomberman.isPaused()) {
+			return;
+		}
+		
 		BombElement element = this.level.createBomb(bomberman);
 		bombsToDraw.put(username, element);
 	}
 
 	public void move(String username, Direction dir) {
 		BombermanElement bomberman = bombermans.get(username);
+		
+		if (bomberman.isPaused()) {
+			return;
+		}
 
 		level.move(bomberman, dir);
 
@@ -95,7 +104,8 @@ public class GameServer implements IGameServer {
 
 	@Override
 	public void pause(String username) {
-		// TODO Auto-generated method stub
+		BombermanElement bomberman = bombermans.get(username);
+		bomberman.pause();
 	}
 
 	@Override
