@@ -7,20 +7,20 @@ import android.os.Handler;
 
 public class RobotElement extends Element {
 
-	private Direction direction = Direction.LEFT;
-	private Handler robotHandler = new Handler();
+	private Direction direction;
+	private Handler robotHandler;
 	private Runnable robotRunnable;
 
 	public RobotElement(Level level, Integer id, Position pos) {
 		super(level, Level.ROBOT, id, pos);
+		direction = Direction.LEFT;
+		robotHandler = new Handler();
 		this.robotRunnable = new Runnable() {
-
 			@Override
 			public void run() {
 				move();
 				resetMoveRunnable();
 			}
-
 		};
 
 		this.robotRunnable.run();
@@ -54,6 +54,10 @@ public class RobotElement extends Element {
 
 	private void resetMoveRunnable() {
 		robotHandler.postDelayed(robotRunnable, level.getRobotSpeed());
+	}
+
+	public void stopAll() {
+		robotHandler.removeCallbacks(this.robotRunnable);
 	}
 
 }

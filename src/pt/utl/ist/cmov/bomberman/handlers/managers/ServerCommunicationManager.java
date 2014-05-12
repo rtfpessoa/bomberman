@@ -110,4 +110,14 @@ public class ServerCommunicationManager implements ICommunicationManager,
 		}
 	}
 
+	@Override
+	public void close() {
+		synchronized (commChannels) {
+			for (Iterator<ICommunicationChannel> commChannel = commChannels
+					.iterator(); commChannel.hasNext();) {
+				commChannel.next().close();
+			}
+		}
+	}
+
 }

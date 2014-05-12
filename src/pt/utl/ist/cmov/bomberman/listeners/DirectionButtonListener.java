@@ -49,4 +49,8 @@ public class DirectionButtonListener implements View.OnTouchListener {
 		return false;
 	}
 
+	public void stopAll() {
+		this.mHandler.removeCallbacks(this.moveBomberman);
+	}
+
 }

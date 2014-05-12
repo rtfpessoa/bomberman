@@ -119,4 +119,8 @@ public class ClientCommunicationManager implements ICommunicationManager,
 
 	}
 
+	@Override
+	public void close() {
+		this.commChannel.close();
+	}
 }

@@ -15,4 +15,8 @@ public class FakeCommunicationChannel implements ICommunicationChannel {
 		outCommManager.receive(object);
 	}
 
+	@Override
+	public void close() {
+	}
+
 }

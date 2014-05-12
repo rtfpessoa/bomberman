@@ -50,6 +50,7 @@ public class LevelChoiceActivity extends FullScreenActivity {
 		String username = getIntent().getExtras().getString(
 				MainActivity.INTENT_USERNAME);
 		intent.putExtra(MainActivity.INTENT_USERNAME, username);
+		finish();
 		startActivity(intent);
 	}
 }

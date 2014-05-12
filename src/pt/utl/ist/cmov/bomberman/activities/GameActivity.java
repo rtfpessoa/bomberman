@@ -39,6 +39,11 @@ public class GameActivity extends WifiDirectActivity implements
 	private ServerCommunicationManager serverManager;
 	private ClientCommunicationManager clientManager;
 
+	private DirectionButtonListener upListener;
+	private DirectionButtonListener downListener;
+	private DirectionButtonListener leftListener;
+	private DirectionButtonListener rightListener;
+
 	private Handler timerHandler;
 	private Runnable timerRunnable;
 
@@ -88,17 +93,17 @@ public class GameActivity extends WifiDirectActivity implements
 
 		this.gamePanel.setGameClient(this.gameClient);
 
-		this.findViewById(R.id.button_up).setOnTouchListener(
-				new DirectionButtonListener(Direction.UP, gameClient));
+		upListener = new DirectionButtonListener(Direction.UP, gameClient);
+		this.findViewById(R.id.button_up).setOnTouchListener(upListener);
 
-		this.findViewById(R.id.button_down).setOnTouchListener(
-				new DirectionButtonListener(Direction.DOWN, gameClient));
+		downListener = new DirectionButtonListener(Direction.DOWN, gameClient);
+		this.findViewById(R.id.button_down).setOnTouchListener(downListener);
 
-		this.findViewById(R.id.button_left).setOnTouchListener(
-				new DirectionButtonListener(Direction.LEFT, gameClient));
+		leftListener = new DirectionButtonListener(Direction.LEFT, gameClient);
+		this.findViewById(R.id.button_left).setOnTouchListener(leftListener);
 
-		this.findViewById(R.id.button_right).setOnTouchListener(
-				new DirectionButtonListener(Direction.RIGHT, gameClient));
+		rightListener = new DirectionButtonListener(Direction.RIGHT, gameClient);
+		this.findViewById(R.id.button_right).setOnTouchListener(rightListener);
 
 		timeLeft = (TextView) this.findViewById(R.id.time_left);
 		playerName = (TextView) this.findViewById(R.id.player_name);
@@ -128,21 +133,20 @@ public class GameActivity extends WifiDirectActivity implements
 		// TODO: get winner and points
 		intent.putExtra(EndGameActivity.INTENT_WINNER, "rtfpessoa");
 		intent.putExtra(EndGameActivity.INTENT_WINNER_POINTS, "69");
-		gamePanel.destroy();
 		finish();
 		startActivity(intent);
 	}
 
 	@Override
 	public void onPause() {
-		gamePanel.destroy();
 		super.onPause();
+		gamePanel.stopAll();
 	}
 
 	@Override
 	public void onDestroy() {
-		gamePanel.destroy();
 		super.onDestroy();
+		stopAll();
 	}
 
 	private void update(BombermanPlayer player) {
@@ -175,12 +179,24 @@ public class GameActivity extends WifiDirectActivity implements
 		} else if (!p2pInfo.isGroupOwner) {
 			Log.e("BOMBERMAN", "This device must be the groupd owner!");
 		} else {
-			Log.e("BOMBERMAN", "This device already has a server!");
+			Log.i("BOMBERMAN", "This device already has a server!");
 		}
 	}
 
 	@Override
 	public void onPeersAvailable(WifiP2pDeviceList peers) {
 		// INFO: this is not needed
+	}
+
+	private void stopAll() {
+		this.timerHandler.removeCallbacks(this.timerRunnable);
+		this.gameServer.stopAll();
+		this.gamePanel.stopAll();
+		this.clientManager.close();
+		this.serverManager.close();
+		this.upListener.stopAll();
+		this.downListener.stopAll();
+		this.leftListener.stopAll();
+		this.rightListener.stopAll();
 	}
 }

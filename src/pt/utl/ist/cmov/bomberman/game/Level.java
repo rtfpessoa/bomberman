@@ -290,6 +290,17 @@ public class Level {
 		return currentDrawings;
 	}
 
+	public void stopAll() {
+		for (ArrayList<Element> line : modelMap) {
+			for (Element element : line) {
+				if (element.getType().equals(ROBOT)) {
+					RobotElement robot = (RobotElement) element;
+					robot.stopAll();
+				}
+			}
+		}
+	}
+
 	private void setOnMap(Position position, Element element) {
 		this.modelMap.get(position.y).set(position.x, element);
 		updatesBuffer.add(DrawingFactory.create(element));

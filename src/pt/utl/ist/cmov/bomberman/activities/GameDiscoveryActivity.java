@@ -76,6 +76,7 @@ public class GameDiscoveryActivity extends WifiDirectActivity implements
 		String username = getIntent().getExtras().getString(
 				MainActivity.INTENT_USERNAME);
 		intent.putExtra(MainActivity.INTENT_USERNAME, username);
+		finish();
 		startActivity(intent);
 	}
 

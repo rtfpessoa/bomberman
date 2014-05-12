@@ -28,6 +28,11 @@ public class PlayerActivity extends WifiDirectActivity implements
 	private GameClient gameClient;
 	private ClientCommunicationManager clientManager;
 
+	private DirectionButtonListener upListener;
+	private DirectionButtonListener downListener;
+	private DirectionButtonListener leftListener;
+	private DirectionButtonListener rightListener;
+
 	private Handler timerHandler;
 	private Runnable timerRunnable;
 
@@ -63,17 +68,17 @@ public class PlayerActivity extends WifiDirectActivity implements
 				GameDiscoveryActivity.DEVICE_MESSAGE);
 		this.wifiDirectController.connect(wifiP2pGroupOwner);
 
-		this.findViewById(R.id.button_up).setOnTouchListener(
-				new DirectionButtonListener(Direction.UP, gameClient));
+		upListener = new DirectionButtonListener(Direction.UP, gameClient);
+		this.findViewById(R.id.button_up).setOnTouchListener(upListener);
 
-		this.findViewById(R.id.button_down).setOnTouchListener(
-				new DirectionButtonListener(Direction.DOWN, gameClient));
+		downListener = new DirectionButtonListener(Direction.DOWN, gameClient);
+		this.findViewById(R.id.button_down).setOnTouchListener(downListener);
 
-		this.findViewById(R.id.button_left).setOnTouchListener(
-				new DirectionButtonListener(Direction.LEFT, gameClient));
+		leftListener = new DirectionButtonListener(Direction.LEFT, gameClient);
+		this.findViewById(R.id.button_left).setOnTouchListener(leftListener);
 
-		this.findViewById(R.id.button_right).setOnTouchListener(
-				new DirectionButtonListener(Direction.RIGHT, gameClient));
+		rightListener = new DirectionButtonListener(Direction.RIGHT, gameClient);
+		this.findViewById(R.id.button_right).setOnTouchListener(rightListener);
 
 		timeLeft = (TextView) this.findViewById(R.id.time_left);
 		playerName = (TextView) this.findViewById(R.id.player_name);
@@ -101,21 +106,20 @@ public class PlayerActivity extends WifiDirectActivity implements
 		// TODO: get winner and points
 		intent.putExtra(EndGameActivity.INTENT_WINNER, "rtfpessoa");
 		intent.putExtra(EndGameActivity.INTENT_WINNER_POINTS, "69");
-		gamePanel.destroy();
 		finish();
 		startActivity(intent);
 	}
 
 	@Override
 	public void onPause() {
-		gamePanel.destroy();
 		super.onPause();
+		gamePanel.stopAll();
 	}
 
 	@Override
 	public void onDestroy() {
-		gamePanel.destroy();
 		super.onDestroy();
+		stopAll();
 	}
 
 	@Override
@@ -150,5 +154,15 @@ public class PlayerActivity extends WifiDirectActivity implements
 	@Override
 	public void onPeersAvailable(WifiP2pDeviceList peers) {
 		// INFO: this is not needed
+	}
+
+	private void stopAll() {
+		this.timerHandler.removeCallbacks(this.timerRunnable);
+		this.gamePanel.stopAll();
+		this.clientManager.close();
+		this.upListener.stopAll();
+		this.downListener.stopAll();
+		this.leftListener.stopAll();
+		this.rightListener.stopAll();
 	}
 }

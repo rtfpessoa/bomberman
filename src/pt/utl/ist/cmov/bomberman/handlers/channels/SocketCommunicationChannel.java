@@ -50,6 +50,15 @@ public class SocketCommunicationChannel implements ICommunicationChannel,
 	}
 
 	@Override
+	public void close() {
+		try {
+			socket.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
 	public void run() {
 		try {
 			while (isRunning) {

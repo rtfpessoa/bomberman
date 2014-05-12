@@ -7,5 +7,7 @@ public interface ICommunicationManager {
 	public void addCommChannel(ICommunicationChannel commChannel);
 
 	public void receive(Object object);
+	
+	public void close();
 
 }

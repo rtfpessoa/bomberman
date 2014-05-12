@@ -120,4 +120,9 @@ public class GameServer implements IGameServer {
 		this.gameClientProxy.updatePlayers(players);
 	}
 
+	public void stopAll() {
+		refreshHandler.removeCallbacks(this.refreshRunnable);
+		level.stopAll();
+	}
+
 }

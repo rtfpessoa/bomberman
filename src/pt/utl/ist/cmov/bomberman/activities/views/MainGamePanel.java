@@ -54,11 +54,11 @@ public class MainGamePanel extends SurfaceView implements
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		Log.i(TAG, "Surface is being destroyed");
-		destroy();
+		stopAll();
 		Log.i(TAG, "Thread was shut down cleanly");
 	}
 
-	public void destroy() {
+	public void stopAll() {
 		if (thread != null) {
 			thread.setRunning(false);
 

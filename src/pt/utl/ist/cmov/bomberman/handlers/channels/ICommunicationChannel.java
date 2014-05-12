@@ -4,4 +4,6 @@ public interface ICommunicationChannel {
 
 	public void send(Object object);
 
+	public void close();
+
 }

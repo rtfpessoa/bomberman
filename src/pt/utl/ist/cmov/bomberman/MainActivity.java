@@ -29,6 +29,7 @@ public class MainActivity extends FullScreenActivity {
 		TextView usernameField = (TextView) findViewById(R.id.username);
 		String username = usernameField.getText().toString();
 		intent.putExtra(MainActivity.INTENT_USERNAME, username);
+		finish();
 		startActivity(intent);
 	}
 
@@ -37,6 +38,7 @@ public class MainActivity extends FullScreenActivity {
 		TextView usernameField = (TextView) findViewById(R.id.username);
 		String username = usernameField.getText().toString();
 		intent.putExtra(MainActivity.INTENT_USERNAME, username);
+		finish();
 		startActivity(intent);
 	}
 
