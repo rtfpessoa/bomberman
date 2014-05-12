@@ -3,6 +3,8 @@ package pt.utl.ist.cmov.bomberman.handlers.channels;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import pt.utl.ist.cmov.bomberman.handlers.managers.ICommunicationManager;
@@ -89,6 +91,13 @@ public class SocketCommunicationChannel implements ICommunicationChannel,
 		} catch (IOException e) {
 			Log.e(TAG, "Exception during write", e);
 		}
+	}
+
+	@Override
+	public String getChannelEndpoint() {
+		InetAddress address = ((InetSocketAddress) socket
+				.getRemoteSocketAddress()).getAddress();
+		return address.getHostAddress();
 	}
 
 }

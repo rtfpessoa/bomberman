@@ -123,4 +123,11 @@ public class ClientCommunicationManager implements ICommunicationManager,
 	public void close() {
 		this.commChannel.close();
 	}
+
+	@Override
+	public ArrayList<String> getChannelEndpoints() {
+		ArrayList<String> channelAddresses = new ArrayList<String>();
+		channelAddresses.add(commChannel.getChannelEndpoint());
+		return channelAddresses;
+	}
 }

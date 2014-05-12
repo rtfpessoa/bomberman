@@ -19,4 +19,9 @@ public class FakeCommunicationChannel implements ICommunicationChannel {
 	public void close() {
 	}
 
+	@Override
+	public String getChannelEndpoint() {
+		return null;
+	}
+
 }

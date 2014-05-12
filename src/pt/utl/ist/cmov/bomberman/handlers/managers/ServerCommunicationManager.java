@@ -120,4 +120,21 @@ public class ServerCommunicationManager implements ICommunicationManager,
 		}
 	}
 
+	@Override
+	public ArrayList<String> getChannelEndpoints() {
+		ArrayList<String> channelAddresses = new ArrayList<String>();
+
+		synchronized (commChannels) {
+			for (Iterator<ICommunicationChannel> commChannel = commChannels
+					.iterator(); commChannel.hasNext();) {
+				String address = commChannel.next().getChannelEndpoint();
+				if (address != null) {
+					channelAddresses.add(address);
+				}
+			}
+		}
+
+		return channelAddresses;
+	}
+
 }
