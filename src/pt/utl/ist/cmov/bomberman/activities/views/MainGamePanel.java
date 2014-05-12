@@ -40,6 +40,7 @@ public class MainGamePanel extends SurfaceView implements
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
+		MapMeasurements.updateViewSize(getWidth(), getHeight());
 	}
 
 	@Override
