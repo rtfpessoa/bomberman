@@ -6,21 +6,23 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import pt.utl.ist.cmov.bomberman.activities.interfaces.CommunicationPeer;
+import pt.utl.ist.cmov.bomberman.handlers.channels.SocketCommunicationChannel;
+import pt.utl.ist.cmov.bomberman.handlers.managers.ICommunicationManager;
 import android.util.Log;
 
 public class ServerSocketHandler extends Thread {
 
 	ServerSocket socket = null;
 	private final int THREAD_COUNT = 10;
-	private CommunicationPeer cPeer;
+	private ICommunicationManager commManager;
 	private static final String TAG = "GroupOwnerSocketHandler";
 
-	public ServerSocketHandler(CommunicationPeer cPeer) throws IOException {
+	public ServerSocketHandler(ICommunicationManager commManager)
+			throws IOException {
 		try {
 			socket = new ServerSocket(4545);
-			this.cPeer = cPeer;
-			Log.d("GroupOwnerSocketHandler", "Socket Started");
+			this.commManager = commManager;
+			Log.i("GroupOwnerSocketHandler", "Socket Started");
 		} catch (IOException e) {
 			e.printStackTrace();
 			pool.shutdownNow();
@@ -39,8 +41,9 @@ public class ServerSocketHandler extends Thread {
 			try {
 				// A blocking operation. Initiate a ChatManager instance when
 				// there is a new connection
-				pool.execute(new CommunicationManager(socket.accept(), cPeer));
-				Log.d(TAG, "Launching the I/O handler");
+				pool.execute(new SocketCommunicationChannel(socket.accept(),
+						commManager));
+				Log.i(TAG, "Launching the I/O handler");
 
 			} catch (IOException e) {
 				try {

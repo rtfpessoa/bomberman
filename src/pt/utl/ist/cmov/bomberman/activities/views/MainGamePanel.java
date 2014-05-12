@@ -1,7 +1,6 @@
 package pt.utl.ist.cmov.bomberman.activities.views;
 
-import pt.utl.ist.cmov.bomberman.game.Game;
-import pt.utl.ist.cmov.bomberman.game.GameMap;
+import pt.utl.ist.cmov.bomberman.game.GameClient;
 import pt.utl.ist.cmov.bomberman.game.MainLoopThread;
 import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
 import android.content.Context;
@@ -19,9 +18,9 @@ public class MainGamePanel extends SurfaceView implements
 
 	private MainLoopThread thread;
 
-	private Game game;
+	private GameClient gameClient;
 
-	private GameMap map;
+	private Context context;
 
 	public MainGamePanel(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -30,49 +29,37 @@ public class MainGamePanel extends SurfaceView implements
 
 		// make the GamePanel focusable so it can handle events
 		setFocusable(true);
+
+		this.context = context;
 	}
 
-	public void setGame(Game game) {
-		this.game = game;
-	}
-
-	public void setMap(GameMap map) {
-		this.map = map;
-	}
-
-	public GameMap getMap() {
-		return this.map;
+	public void setGameClient(GameClient gameClient) {
+		this.gameClient = gameClient;
 	}
 
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
+		MapMeasurements.updateViewSize(getWidth(), getHeight());
 	}
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		boolean isNew = thread == null;
+		MapMeasurements.updateViewSize(getWidth(), getHeight());
 
 		thread = new MainLoopThread(getHolder(), this);
-
-		if (isNew) {
-			MapMeasurements.updateMapMeasurements(this.getWidth(),
-					this.getHeight(), this.map.getWidth(), this.map.getHeight());
-			this.map.parseMap();
-			this.game.init();		}
-
 		thread.setRunning(true);
 		thread.start();
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		Log.d(TAG, "Surface is being destroyed");
-		destroy();
-		Log.d(TAG, "Thread was shut down cleanly");
+		Log.i(TAG, "Surface is being destroyed");
+		stopAll();
+		Log.i(TAG, "Thread was shut down cleanly");
 	}
 
-	public void destroy() {
+	public void stopAll() {
 		if (thread != null) {
 			thread.setRunning(false);
 
@@ -90,10 +77,8 @@ public class MainGamePanel extends SurfaceView implements
 
 	@Override
 	public void onDraw(Canvas canvas) {
-		// fills the canvas with black
 		canvas.drawColor(Color.rgb(16, 120, 48));
-
-//		map.draw(canvas);
+		gameClient.draw(context, canvas);
 	}
 
 }

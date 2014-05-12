@@ -33,7 +33,7 @@ public class MainLoopThread extends Thread {
 	@Override
 	public void run() {
 		Canvas canvas;
-		Log.d(TAG, "Starting game loop");
+		Log.i(TAG, "Starting game loop");
 		while (running) {
 			canvas = null;
 			// try locking the canvas for exclusive pixel editing

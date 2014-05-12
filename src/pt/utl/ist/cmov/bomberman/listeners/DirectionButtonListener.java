@@ -1,6 +1,6 @@
 package pt.utl.ist.cmov.bomberman.listeners;
 
-import pt.utl.ist.cmov.bomberman.game.Game;
+import pt.utl.ist.cmov.bomberman.game.GameClient;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.os.Handler;
 import android.util.Log;
@@ -13,12 +13,12 @@ public class DirectionButtonListener implements View.OnTouchListener {
 			.getSimpleName();
 
 	private Direction direction;
-	private Game game;
+	private GameClient gameClient;
 	private boolean pressed;
 
-	public DirectionButtonListener(Direction direction, Game game) {
+	public DirectionButtonListener(Direction direction, GameClient gameClient) {
 		this.direction = direction;
-		this.game = game;
+		this.gameClient = gameClient;
 		this.pressed = false;
 	}
 
@@ -27,7 +27,7 @@ public class DirectionButtonListener implements View.OnTouchListener {
 		@Override
 		public void run() {
 			if (pressed) {
-				game.moveBomberman(direction);
+				gameClient.move(direction);
 				mHandler.postDelayed(moveBomberman, 300);
 			}
 		}
@@ -37,16 +37,20 @@ public class DirectionButtonListener implements View.OnTouchListener {
 	public boolean onTouch(View v, MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			if (!pressed) {
-				Log.d(TAG, "Pressed " + this.direction);
+				Log.v(TAG, "Pressed " + this.direction);
 				this.pressed = true;
 				moveBomberman.run();
 			}
 		} else if (event.getAction() == MotionEvent.ACTION_UP) {
-			Log.d(TAG, "UnPressed " + this.direction);
+			Log.v(TAG, "UnPressed " + this.direction);
 			this.pressed = false;
 		}
 
 		return false;
+	}
+
+	public void stopAll() {
+		this.mHandler.removeCallbacks(this.moveBomberman);
 	}
 
 }

@@ -35,13 +35,13 @@ public class LevelManager {
 			List<Character> mapLine = new ArrayList<Character>();
 
 			for (int x = 0; x < line.length(); x++) {
-				if (line.charAt(x) != GameMap.WALL
-						&& line.charAt(x) != GameMap.EMPTY
-						&& line.charAt(x) != GameMap.OBSTACLE
-						&& line.charAt(x) != GameMap.ROBOT) {
+				if (line.charAt(x) != Level.WALL
+						&& line.charAt(x) != Level.EMPTY
+						&& line.charAt(x) != Level.OBSTACLE
+						&& line.charAt(x) != Level.ROBOT) {
 					bombermans.put(Character.getNumericValue(line.charAt(x)),
 							new Position(x, y));
-					mapLine.add(GameMap.EMPTY);
+					mapLine.add(Level.EMPTY);
 				} else
 					mapLine.add(line.charAt(x));
 			}
@@ -66,16 +66,19 @@ public class LevelManager {
 			Integer pointsOpponent = levelInfo.nextInt();
 			levelInfo.nextLine();
 			Map<Integer, Position> bombermans = new HashMap<Integer, Position>();
-			GameMap map = new GameMap(ctx, readMap(levelInfo, bombermans));
-			levelInfo.close();
-			return new Level(gameDuration, explosionTimeout, explosionDuration,
+			
+			Level level = new Level(gameDuration, explosionTimeout, explosionDuration,
 					explosionRange, robotSpeed, pointsRobot, pointsOpponent,
-					bombermans, map);
+					bombermans);
+			level.parseMap(readMap(levelInfo, bombermans));
+			
+			levelInfo.close();
+
+			return level;
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 
 	}
-
 }
