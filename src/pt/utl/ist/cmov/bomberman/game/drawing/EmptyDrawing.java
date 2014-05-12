@@ -1,4 +1,4 @@
-package pt.utl.ist.cmov.bomberman.game.drawings;
+package pt.utl.ist.cmov.bomberman.game.drawing;
 
 import pt.utl.ist.cmov.bomberman.util.Position;
 import android.content.Context;

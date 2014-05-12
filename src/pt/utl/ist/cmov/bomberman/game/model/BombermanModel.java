@@ -1,14 +1,14 @@
-package pt.utl.ist.cmov.bomberman.game.elements;
+package pt.utl.ist.cmov.bomberman.game.model;
 
 import pt.utl.ist.cmov.bomberman.game.Level;
 import pt.utl.ist.cmov.bomberman.util.Position;
 
-public class BombermanElement extends Element {
+public class BombermanModel extends Model {
 
 	private Integer bombermanId;
 	private Boolean isPaused;
 
-	public BombermanElement(Level level, Integer id, Position pos,
+	public BombermanModel(Level level, Integer id, Position pos,
 			Integer bombermanId) {
 		super(level, Level.BOMBERMAN, id, pos);
 
@@ -25,7 +25,7 @@ public class BombermanElement extends Element {
 	}
 
 	@Override
-	public boolean canMoveOver(Element model) {
+	public boolean canMoveOver(Model model) {
 		if (model.getType() == Level.ROBOT
 				|| model.getType() == Level.EXPLODING) {
 			return true;

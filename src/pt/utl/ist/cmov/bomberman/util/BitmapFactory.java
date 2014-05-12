@@ -33,6 +33,7 @@ public class BitmapFactory {
 
 		if (bitmap == null) {
 			bitmap = loadBitmapFromAsset(strName);
+			bitmaps.put(strName, bitmap);
 		}
 
 		return bitmap;

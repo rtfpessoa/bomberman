@@ -1,4 +1,4 @@
-package pt.utl.ist.cmov.bomberman.game.elements;
+package pt.utl.ist.cmov.bomberman.game.model;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -9,9 +9,9 @@ import pt.utl.ist.cmov.bomberman.util.Position;
 import android.os.Handler;
 import android.util.Log;
 
-public class BombElement extends Element {
+public class BombModel extends Model {
 
-	private BombermanElement bomberman;
+	private BombermanModel bomberman;
 
 	private Handler bombHandler;
 	private Runnable bombRunnable;
@@ -19,8 +19,8 @@ public class BombElement extends Element {
 	private Boolean hasExploded;
 	private List<Position> positionsToExplode;
 
-	public BombElement(Level level, Integer id, Position pos,
-			BombermanElement bomberman) {
+	public BombModel(Level level, Integer id, Position pos,
+			BombermanModel bomberman) {
 		super(level, Level.BOMB, id, pos);
 
 		this.bombHandler = level.getHandler();
@@ -41,12 +41,12 @@ public class BombElement extends Element {
 		this.id = id;
 	}
 
-	public BombermanElement getBomberman() {
+	public BombermanModel getBomberman() {
 		return this.bomberman;
 	}
 
 	@Override
-	public boolean canMoveOver(Element element) {
+	public boolean canMoveOver(Model model) {
 		return false;
 	}
 
@@ -60,11 +60,11 @@ public class BombElement extends Element {
 
 			for (int i = 1; i <= explosionRange; i++) {
 				pos = Position.calculateNext(direction, pos);
-				Element element = this.level.getOnMap(pos);
+				Model model = this.level.getOnMap(pos);
 
-				if (isStopElementType(element.getType())) {
+				if (isStopElementType(model.getType())) {
 					break;
-				} else if (element.getType() != Level.EMPTY) {
+				} else if (model.getType() != Level.EMPTY) {
 					positionsToExplode.add(pos);
 					break;
 				} else {

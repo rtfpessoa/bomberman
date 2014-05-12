@@ -1,16 +1,16 @@
-package pt.utl.ist.cmov.bomberman.game.elements;
+package pt.utl.ist.cmov.bomberman.game.model;
 
 import pt.utl.ist.cmov.bomberman.game.Level;
 import pt.utl.ist.cmov.bomberman.util.Position;
 
-public abstract class Element {
+public abstract class Model {
 
 	protected Level level;
 	protected Position pos;
 	protected Integer id;
 	private final Character type;
 
-	public Element(Level level, Character type, Integer id, Position pos) {
+	public Model(Level level, Character type, Integer id, Position pos) {
 		super();
 
 		this.level = level;
@@ -31,9 +31,9 @@ public abstract class Element {
 		return this.pos;
 	}
 
-	public abstract boolean canMoveOver(Element element);
+	public abstract boolean canMoveOver(Model model);
 
-	public void moveAction(Element element) {
+	public void moveAction(Model model) {
 
 	}
 

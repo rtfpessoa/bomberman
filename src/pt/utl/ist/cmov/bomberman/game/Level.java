@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import pt.utl.ist.cmov.bomberman.game.drawings.Drawing;
-import pt.utl.ist.cmov.bomberman.game.drawings.DrawingFactory;
-import pt.utl.ist.cmov.bomberman.game.elements.BombElement;
-import pt.utl.ist.cmov.bomberman.game.elements.BombermanElement;
-import pt.utl.ist.cmov.bomberman.game.elements.Element;
-import pt.utl.ist.cmov.bomberman.game.elements.EmptyElement;
-import pt.utl.ist.cmov.bomberman.game.elements.ExplosionElement;
-import pt.utl.ist.cmov.bomberman.game.elements.ObstacleElement;
-import pt.utl.ist.cmov.bomberman.game.elements.RobotElement;
-import pt.utl.ist.cmov.bomberman.game.elements.WallElement;
+import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
+import pt.utl.ist.cmov.bomberman.game.dto.ModelDTOFactory;
+import pt.utl.ist.cmov.bomberman.game.model.BombModel;
+import pt.utl.ist.cmov.bomberman.game.model.BombermanModel;
+import pt.utl.ist.cmov.bomberman.game.model.EmptyModel;
+import pt.utl.ist.cmov.bomberman.game.model.ExplosionModel;
+import pt.utl.ist.cmov.bomberman.game.model.Model;
+import pt.utl.ist.cmov.bomberman.game.model.ObstacleModel;
+import pt.utl.ist.cmov.bomberman.game.model.RobotModel;
+import pt.utl.ist.cmov.bomberman.game.model.WallModel;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import pt.utl.ist.cmov.bomberman.util.Position;
 import android.os.Handler;
@@ -41,14 +41,14 @@ public class Level {
 	private Integer height;
 	private Integer width;
 
-	private ArrayList<ArrayList<Element>> modelMap;
+	private ArrayList<ArrayList<Model>> modelMap;
 
 	private Integer bombermanIds;
-	private Integer elementIds;
+	private Integer modelIds;
 
 	private Boolean isPaused;
 
-	private ArrayList<Drawing> updatesBuffer;
+	private ArrayList<ModelDTO> updatesBuffer;
 
 	private Handler handler;
 
@@ -64,11 +64,11 @@ public class Level {
 		this.robotSpeed = robotSpeed;
 		this.pointsRobot = pointsRobot;
 		this.pointsOpponent = pointsOpponent;
-		this.modelMap = new ArrayList<ArrayList<Element>>();
+		this.modelMap = new ArrayList<ArrayList<Model>>();
 		this.bombermansInitialPos = bombermansInitialPos;
 		this.bombermanIds = 1;
 		this.isPaused = false;
-		this.updatesBuffer = new ArrayList<Drawing>();
+		this.updatesBuffer = new ArrayList<ModelDTO>();
 		this.handler = new Handler();
 	}
 
@@ -148,7 +148,7 @@ public class Level {
 		return getOnMap(pos).getType();
 	}
 
-	public Element getOnMap(Position pos) {
+	public Model getOnMap(Position pos) {
 		return this.modelMap.get(pos.y).get(pos.x);
 	}
 
@@ -160,16 +160,15 @@ public class Level {
 		return this.width;
 	}
 
-	public Element move(Element element, Direction direction) {
+	public Model move(Model model, Direction direction) {
 		if (!this.isPaused) {
-			Position newPos = Position.calculateNext(direction,
-					element.getPos());
+			Position newPos = Position.calculateNext(direction, model.getPos());
 
-			Element destination = this.getOnMap(newPos);
-			if (destination.canMoveOver(element)) {
-				element.moveAction(destination);
-				destination.moveAction(element);
-				this.move(element.getPos(), newPos);
+			Model destination = this.getOnMap(newPos);
+			if (destination.canMoveOver(model)) {
+				model.moveAction(destination);
+				destination.moveAction(model);
+				this.move(model.getPos(), newPos);
 			} else {
 				return null;
 			}
@@ -182,8 +181,8 @@ public class Level {
 
 	private void move(Position orig, Position dest) {
 		synchronized (this.modelMap) {
-			Element model = getOnMap(dest);
-			Element otherModel = getOnMap(orig);
+			Model model = getOnMap(dest);
+			Model otherModel = getOnMap(orig);
 
 			model.setPos(orig);
 			otherModel.setPos(dest);
@@ -194,46 +193,46 @@ public class Level {
 	}
 
 	public void putEmpty(Position pos) {
-		Element current = getOnMap(pos);
+		Model current = getOnMap(pos);
 
-		EmptyElement empty = new EmptyElement(this, current.getId(), pos);
+		EmptyModel empty = new EmptyModel(this, current.getId(), pos);
 		setOnMap(pos, empty);
 	}
 
-	public void putExploding(BombElement model, Position pos) {
-		Element current = getOnMap(pos);
+	public void putExploding(BombModel model, Position pos) {
+		Model current = getOnMap(pos);
 
-		ExplosionElement explosion = new ExplosionElement(this,
-				current.getId(), pos, model);
+		ExplosionModel explosion = new ExplosionModel(this, current.getId(),
+				pos, model);
 		setOnMap(pos, explosion);
 	}
 
-	public BombElement createBomb(BombermanElement bomberman) {
+	public BombModel createBomb(BombermanModel bomberman) {
 		Position pos = bomberman.getPos();
 
-		return new BombElement(this, bomberman.getId(), pos, bomberman);
+		return new BombModel(this, bomberman.getId(), pos, bomberman);
 	}
 
-	public void putBomb(BombElement bomb) {
-		Element previous = getOnMap(bomb.getPos());
+	public void putBomb(BombModel bomb) {
+		Model previous = getOnMap(bomb.getPos());
 
 		bomb.setId(previous.getId());
 
 		setOnMap(bomb.getPos(), bomb);
 	}
 
-	public BombermanElement putBomberman() {
+	public BombermanModel putBomberman() {
 		Integer id = bombermanIds++;
 		Position pos = this.getBombermanInitialPos(id);
-		Element current = this.getMap().get(pos.y).get(pos.x);
-		BombermanElement bomberman = new BombermanElement(this,
-				current.getId(), pos, id);
+		Model current = this.getMap().get(pos.y).get(pos.x);
+		BombermanModel bomberman = new BombermanModel(this, current.getId(),
+				pos, id);
 		setOnMap(pos, bomberman);
 
 		return bomberman;
 	}
-	
-	public void putBomberman(BombermanElement bomberman) {
+
+	public void putBomberman(BombermanModel bomberman) {
 		setOnMap(bomberman.getPos(), bomberman);
 	}
 
@@ -244,25 +243,25 @@ public class Level {
 		this.width = initialMap.get(0).size();
 
 		this.maxBombermans = this.bombermansInitialPos.size();
-		this.elementIds = maxBombermans + 1;
+		this.modelIds = maxBombermans + 1;
 
 		for (int y = 0; y < this.height; y++) {
-			ArrayList<Element> line = new ArrayList<Element>();
+			ArrayList<Model> line = new ArrayList<Model>();
 
 			for (int x = 0; x < this.width; x++) {
 				Character c = initialMap.get(y).get(x);
-				Integer id = this.elementIds++;
+				Integer id = this.modelIds++;
 
 				Position pos = new Position(x, y);
 
 				if (c == WALL)
-					line.add(new WallElement(this, id, pos));
+					line.add(new WallModel(this, id, pos));
 				else if (c == OBSTACLE)
-					line.add(new ObstacleElement(this, id, pos));
+					line.add(new ObstacleModel(this, id, pos));
 				else if (c == ROBOT)
-					line.add(new RobotElement(this, id, pos));
+					line.add(new RobotModel(this, id, pos));
 				else if (c == EMPTY)
-					line.add(new EmptyElement(this, id, pos));
+					line.add(new EmptyModel(this, id, pos));
 			}
 
 			this.modelMap.add(line);
@@ -282,31 +281,30 @@ public class Level {
 		return false;
 	}
 
-	public ArrayList<ArrayList<Element>> getMap() {
+	public ArrayList<ArrayList<Model>> getMap() {
 		return modelMap;
 	}
 
-	public ArrayList<Drawing> getLatestUpdates() {
-		ArrayList<Drawing> currentDrawings = new ArrayList<Drawing>(
-				updatesBuffer);
-		this.updatesBuffer = new ArrayList<Drawing>();
+	public ArrayList<ModelDTO> getLatestUpdates() {
+		ArrayList<ModelDTO> dtos = new ArrayList<ModelDTO>(updatesBuffer);
+		this.updatesBuffer = new ArrayList<ModelDTO>();
 
-		return currentDrawings;
+		return dtos;
 	}
 
 	public void stopAll() {
-		for (ArrayList<Element> line : modelMap) {
-			for (Element element : line) {
-				if (element.getType().equals(ROBOT)) {
-					RobotElement robot = (RobotElement) element;
+		for (ArrayList<Model> line : modelMap) {
+			for (Model model : line) {
+				if (model.getType().equals(ROBOT)) {
+					RobotModel robot = (RobotModel) model;
 					robot.stopAll();
 				}
 			}
 		}
 	}
 
-	private void setOnMap(Position position, Element element) {
-		this.modelMap.get(position.y).set(position.x, element);
-		updatesBuffer.add(DrawingFactory.create(element));
+	private void setOnMap(Position position, Model model) {
+		this.modelMap.get(position.y).set(position.x, model);
+		updatesBuffer.add(ModelDTOFactory.create(model));
 	}
 }

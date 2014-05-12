@@ -1,25 +1,25 @@
-package pt.utl.ist.cmov.bomberman.game.elements;
+package pt.utl.ist.cmov.bomberman.game.model;
 
 import pt.utl.ist.cmov.bomberman.game.Level;
 import pt.utl.ist.cmov.bomberman.util.Position;
 
-public class ExplosionElement extends Element {
+public class ExplosionModel extends Model {
 	
-	private BombElement bomb;
+	private BombModel bomb;
 
-	public ExplosionElement(Level level, Integer id, Position pos, BombElement bomb) {
+	public ExplosionModel(Level level, Integer id, Position pos, BombModel bomb) {
 		super(level, Level.EXPLODING, id, pos);
 		
 		this.bomb = bomb;
 	}
 
 	@Override
-	public boolean canMoveOver(Element element) {
+	public boolean canMoveOver(Model model) {
 		return true;
 	}
 	
 	@Override
-	public void moveAction(Element model) {
+	public void moveAction(Model model) {
 		if (model.getType() == Level.BOMBERMAN) {
 			// TODO: Bomberman Killed
 			// TODO: Bomberman gets PO points

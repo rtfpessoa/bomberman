@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import pt.utl.ist.cmov.bomberman.game.drawings.Drawing;
-import pt.utl.ist.cmov.bomberman.game.drawings.DrawingFactory;
-import pt.utl.ist.cmov.bomberman.game.elements.BombElement;
-import pt.utl.ist.cmov.bomberman.game.elements.BombermanElement;
-import pt.utl.ist.cmov.bomberman.game.elements.Element;
+import pt.utl.ist.cmov.bomberman.game.drawing.Drawing;
+import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
+import pt.utl.ist.cmov.bomberman.game.dto.ModelDTOFactory;
+import pt.utl.ist.cmov.bomberman.game.model.BombModel;
+import pt.utl.ist.cmov.bomberman.game.model.BombermanModel;
+import pt.utl.ist.cmov.bomberman.game.model.Model;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.os.Handler;
 
@@ -19,9 +20,9 @@ public class GameServer implements IGameServer {
 	private Level level;
 	private IGameClient gameClientProxy;
 
-	private HashMap<String, BombElement> bombsToDraw;
+	private HashMap<String, BombModel> bombsToDraw;
 
-	private HashMap<String, BombermanElement> bombermans;
+	private HashMap<String, BombermanModel> bombermans;
 
 	private Handler refreshHandler;
 	private Runnable refreshRunnable;
@@ -33,8 +34,8 @@ public class GameServer implements IGameServer {
 		this.remainingTime = level.getGameDuration();
 
 		this.players = new HashMap<String, BombermanPlayer>();
-		this.bombsToDraw = new HashMap<String, BombElement>();
-		this.bombermans = new HashMap<String, BombermanElement>();
+		this.bombsToDraw = new HashMap<String, BombModel>();
+		this.bombermans = new HashMap<String, BombermanModel>();
 
 		this.refreshHandler = new Handler();
 		this.refreshRunnable = new Runnable() {
@@ -51,17 +52,17 @@ public class GameServer implements IGameServer {
 	}
 
 	public void initClient() {
-		ArrayList<ArrayList<Element>> elements = this.level.getMap();
+		ArrayList<ArrayList<Model>> models = this.level.getMap();
 
-		ArrayList<Drawing> drawings = new ArrayList<Drawing>();
-		for (List<Element> line : elements) {
-			for (Element element : line) {
-				Drawing drawing = DrawingFactory.create(element);
-				drawings.add(drawing);
+		ArrayList<ModelDTO> dtos = new ArrayList<ModelDTO>();
+		for (List<Model> line : models) {
+			for (Model model : line) {
+				ModelDTO dto = ModelDTOFactory.create(model);
+				dtos.add(dto);
 			}
 		}
 
-		gameClientProxy.init(elements.size(), elements.get(0).size(), drawings);
+		gameClientProxy.init(models.size(), models.get(0).size(), dtos);
 	}
 
 	public void setGameClient(IGameClient gameClientProxy) {
@@ -71,24 +72,24 @@ public class GameServer implements IGameServer {
 	public void putBomberman(String username) {
 		this.players.put(username, new BombermanPlayer(username));
 
-		BombermanElement element = this.level.putBomberman();
-		bombermans.put(username, element);
+		BombermanModel model = this.level.putBomberman();
+		bombermans.put(username, model);
 	}
 
 	public void putBomb(String username) {
-		BombermanElement bomberman = bombermans.get(username);
-		
+		BombermanModel bomberman = bombermans.get(username);
+
 		if (bomberman.isPaused()) {
 			return;
 		}
-		
-		BombElement element = this.level.createBomb(bomberman);
-		bombsToDraw.put(username, element);
+
+		BombModel model = this.level.createBomb(bomberman);
+		bombsToDraw.put(username, model);
 	}
 
 	public void move(String username, Direction dir) {
-		BombermanElement bomberman = bombermans.get(username);
-		
+		BombermanModel bomberman = bombermans.get(username);
+
 		if (bomberman.isPaused()) {
 			return;
 		}
@@ -96,7 +97,7 @@ public class GameServer implements IGameServer {
 		level.move(bomberman, dir);
 
 		if (bombsToDraw.containsKey(username)) {
-			BombElement bomb = bombsToDraw.get(username);
+			BombModel bomb = bombsToDraw.get(username);
 			this.level.putBomb(bomb);
 			bombsToDraw.remove(username);
 		}
@@ -104,7 +105,7 @@ public class GameServer implements IGameServer {
 
 	@Override
 	public void pause(String username) {
-		BombermanElement bomberman = bombermans.get(username);
+		BombermanModel bomberman = bombermans.get(username);
 		bomberman.pause();
 	}
 
@@ -114,9 +115,8 @@ public class GameServer implements IGameServer {
 	}
 
 	private void updateScreen() {
-		ArrayList<Drawing> currentDrawings = new ArrayList<Drawing>(
-				level.getLatestUpdates());
-		this.gameClientProxy.updateScreen(currentDrawings);
+		ArrayList<ModelDTO> changedModels = level.getLatestUpdates();
+		this.gameClientProxy.updateScreen(changedModels);
 	}
 
 	public void decrementTime() {

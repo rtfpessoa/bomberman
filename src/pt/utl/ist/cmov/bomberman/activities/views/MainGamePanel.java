@@ -1,5 +1,7 @@
 package pt.utl.ist.cmov.bomberman.activities.views;
 
+import java.nio.channels.FileChannel.MapMode;
+
 import pt.utl.ist.cmov.bomberman.game.GameClient;
 import pt.utl.ist.cmov.bomberman.game.MainLoopThread;
 import pt.utl.ist.cmov.bomberman.util.MapMeasurements;

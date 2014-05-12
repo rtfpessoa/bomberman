@@ -8,7 +8,7 @@ import java.util.HashMap;
 import pt.utl.ist.cmov.bomberman.game.BombermanPlayer;
 import pt.utl.ist.cmov.bomberman.game.GameClient;
 import pt.utl.ist.cmov.bomberman.game.IGameServer;
-import pt.utl.ist.cmov.bomberman.game.drawings.Drawing;
+import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
 import pt.utl.ist.cmov.bomberman.handlers.CommunicationObject;
 import pt.utl.ist.cmov.bomberman.handlers.channels.ICommunicationChannel;
 import pt.utl.ist.cmov.bomberman.util.Direction;
@@ -42,12 +42,12 @@ public class ClientCommunicationManager implements ICommunicationManager,
 			Log.i("CommunicationManager", obj.getMessage());
 		}
 		if (obj.getType().equals(CommunicationObject.UPDATE_SCREEN)) {
-			Type collectionType = new TypeToken<Collection<Drawing>>() {
+			Type collectionType = new TypeToken<Collection<ModelDTO>>() {
 			}.getType();
 
-			ArrayList<Drawing> drawings = (ArrayList<Drawing>) gson.fromJson(
+			ArrayList<ModelDTO> models = (ArrayList<ModelDTO>) gson.fromJson(
 					obj.getMessage(), collectionType);
-			this.gameClient.updateScreen(drawings);
+			this.gameClient.updateScreen(models);
 		}
 		if (obj.getType().equals(CommunicationObject.UPDATE_PLAYERS)) {
 			Type collectionType = new TypeToken<HashMap<String, BombermanPlayer>>() {
@@ -61,17 +61,17 @@ public class ClientCommunicationManager implements ICommunicationManager,
 			Type hashType = new TypeToken<HashMap<String, Integer>>() {
 			}.getType();
 
-			Type collectionType = new TypeToken<ArrayList<Drawing>>() {
+			Type collectionType = new TypeToken<ArrayList<ModelDTO>>() {
 			}.getType();
 
-			ArrayList<Drawing> drawings = (ArrayList<Drawing>) gson.fromJson(
+			ArrayList<ModelDTO> models = (ArrayList<ModelDTO>) gson.fromJson(
 					obj.getMessage(), collectionType);
 
 			HashMap<String, Integer> mesurements = (HashMap<String, Integer>) gson
 					.fromJson(obj.getExtraMessage(), hashType);
 
 			this.gameClient.init(mesurements.get("lines"),
-					mesurements.get("cols"), drawings);
+					mesurements.get("cols"), models);
 		}
 	}
 

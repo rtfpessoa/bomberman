@@ -1,17 +1,17 @@
-package pt.utl.ist.cmov.bomberman.game.elements;
+package pt.utl.ist.cmov.bomberman.game.model;
 
 import pt.utl.ist.cmov.bomberman.game.Level;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import pt.utl.ist.cmov.bomberman.util.Position;
 import android.os.Handler;
 
-public class RobotElement extends Element {
+public class RobotModel extends Model {
 
 	private Direction direction;
 	private Handler robotHandler;
 	private Runnable robotRunnable;
 
-	public RobotElement(Level level, Integer id, Position pos) {
+	public RobotModel(Level level, Integer id, Position pos) {
 		super(level, Level.ROBOT, id, pos);
 		direction = Direction.LEFT;
 		robotHandler = new Handler();
@@ -35,7 +35,7 @@ public class RobotElement extends Element {
 	}
 
 	@Override
-	public boolean canMoveOver(Element element) {
+	public boolean canMoveOver(Model model) {
 		return false;
 	}
 

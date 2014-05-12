@@ -1,4 +1,4 @@
-package pt.utl.ist.cmov.bomberman.game.drawings;
+package pt.utl.ist.cmov.bomberman.game.drawing;
 
 import java.io.Serializable;
 

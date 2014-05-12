@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
-import pt.utl.ist.cmov.bomberman.game.drawings.Drawing;
+import pt.utl.ist.cmov.bomberman.game.drawing.Drawing;
+import pt.utl.ist.cmov.bomberman.game.drawing.DrawingFactory;
+import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
 import android.content.Context;
@@ -35,9 +37,9 @@ public class GameClient implements IGameClient {
 		this.gameServerProxy = gameServer;
 	}
 
-	public void init(Integer lines, Integer cols, ArrayList<Drawing> elements) {
+	public void init(Integer lines, Integer cols, ArrayList<ModelDTO> models) {
 		MapMeasurements.updateMapSize(cols, lines);
-		updateScreen(elements);
+		updateScreen(models);
 	}
 
 	public void putBomberman() {
@@ -57,8 +59,9 @@ public class GameClient implements IGameClient {
 	}
 
 	@Override
-	public void updateScreen(ArrayList<Drawing> drawings) {
-		for (Drawing drawing : drawings) {
+	public void updateScreen(ArrayList<ModelDTO> models) {
+		for (ModelDTO model : models) {
+			Drawing drawing = DrawingFactory.create(model);
 			this.drawings.put(drawing.getId(), drawing);
 		}
 	}

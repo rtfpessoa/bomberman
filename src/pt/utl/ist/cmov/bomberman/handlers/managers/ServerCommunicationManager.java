@@ -9,7 +9,7 @@ import java.util.List;
 import pt.utl.ist.cmov.bomberman.game.BombermanPlayer;
 import pt.utl.ist.cmov.bomberman.game.GameServer;
 import pt.utl.ist.cmov.bomberman.game.IGameClient;
-import pt.utl.ist.cmov.bomberman.game.drawings.Drawing;
+import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
 import pt.utl.ist.cmov.bomberman.handlers.CommunicationObject;
 import pt.utl.ist.cmov.bomberman.handlers.channels.ICommunicationChannel;
 import pt.utl.ist.cmov.bomberman.util.Direction;
@@ -64,9 +64,9 @@ public class ServerCommunicationManager implements ICommunicationManager,
 	}
 
 	@Override
-	public void updateScreen(ArrayList<Drawing> drawings) {
+	public void updateScreen(ArrayList<ModelDTO> models) {
 		Gson gson = new Gson();
-		String innerJson = gson.toJson(drawings);
+		String innerJson = gson.toJson(models);
 
 		CommunicationObject object = new CommunicationObject(
 				CommunicationObject.UPDATE_SCREEN, innerJson);
@@ -75,13 +75,13 @@ public class ServerCommunicationManager implements ICommunicationManager,
 	}
 
 	@Override
-	public void init(Integer lines, Integer cols, ArrayList<Drawing> drawings) {
+	public void init(Integer lines, Integer cols, ArrayList<ModelDTO> models) {
 		HashMap<String, Integer> extraMessage = new HashMap<String, Integer>();
 		extraMessage.put("lines", lines);
 		extraMessage.put("cols", cols);
 
 		Gson gson = new Gson();
-		String messageJson = gson.toJson(drawings);
+		String messageJson = gson.toJson(models);
 		String extraMessageJson = gson.toJson(extraMessage);
 
 		CommunicationObject object = new CommunicationObject(
