@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import pt.utl.ist.cmov.bomberman.activities.GameActivity;
+import pt.utl.ist.cmov.bomberman.activities.PlayerActivity;
 import pt.utl.ist.cmov.bomberman.game.drawing.Drawing;
 import pt.utl.ist.cmov.bomberman.game.drawing.DrawingFactory;
 import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
@@ -31,7 +32,7 @@ public class GameClient implements IGameClient {
 		this.drawings = new ConcurrentHashMap<Integer, Drawing>();
 
 		this.players = new HashMap<String, BombermanPlayer>();
-		this.players.put(username, new BombermanPlayer(username));
+		this.players.put(username, new BombermanPlayer(-1, username));
 	}
 
 	public BombermanPlayer getPlayer() {
@@ -65,6 +66,11 @@ public class GameClient implements IGameClient {
 
 	public void quit() {
 		gameServerProxy.quit(this.username);
+
+		// TODO: we need to change this
+		if (activity instanceof PlayerActivity) {
+			activity.finish();
+		}
 	}
 
 	@Override
@@ -81,7 +87,8 @@ public class GameClient implements IGameClient {
 	}
 
 	@Override
-	public void startServer(Integer width, Integer height, ArrayList<ModelDTO> models) {
+	public void startServer(Integer width, Integer height,
+			ArrayList<ModelDTO> models) {
 		activity.startNewServer(width, height, models);
 	}
 

@@ -9,7 +9,6 @@ import pt.utl.ist.cmov.bomberman.game.model.BombModel;
 import pt.utl.ist.cmov.bomberman.game.model.BombermanModel;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.os.Handler;
-import android.os.Process;
 
 public class GameServer implements IGameServer {
 
@@ -62,10 +61,10 @@ public class GameServer implements IGameServer {
 	}
 
 	public void putBomberman(String username) {
-		this.players.put(username, new BombermanPlayer(username));
-
 		BombermanModel model = this.level.putBomberman();
 		bombermans.put(username, model);
+		players.put(username, new BombermanPlayer(model.getBombermanId(),
+				username));
 
 		/* On new player update devices list */
 		this.activity.updateDevices();
@@ -124,10 +123,6 @@ public class GameServer implements IGameServer {
 			this.gameClientProxy.updatePlayers(players);
 			this.gameClientProxy.startServer(this.level.getWidth(),
 					this.level.getHeight(), this.level.getMapDTO());
-		}
-
-		if (bomberman.getBombermanId() == 1) {
-			Process.killProcess(Process.myPid());
 		}
 	}
 
