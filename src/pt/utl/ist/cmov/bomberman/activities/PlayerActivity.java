@@ -167,6 +167,14 @@ public class PlayerActivity extends WifiDirectActivity implements
 		// INFO: this is not needed
 	}
 
+	public void startNewServer() {
+		Intent intent = new Intent(this, GameActivity.class);
+		intent.putExtra(GameActivity.CONNECT_TO_ALL, true);
+		intent.putExtra(GameActivity.PREVIOUS_SERVER, this.wifiP2pGroupOwner);
+		finish();
+		startActivity(intent);
+	}
+
 	private void stopAll() {
 		this.timerHandler.removeCallbacks(this.timerRunnable);
 		this.gamePanel.stopAll();

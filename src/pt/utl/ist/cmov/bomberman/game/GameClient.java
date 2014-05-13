@@ -57,7 +57,7 @@ public class GameClient implements IGameClient {
 	public void pause() {
 		gameServerProxy.pause(this.username);
 	}
-	
+
 	public void quit() {
 		gameServerProxy.quit(this.username);
 	}
@@ -74,10 +74,11 @@ public class GameClient implements IGameClient {
 	public void updatePlayers(HashMap<String, BombermanPlayer> players) {
 		this.players = players;
 	}
-	
+
 	@Override
 	public void startServer(ArrayList<ModelDTO> models) {
 		// TODO: start new activity with players and models
+		// activity.startNewServer();
 	}
 
 	public void draw(Context context, Canvas canvas) {
