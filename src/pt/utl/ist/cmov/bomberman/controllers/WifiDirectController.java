@@ -36,17 +36,12 @@ public class WifiDirectController extends BroadcastReceiver {
 		String action = intent.getAction();
 
 		if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
-			// int wifiDirectState = intent.getIntExtra(
-			// WifiP2pManager.EXTRA_WIFI_STATE, -1);
-			// if (wifiDirectState == WifiP2pManager.WIFI_P2P_STATE_DISABLED) {
-			// setupWifi();
-			// try {
-			// Method enableWifiDirect = mManager.getClass().getMethod(
-			// "enableP2p", Channel.class);
-			// enableWifiDirect.invoke(mManager, mChannel);
-			// } catch (Exception ignore) {
-			// }
-			// }
+			int wifiDirectState = intent.getIntExtra(
+					WifiP2pManager.EXTRA_WIFI_STATE, -1);
+			if (wifiDirectState == WifiP2pManager.WIFI_P2P_STATE_DISABLED) {
+				Log.e("BOMBERMAN",
+						"Your device doesn't have wifi direct enabled!");
+			}
 		} else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
 			if (mManager != null) {
 				mManager.requestPeers(mChannel, (PeerListListener) activity);
@@ -65,15 +60,6 @@ public class WifiDirectController extends BroadcastReceiver {
 						(ConnectionInfoListener) activity);
 			}
 		}
-	}
-
-	public void setupWifi() {
-		// WifiManager wifi = (WifiManager) activity
-		// .getSystemService(Context.WIFI_SERVICE);
-		//
-		// if (!wifi.isWifiEnabled()) {
-		// wifi.setWifiEnabled(true);
-		// }
 	}
 
 	public void discoverPeers() {

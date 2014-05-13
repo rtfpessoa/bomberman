@@ -18,6 +18,7 @@ import pt.utl.ist.cmov.bomberman.listeners.DirectionButtonListener;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
@@ -30,6 +31,10 @@ import android.widget.TextView;
 
 public class GameActivity extends WifiDirectActivity implements
 		PeerListListener, ConnectionInfoListener {
+
+	public static final String CONNECT_TO_ALL = "pt.utl.ist.cmov.bomberman.CONNECT_TO_ALL";
+
+	public static final String PREVIOUS_SERVER = "pt.utl.ist.cmov.bomberman.PREVIOUS_SERVER";
 
 	private static Context context;
 
@@ -54,6 +59,9 @@ public class GameActivity extends WifiDirectActivity implements
 
 	private Boolean hasStartedServer;
 
+	private Boolean connectToAll;
+	private WifiP2pDevice previousMaster;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -71,6 +79,11 @@ public class GameActivity extends WifiDirectActivity implements
 
 		String levelName = getIntent().getExtras().getString(
 				LevelChoiceActivity.LEVEL_MESSAGE);
+
+		connectToAll = getIntent().getExtras().getBoolean(
+				GameActivity.CONNECT_TO_ALL);
+		previousMaster = getIntent().getExtras().getParcelable(
+				GameActivity.PREVIOUS_SERVER);
 
 		Level level = LevelManager.loadLevel(context, context.getAssets(),
 				levelName);
@@ -124,6 +137,9 @@ public class GameActivity extends WifiDirectActivity implements
 			}
 		};
 		this.timerRunnable.run();
+
+		/* Connect to previous players if any, only after all setup */
+		this.wifiDirectController.discoverPeers();
 	}
 
 	public void bombClick(View view) {
@@ -201,7 +217,17 @@ public class GameActivity extends WifiDirectActivity implements
 
 	@Override
 	public void onPeersAvailable(WifiP2pDeviceList peers) {
-		// INFO: this is not needed
+		if (connectToAll && !peers.getDeviceList().isEmpty()) {
+			for (WifiP2pDevice device : peers.getDeviceList()) {
+				if (previousMaster == null
+						|| !previousMaster.deviceAddress
+								.equals(device.deviceAddress)) {
+					this.wifiDirectController.connect(device);
+				}
+			}
+
+			connectToAll = false;
+		}
 	}
 
 	private void stopAll() {

@@ -41,8 +41,6 @@ public class PlayerActivity extends WifiDirectActivity implements
 	private TextView score;
 	private TextView playerNumber;
 
-	private Boolean hasStartedServer = false;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -139,12 +137,12 @@ public class PlayerActivity extends WifiDirectActivity implements
 	public void onConnectionInfoAvailable(WifiP2pInfo p2pInfo) {
 		Thread handler = null;
 
-		if (!hasStartedServer && !p2pInfo.isGroupOwner) {
+		if (!p2pInfo.isGroupOwner) {
 			Log.i("BOMBERMAN", "Connected as peer");
+			this.clientManager.close();
 			handler = new PlayerSocketHandler(this.clientManager,
 					p2pInfo.groupOwnerAddress);
 			handler.start();
-			hasStartedServer = true;
 		} else {
 			Log.e("BOMBERMAN", "This device should not be the groupd owner!");
 		}

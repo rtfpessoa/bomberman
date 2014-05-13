@@ -36,8 +36,6 @@ public class WifiDirectActivity extends FullScreenActivity {
 		this.wifiDirectController = new WifiDirectController(manager, channel,
 				this);
 
-		wifiDirectController.setupWifi();
-
 		wifiDirectController.discoverPeers();
 	}
 
