@@ -28,6 +28,7 @@ public class ClientCommunicationManager implements ICommunicationManager,
 	}
 
 	public void setCommChannel(ICommunicationChannel commChannel) {
+		close();
 		this.commChannel = commChannel;
 		gameClient.putBomberman();
 	}
@@ -130,8 +131,10 @@ public class ClientCommunicationManager implements ICommunicationManager,
 
 	@Override
 	public void close() {
-		this.commChannel.close();
-		this.commChannel = null;
+		if (this.commChannel != null) {
+			this.commChannel.close();
+			this.commChannel = null;
+		}
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package pt.utl.ist.cmov.bomberman.controllers;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,10 +10,12 @@ import android.net.NetworkInfo;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pGroup;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
+import android.net.wifi.p2p.WifiP2pManager.GroupInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.util.Log;
 
@@ -23,12 +27,15 @@ public class WifiDirectController extends BroadcastReceiver {
 
 	private Activity activity;
 
+	private ArrayList<WifiP2pDevice> groupDevices;
+
 	public WifiDirectController(WifiP2pManager manager, Channel channel,
 			Activity activity) {
 		super();
 		this.mManager = manager;
 		this.mChannel = channel;
 		this.activity = activity;
+		this.groupDevices = new ArrayList<WifiP2pDevice>();
 	}
 
 	@Override
@@ -120,5 +127,28 @@ public class WifiDirectController extends BroadcastReceiver {
 				Log.i("BOMBERMAN", "Failed to remove from group!");
 			}
 		});
+	}
+
+	public void requestGroupInfo() {
+		mManager.requestGroupInfo(mChannel, new GroupInfoListener() {
+			@Override
+			public void onGroupInfoAvailable(WifiP2pGroup group) {
+				if (group == null) {
+					Log.e("BOMBERMAN", "Group info unavailable!");
+				} else {
+					if (group.getClientList().isEmpty()) {
+						Log.e("BOMBERMAN", "No devices in the group!");
+					} else {
+						Log.i("BOMBERMAN", "Group devices updated!");
+						groupDevices.clear();
+						groupDevices.addAll(group.getClientList());
+					}
+				}
+			}
+		});
+	}
+
+	public ArrayList<WifiP2pDevice> getGroupDevices() {
+		return this.groupDevices;
 	}
 }

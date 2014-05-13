@@ -3,6 +3,7 @@ package pt.utl.ist.cmov.bomberman.game;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import pt.utl.ist.cmov.bomberman.activities.GameActivity;
 import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
 import pt.utl.ist.cmov.bomberman.game.model.BombModel;
 import pt.utl.ist.cmov.bomberman.game.model.BombermanModel;
@@ -25,8 +26,11 @@ public class GameServer implements IGameServer {
 	private Runnable refreshRunnable;
 	private Integer remainingTime;
 
-	public GameServer(Level level) {
+	private GameActivity gameActivity;
+
+	public GameServer(GameActivity gameActivity, Level level) {
 		super();
+		this.gameActivity = gameActivity;
 		this.level = level;
 		this.remainingTime = level.getGameDuration();
 
@@ -62,6 +66,9 @@ public class GameServer implements IGameServer {
 
 		BombermanModel model = this.level.putBomberman();
 		bombermans.put(username, model);
+
+		/* On new player update devices list */
+		this.gameActivity.updateDevices();
 	}
 
 	public void putBomb(String username) {

@@ -139,7 +139,6 @@ public class PlayerActivity extends WifiDirectActivity implements
 
 		if (!p2pInfo.isGroupOwner) {
 			Log.i("BOMBERMAN", "Connected as peer");
-			this.clientManager.close();
 			handler = new PlayerSocketHandler(this.clientManager,
 					p2pInfo.groupOwnerAddress);
 			handler.start();
@@ -149,17 +148,19 @@ public class PlayerActivity extends WifiDirectActivity implements
 	}
 
 	private void update(BombermanPlayer player) {
-		String timeString = player.getTime().toString() + " s";
-		timeLeft.setText(timeString);
+		if (player != null) {
+			String timeString = player.getTime().toString() + " s";
+			timeLeft.setText(timeString);
 
-		String usernameString = player.getUsername();
-		playerName.setText(usernameString);
+			String usernameString = player.getUsername();
+			playerName.setText(usernameString);
 
-		String scoreString = player.getScore() + " pts";
-		score.setText(scoreString);
+			String scoreString = player.getScore() + " pts";
+			score.setText(scoreString);
 
-		String playerString = player.getPlayers() + " players";
-		playerNumber.setText(playerString);
+			String playerString = player.getPlayers() + " players";
+			playerNumber.setText(playerString);
+		}
 	}
 
 	@Override

@@ -90,7 +90,7 @@ public class GameActivity extends WifiDirectActivity implements
 
 		this.gamePanel = (MainGamePanel) findViewById(R.id.game_panel);
 
-		this.gameServer = new GameServer(level);
+		this.gameServer = new GameServer(this, level);
 		this.gameClient = new GameClient(username);
 
 		this.serverManager = new ServerCommunicationManager(this.gameServer);
@@ -182,17 +182,19 @@ public class GameActivity extends WifiDirectActivity implements
 	}
 
 	private void update(BombermanPlayer player) {
-		String timeString = player.getTime().toString() + " s";
-		timeLeft.setText(timeString);
+		if (player != null) {
+			String timeString = player.getTime().toString() + " s";
+			timeLeft.setText(timeString);
 
-		String usernameString = player.getUsername();
-		playerName.setText(usernameString);
+			String usernameString = player.getUsername();
+			playerName.setText(usernameString);
 
-		String scoreString = player.getScore() + " pts";
-		score.setText(scoreString);
+			String scoreString = player.getScore() + " pts";
+			score.setText(scoreString);
 
-		String playerString = player.getPlayers() + " players";
-		playerNumber.setText(playerString);
+			String playerString = player.getPlayers() + " players";
+			playerNumber.setText(playerString);
+		}
 	}
 
 	@Override
@@ -228,6 +230,10 @@ public class GameActivity extends WifiDirectActivity implements
 
 			connectToAll = false;
 		}
+	}
+
+	public void updateDevices() {
+		this.wifiDirectController.requestGroupInfo();
 	}
 
 	private void stopAll() {
