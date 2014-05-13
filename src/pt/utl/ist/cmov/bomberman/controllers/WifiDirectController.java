@@ -107,4 +107,18 @@ public class WifiDirectController extends BroadcastReceiver {
 			}
 		});
 	}
+
+	public void removeGroup() {
+		mManager.removeGroup(mChannel, new ActionListener() {
+			@Override
+			public void onSuccess() {
+				Log.i("BOMBERMAN", "Removed from group successfully!");
+			}
+
+			@Override
+			public void onFailure(int reason) {
+				Log.i("BOMBERMAN", "Failed to remove from group!");
+			}
+		});
+	}
 }
