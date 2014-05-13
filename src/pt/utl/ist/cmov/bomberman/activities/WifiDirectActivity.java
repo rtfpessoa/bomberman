@@ -5,18 +5,21 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
+import android.net.wifi.p2p.WifiP2pManager.ChannelListener;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
-public class WifiDirectActivity extends FullScreenActivity {
+public class WifiDirectActivity extends FullScreenActivity implements
+		ChannelListener {
 
 	protected WifiP2pManager manager;
 	protected final IntentFilter intentFilter = new IntentFilter();
 	protected Channel channel;
 	protected WifiDirectController wifiDirectController;
 	protected WifiP2pDevice wifiP2pGroupOwner;
-
-	private Boolean intentRegistered = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,24 +45,48 @@ public class WifiDirectActivity extends FullScreenActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		prepareIntentReceiver();
+		this.wifiDirectController = new WifiDirectController(manager, channel,
+				this);
+		registerReceiver(wifiDirectController, intentFilter);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		prepareIntentReceiver();
+		unregisterReceiver(this.wifiDirectController);
 	}
 
-	private void prepareIntentReceiver() {
-		if (!this.intentRegistered) {
-			this.wifiDirectController = new WifiDirectController(manager,
-					channel, this);
-			registerReceiver(wifiDirectController, intentFilter);
-			this.intentRegistered = true;
+	@Override
+	protected void onStop() {
+		if (manager != null && channel != null) {
+			manager.removeGroup(channel, new ActionListener() {
+
+				@Override
+				public void onFailure(int reasonCode) {
+					Log.d("BOMBERMAN", "Disconnect failed. Reason :"
+							+ reasonCode);
+				}
+
+				@Override
+				public void onSuccess() {
+				}
+
+			});
+		}
+		super.onStop();
+	}
+
+	@Override
+	public void onChannelDisconnected() {
+		if (manager != null) {
+			Toast.makeText(this, "Channel lost. Trying again",
+					Toast.LENGTH_SHORT).show();
+			manager.initialize(this, getMainLooper(), this);
 		} else {
-			unregisterReceiver(this.wifiDirectController);
-			this.intentRegistered = false;
+			Toast.makeText(
+					this,
+					"Severe! Channel is probably lost premanently. Try Disable/Re-Enable P2P.",
+					Toast.LENGTH_LONG).show();
 		}
 	}
 
