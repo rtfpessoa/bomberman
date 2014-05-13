@@ -270,6 +270,49 @@ public class Level {
 		this.isPaused = false;
 	}
 
+	public void parseMap(Integer height, Integer width, ArrayList<ModelDTO> initialMap) {
+		this.isPaused = true;
+
+		this.height = height;
+		this.width = width;
+
+		this.maxBombermans = this.bombermansInitialPos.size();
+		this.modelIds = maxBombermans + 1;
+
+		for (int y = 0; y < this.height; y++) {
+			ArrayList<Model> line = new ArrayList<Model>();
+
+			for (int x = 0; x < this.width; x++) {
+				ModelDTO model = findByPos(initialMap, x, y);
+				Integer id = this.modelIds++;
+
+				Position pos = new Position(x, y);
+
+				if (model.getType() == WALL)
+					line.add(new WallModel(this, id, pos));
+				else if (model.getType() == OBSTACLE)
+					line.add(new ObstacleModel(this, id, pos));
+				else if (model.getType() == ROBOT)
+					line.add(new RobotModel(this, id, pos));
+				else if (model.getType() == EMPTY)
+					line.add(new EmptyModel(this, id, pos));
+			}
+
+			this.modelMap.add(line);
+		}
+
+		this.isPaused = false;
+	}
+
+	private ModelDTO findByPos(List<ModelDTO> initialMap, int x, int y) {
+		for (ModelDTO model : initialMap) {
+			if (model.getPos().x == x && model.getPos().y == y) {
+				return model;
+			}
+		}
+		return null;
+	}
+
 	public boolean isInDeathZone(Position testPosition) {
 		for (Direction direction : Direction.values()) {
 			Position nextPosition = Position.calculateNext(direction,

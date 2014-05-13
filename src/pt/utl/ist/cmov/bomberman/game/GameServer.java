@@ -2,13 +2,10 @@ package pt.utl.ist.cmov.bomberman.game;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
-import pt.utl.ist.cmov.bomberman.game.dto.ModelDTOFactory;
 import pt.utl.ist.cmov.bomberman.game.model.BombModel;
 import pt.utl.ist.cmov.bomberman.game.model.BombermanModel;
-import pt.utl.ist.cmov.bomberman.game.model.Model;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.os.Handler;
 import android.os.Process;
@@ -52,7 +49,7 @@ public class GameServer implements IGameServer {
 	}
 
 	public void initClient() {
-		gameClientProxy.init(this.level.getWidth(), this.level.getHeight(),
+		gameClientProxy.init(this.level.getHeight(), this.level.getWidth(),
 				this.level.getMapDTO());
 	}
 
