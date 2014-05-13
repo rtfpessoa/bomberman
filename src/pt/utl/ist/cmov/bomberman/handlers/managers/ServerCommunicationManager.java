@@ -40,26 +40,26 @@ public class ServerCommunicationManager implements ICommunicationManager,
 
 		CommunicationObject obj = (CommunicationObject) object;
 
-		if (obj.getType().equals(CommunicationObject.DEBUG)) {
-			Log.i("CommunicationManager", obj.getMessage());
-		}
-		if (obj.getType().equals(CommunicationObject.PUT_BOMBERMAN)) {
-			this.gameServer.putBomberman(obj.getMessage());
-		}
-		if (obj.getType().equals(CommunicationObject.PUT_BOMB)) {
-			this.gameServer.putBomb(obj.getMessage());
-		}
-		if (obj.getType().equals(CommunicationObject.PAUSE)) {
-			this.gameServer.pause(obj.getMessage());
-		}
-		if (obj.getType().equals(CommunicationObject.QUIT)) {
-			this.gameServer.quit(obj.getMessage());
-		}
 		if (obj.getType().equals(CommunicationObject.MOVE)) {
 			Direction direction = (Direction) gson.fromJson(
 					obj.getExtraMessage(), Direction.class);
 
 			this.gameServer.move(obj.getMessage(), direction);
+		}
+		else if (obj.getType().equals(CommunicationObject.PUT_BOMB)) {
+			this.gameServer.putBomb(obj.getMessage());
+		}
+		else if (obj.getType().equals(CommunicationObject.PUT_BOMBERMAN)) {
+			this.gameServer.putBomberman(obj.getMessage());
+		}
+		else if (obj.getType().equals(CommunicationObject.PAUSE)) {
+			this.gameServer.pause(obj.getMessage());
+		}
+		else if (obj.getType().equals(CommunicationObject.QUIT)) {
+			this.gameServer.quit(obj.getMessage());
+		}
+		else if (obj.getType().equals(CommunicationObject.DEBUG)) {
+			Log.i("CommunicationManager", obj.getMessage());
 		}
 	}
 
@@ -97,6 +97,17 @@ public class ServerCommunicationManager implements ICommunicationManager,
 
 		CommunicationObject object = new CommunicationObject(
 				CommunicationObject.UPDATE_PLAYERS, innerJson);
+
+		broadcast(object);
+	}
+	
+	@Override
+	public void startServer(ArrayList<ModelDTO> models) {
+		Gson gson = new Gson();
+		String messageJson = gson.toJson(models);
+		
+		CommunicationObject object = new CommunicationObject(
+				CommunicationObject.START_SERVER, messageJson);
 
 		broadcast(object);
 	}

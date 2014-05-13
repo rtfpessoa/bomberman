@@ -114,8 +114,11 @@ public class GameActivity extends WifiDirectActivity implements
 		this.timerRunnable = new Runnable() {
 			@Override
 			public void run() {
-				gameServer.decrementTime();
-				update(gameClient.getPlayer());
+				try {
+					gameServer.decrementTime();
+					update(gameClient.getPlayer());
+				} catch (NullPointerException ignored) {
+				}
 
 				timerHandler.postDelayed(timerRunnable, 1000);
 			}
@@ -126,9 +129,13 @@ public class GameActivity extends WifiDirectActivity implements
 	public void bombClick(View view) {
 		gameClient.putBomb();
 	}
-	
+
 	public void pauseClick(View view) {
 		gameClient.pause();
+	}
+
+	public void quitClick(View view) {
+		gameClient.quit();
 	}
 
 	public void endGame() {
@@ -152,11 +159,10 @@ public class GameActivity extends WifiDirectActivity implements
 		super.onDestroy();
 		stopAll();
 	}
-	
+
 	@Override
-	public void onBackPressed()
-	{
-	    gameClient.pause();
+	public void onBackPressed() {
+		gameClient.pause();
 	}
 
 	private void update(BombermanPlayer player) {

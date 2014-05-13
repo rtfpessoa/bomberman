@@ -224,7 +224,7 @@ public class Level {
 	public BombermanModel putBomberman() {
 		Integer id = bombermanIds++;
 		Position pos = this.getBombermanInitialPos(id);
-		Model current = this.getMap().get(pos.y).get(pos.x);
+		Model current = getOnMap(pos);
 		BombermanModel bomberman = new BombermanModel(this, current.getId(),
 				pos, id);
 		setOnMap(pos, bomberman);
@@ -281,8 +281,15 @@ public class Level {
 		return false;
 	}
 
-	public ArrayList<ArrayList<Model>> getMap() {
-		return modelMap;
+	public ArrayList<ModelDTO> getMapDTO() {
+		ArrayList<ModelDTO> dtos = new ArrayList<ModelDTO>();
+		for (List<Model> line : modelMap) {
+			for (Model model : line) {
+				ModelDTO dto = ModelDTOFactory.create(model);
+				dtos.add(dto);
+			}
+		}
+		return dtos;
 	}
 
 	public ArrayList<ModelDTO> getLatestUpdates() {

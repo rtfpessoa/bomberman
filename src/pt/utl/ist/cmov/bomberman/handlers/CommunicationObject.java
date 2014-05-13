@@ -19,6 +19,7 @@ public class CommunicationObject implements Serializable {
 	/* Client */
 	public static final String UPDATE_SCREEN = "pt.utl.ist.cmov.bomberman.UPDATE_SCREEN";
 	public static final String UPDATE_PLAYERS = "pt.utl.ist.cmov.bomberman.UPDATE_PLAYERS";
+	public static final String START_SERVER = "pt.utl.ist.cmov.bomberman.START_SERVER";
 
 	private final String type;
 	private final String message;

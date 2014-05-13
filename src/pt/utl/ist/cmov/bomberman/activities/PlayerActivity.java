@@ -100,6 +100,14 @@ public class PlayerActivity extends WifiDirectActivity implements
 		gameClient.putBomb();
 	}
 
+	public void pauseClick(View view) {
+		gameClient.pause();
+	}
+
+	public void quitClick(View view) {
+		gameClient.quit();
+	}
+
 	public void endGame() {
 		Intent intent = new Intent(this, EndGameActivity.class);
 
@@ -121,11 +129,10 @@ public class PlayerActivity extends WifiDirectActivity implements
 		super.onDestroy();
 		stopAll();
 	}
-	
+
 	@Override
-	public void onBackPressed()
-	{
-	    gameClient.pause();
+	public void onBackPressed() {
+		gameClient.pause();
 	}
 
 	@Override

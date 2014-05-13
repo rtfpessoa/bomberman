@@ -38,9 +38,6 @@ public class ClientCommunicationManager implements ICommunicationManager,
 
 		CommunicationObject obj = (CommunicationObject) object;
 
-		if (obj.getType().equals(CommunicationObject.DEBUG)) {
-			Log.i("CommunicationManager", obj.getMessage());
-		}
 		if (obj.getType().equals(CommunicationObject.UPDATE_SCREEN)) {
 			Type collectionType = new TypeToken<Collection<ModelDTO>>() {
 			}.getType();
@@ -48,16 +45,14 @@ public class ClientCommunicationManager implements ICommunicationManager,
 			ArrayList<ModelDTO> models = (ArrayList<ModelDTO>) gson.fromJson(
 					obj.getMessage(), collectionType);
 			this.gameClient.updateScreen(models);
-		}
-		if (obj.getType().equals(CommunicationObject.UPDATE_PLAYERS)) {
+		} else if (obj.getType().equals(CommunicationObject.UPDATE_PLAYERS)) {
 			Type collectionType = new TypeToken<HashMap<String, BombermanPlayer>>() {
 			}.getType();
 
 			HashMap<String, BombermanPlayer> players = (HashMap<String, BombermanPlayer>) gson
 					.fromJson(obj.getMessage(), collectionType);
 			this.gameClient.updatePlayers(players);
-		}
-		if (obj.getType().equals(CommunicationObject.INIT)) {
+		} else if (obj.getType().equals(CommunicationObject.INIT)) {
 			Type hashType = new TypeToken<HashMap<String, Integer>>() {
 			}.getType();
 
@@ -72,6 +67,16 @@ public class ClientCommunicationManager implements ICommunicationManager,
 
 			this.gameClient.init(mesurements.get("lines"),
 					mesurements.get("cols"), models);
+		} else if (obj.getType().equals(CommunicationObject.START_SERVER)) {
+			Type collectionType = new TypeToken<ArrayList<ModelDTO>>() {
+			}.getType();
+
+			ArrayList<ModelDTO> models = (ArrayList<ModelDTO>) gson.fromJson(
+					obj.getMessage(), collectionType);
+
+			this.gameClient.startServer(models);
+		} else if (obj.getType().equals(CommunicationObject.DEBUG)) {
+			Log.i("CommunicationManager", obj.getMessage());
 		}
 	}
 
@@ -117,8 +122,10 @@ public class ClientCommunicationManager implements ICommunicationManager,
 
 	@Override
 	public void quit(String username) {
-		// TODO Auto-generated method stub
+		CommunicationObject object = new CommunicationObject(
+				CommunicationObject.QUIT, username);
 
+		commChannel.send(object);
 	}
 
 	@Override

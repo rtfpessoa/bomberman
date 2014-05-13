@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import pt.utl.ist.cmov.bomberman.game.drawing.Drawing;
 import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
 import pt.utl.ist.cmov.bomberman.game.dto.ModelDTOFactory;
 import pt.utl.ist.cmov.bomberman.game.model.BombModel;
@@ -12,6 +11,7 @@ import pt.utl.ist.cmov.bomberman.game.model.BombermanModel;
 import pt.utl.ist.cmov.bomberman.game.model.Model;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.os.Handler;
+import android.os.Process;
 
 public class GameServer implements IGameServer {
 
@@ -52,17 +52,8 @@ public class GameServer implements IGameServer {
 	}
 
 	public void initClient() {
-		ArrayList<ArrayList<Model>> models = this.level.getMap();
-
-		ArrayList<ModelDTO> dtos = new ArrayList<ModelDTO>();
-		for (List<Model> line : models) {
-			for (Model model : line) {
-				ModelDTO dto = ModelDTOFactory.create(model);
-				dtos.add(dto);
-			}
-		}
-
-		gameClientProxy.init(models.size(), models.get(0).size(), dtos);
+		gameClientProxy.init(this.level.getWidth(), this.level.getHeight(),
+				this.level.getMapDTO());
 	}
 
 	public void setGameClient(IGameClient gameClientProxy) {
@@ -111,7 +102,28 @@ public class GameServer implements IGameServer {
 
 	@Override
 	public void quit(String username) {
-		// TODO Auto-generated method stub
+		BombermanModel bomberman = bombermans.get(username);
+
+		players.remove(username);
+		bombermans.remove(username);
+
+		if (bombermans.size() > 1 && bomberman.getBombermanId() == 1) {
+			// pauseGame
+			for (BombermanModel b : bombermans.values()) {
+				b.pause();
+			}
+			this.stopAll();
+			// chooseNextServer
+			BombermanPlayer newServer = players.values().iterator().next();
+			// startServer
+			this.updateScreen();
+			this.gameClientProxy.updatePlayers(players);
+			this.gameClientProxy.startServer(this.level.getMapDTO());
+		}
+
+		if (bomberman.getBombermanId() == 1) {
+			Process.killProcess(Process.myPid());
+		}
 	}
 
 	private void updateScreen() {
