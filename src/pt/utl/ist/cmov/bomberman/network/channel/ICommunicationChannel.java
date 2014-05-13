@@ -1,4 +1,4 @@
-package pt.utl.ist.cmov.bomberman.handlers.channels;
+package pt.utl.ist.cmov.bomberman.network.channel;
 
 
 public interface ICommunicationChannel {

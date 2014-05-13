@@ -8,8 +8,8 @@ import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
 import pt.utl.ist.cmov.bomberman.game.BombermanPlayer;
 import pt.utl.ist.cmov.bomberman.game.GameClient;
 import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
-import pt.utl.ist.cmov.bomberman.handlers.managers.ClientCommunicationManager;
 import pt.utl.ist.cmov.bomberman.listeners.DirectionButtonListener;
+import pt.utl.ist.cmov.bomberman.network.proxy.ClientCommunicationProxy;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
@@ -30,7 +30,7 @@ public abstract class GameActivity extends WifiDirectActivity implements
 
 	protected MainGamePanel gamePanel;
 	protected GameClient gameClient;
-	protected ClientCommunicationManager clientManager;
+	protected ClientCommunicationProxy clientManager;
 
 	private DirectionButtonListener upListener;
 	private DirectionButtonListener downListener;
@@ -58,7 +58,7 @@ public abstract class GameActivity extends WifiDirectActivity implements
 
 		this.gameClient = new GameClient(this, username);
 
-		this.clientManager = new ClientCommunicationManager(this.gameClient);
+		this.clientManager = new ClientCommunicationProxy(this.gameClient);
 
 		this.gameClient.setGameServer(clientManager);
 

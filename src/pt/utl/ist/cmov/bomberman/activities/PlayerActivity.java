@@ -3,7 +3,7 @@ package pt.utl.ist.cmov.bomberman.activities;
 import java.util.ArrayList;
 
 import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
-import pt.utl.ist.cmov.bomberman.handlers.PlayerSocketHandler;
+import pt.utl.ist.cmov.bomberman.network.handler.PlayerSocketHandler;
 import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;

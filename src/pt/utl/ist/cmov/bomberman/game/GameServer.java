@@ -110,7 +110,7 @@ public class GameServer implements IGameServer {
 		players.remove(username);
 		bombermans.remove(username);
 
-		if (bombermans.size() > 1 && bomberman.getBombermanId() == 1) {
+		if (bombermans.size() > 0 && bomberman.getBombermanId() == 1) {
 			// pauseGame
 			for (BombermanModel b : bombermans.values()) {
 				b.pause();

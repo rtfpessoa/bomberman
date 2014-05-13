@@ -1,23 +1,23 @@
-package pt.utl.ist.cmov.bomberman.handlers;
+package pt.utl.ist.cmov.bomberman.network.handler;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-import pt.utl.ist.cmov.bomberman.handlers.channels.SocketCommunicationChannel;
-import pt.utl.ist.cmov.bomberman.handlers.managers.ICommunicationManager;
+import pt.utl.ist.cmov.bomberman.network.channel.SocketCommunicationChannel;
+import pt.utl.ist.cmov.bomberman.network.proxy.ICommunicationProxy;
 import pt.utl.ist.cmov.bomberman.util.Constants;
 import android.util.Log;
 
 public class PlayerSocketHandler extends Thread {
 
 	private static final String TAG = "ClientSocketHandler";
-	private ICommunicationManager commManager;
+	private ICommunicationProxy commManager;
 	private SocketCommunicationChannel channel;
 	private InetAddress mAddress;
 
-	public PlayerSocketHandler(ICommunicationManager commManager,
+	public PlayerSocketHandler(ICommunicationProxy commManager,
 			InetAddress groupOwnerAddress) {
 		this.commManager = commManager;
 		this.mAddress = groupOwnerAddress;

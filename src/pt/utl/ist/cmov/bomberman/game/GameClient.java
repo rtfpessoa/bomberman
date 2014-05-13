@@ -67,7 +67,6 @@ public class GameClient implements IGameClient {
 	public void quit() {
 		gameServerProxy.quit(this.username);
 
-		// TODO: we need to change this
 		if (activity instanceof PlayerActivity) {
 			activity.finish();
 		}

@@ -1,8 +1,12 @@
 package pt.utl.ist.cmov.bomberman.game.dto;
 
+import java.io.Serializable;
+
 import pt.utl.ist.cmov.bomberman.util.Position;
 
-public class ModelDTO {
+public class ModelDTO implements Serializable {
+
+	private static final long serialVersionUID = -7638022407453988722L;
 
 	private final Integer id;
 	private final Character type;

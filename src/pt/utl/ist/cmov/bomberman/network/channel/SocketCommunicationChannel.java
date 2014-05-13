@@ -1,4 +1,4 @@
-package pt.utl.ist.cmov.bomberman.handlers.channels;
+package pt.utl.ist.cmov.bomberman.network.channel;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -7,14 +7,14 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-import pt.utl.ist.cmov.bomberman.handlers.managers.ICommunicationManager;
+import pt.utl.ist.cmov.bomberman.network.proxy.ICommunicationProxy;
 import android.util.Log;
 
 public class SocketCommunicationChannel implements ICommunicationChannel,
 		Runnable {
 
 	private Socket socket = null;
-	private ICommunicationManager commManager;
+	private ICommunicationProxy commManager;
 
 	private ObjectInputStream iStream;
 	private ObjectOutputStream oStream;
@@ -25,7 +25,7 @@ public class SocketCommunicationChannel implements ICommunicationChannel,
 	private Boolean isRunning;
 
 	public SocketCommunicationChannel(Socket socket,
-			ICommunicationManager commManager) {
+			ICommunicationProxy commManager) {
 		this.socket = socket;
 		this.commManager = commManager;
 		this.isRunning = true;

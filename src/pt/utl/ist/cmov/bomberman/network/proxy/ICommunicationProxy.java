@@ -1,10 +1,10 @@
-package pt.utl.ist.cmov.bomberman.handlers.managers;
+package pt.utl.ist.cmov.bomberman.network.proxy;
 
 import java.util.ArrayList;
 
-import pt.utl.ist.cmov.bomberman.handlers.channels.ICommunicationChannel;
+import pt.utl.ist.cmov.bomberman.network.channel.ICommunicationChannel;
 
-public interface ICommunicationManager {
+public interface ICommunicationProxy {
 
 	public ArrayList<String> getChannelEndpoints();
 

@@ -1,4 +1,4 @@
-package pt.utl.ist.cmov.bomberman.handlers.managers;
+package pt.utl.ist.cmov.bomberman.network.proxy;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -9,21 +9,21 @@ import pt.utl.ist.cmov.bomberman.game.BombermanPlayer;
 import pt.utl.ist.cmov.bomberman.game.GameClient;
 import pt.utl.ist.cmov.bomberman.game.IGameServer;
 import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
-import pt.utl.ist.cmov.bomberman.handlers.CommunicationObject;
-import pt.utl.ist.cmov.bomberman.handlers.channels.ICommunicationChannel;
+import pt.utl.ist.cmov.bomberman.network.CommunicationObject;
+import pt.utl.ist.cmov.bomberman.network.channel.ICommunicationChannel;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-public class ClientCommunicationManager implements ICommunicationManager,
+public class ClientCommunicationProxy implements ICommunicationProxy,
 		IGameServer {
 
 	private ICommunicationChannel commChannel;
 	private GameClient gameClient;
 
-	public ClientCommunicationManager(GameClient gameClient) {
+	public ClientCommunicationProxy(GameClient gameClient) {
 		this.gameClient = gameClient;
 	}
 

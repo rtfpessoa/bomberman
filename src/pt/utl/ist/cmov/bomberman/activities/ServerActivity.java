@@ -7,9 +7,9 @@ import pt.utl.ist.cmov.bomberman.game.GameServer;
 import pt.utl.ist.cmov.bomberman.game.Level;
 import pt.utl.ist.cmov.bomberman.game.LevelManager;
 import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
-import pt.utl.ist.cmov.bomberman.handlers.ServerSocketHandler;
-import pt.utl.ist.cmov.bomberman.handlers.channels.FakeCommunicationChannel;
-import pt.utl.ist.cmov.bomberman.handlers.managers.ServerCommunicationManager;
+import pt.utl.ist.cmov.bomberman.network.channel.FakeCommunicationChannel;
+import pt.utl.ist.cmov.bomberman.network.handler.ServerSocketHandler;
+import pt.utl.ist.cmov.bomberman.network.proxy.ServerCommunicationProxy;
 import android.content.Context;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
@@ -23,7 +23,7 @@ public class ServerActivity extends GameActivity {
 	private static Context context;
 
 	private GameServer gameServer;
-	private ServerCommunicationManager serverManager;
+	private ServerCommunicationProxy serverManager;
 
 	private Boolean hasStartedServer;
 
@@ -68,7 +68,7 @@ public class ServerActivity extends GameActivity {
 
 		this.gameServer = new GameServer(this, level);
 
-		this.serverManager = new ServerCommunicationManager(this.gameServer);
+		this.serverManager = new ServerCommunicationProxy(this.gameServer);
 
 		gameServer.setGameClient(serverManager);
 

@@ -1,4 +1,4 @@
-package pt.utl.ist.cmov.bomberman.handlers;
+package pt.utl.ist.cmov.bomberman.network.handler;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -6,18 +6,18 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import pt.utl.ist.cmov.bomberman.handlers.channels.SocketCommunicationChannel;
-import pt.utl.ist.cmov.bomberman.handlers.managers.ICommunicationManager;
+import pt.utl.ist.cmov.bomberman.network.channel.SocketCommunicationChannel;
+import pt.utl.ist.cmov.bomberman.network.proxy.ICommunicationProxy;
 import android.util.Log;
 
 public class ServerSocketHandler extends Thread {
 
 	ServerSocket socket = null;
 	private final int THREAD_COUNT = 10;
-	private ICommunicationManager commManager;
+	private ICommunicationProxy commManager;
 	private static final String TAG = "GroupOwnerSocketHandler";
 
-	public ServerSocketHandler(ICommunicationManager commManager)
+	public ServerSocketHandler(ICommunicationProxy commManager)
 			throws IOException {
 		try {
 			socket = new ServerSocket(4545);

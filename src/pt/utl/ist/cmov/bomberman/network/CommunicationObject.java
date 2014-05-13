@@ -1,4 +1,4 @@
-package pt.utl.ist.cmov.bomberman.handlers;
+package pt.utl.ist.cmov.bomberman.network;
 
 import java.io.Serializable;
 

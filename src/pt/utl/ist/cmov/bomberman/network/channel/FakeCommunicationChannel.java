@@ -1,12 +1,12 @@
-package pt.utl.ist.cmov.bomberman.handlers.channels;
+package pt.utl.ist.cmov.bomberman.network.channel;
 
-import pt.utl.ist.cmov.bomberman.handlers.managers.ICommunicationManager;
+import pt.utl.ist.cmov.bomberman.network.proxy.ICommunicationProxy;
 
 public class FakeCommunicationChannel implements ICommunicationChannel {
 
-	private ICommunicationManager outCommManager;
+	private ICommunicationProxy outCommManager;
 
-	public FakeCommunicationChannel(ICommunicationManager outCommManager) {
+	public FakeCommunicationChannel(ICommunicationProxy outCommManager) {
 		this.outCommManager = outCommManager;
 	}
 
