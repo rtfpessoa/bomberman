@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import pt.utl.ist.cmov.bomberman.activities.GameActivity;
+import pt.utl.ist.cmov.bomberman.activities.ServerActivity;
 import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
 import pt.utl.ist.cmov.bomberman.game.model.BombModel;
 import pt.utl.ist.cmov.bomberman.game.model.BombermanModel;
@@ -12,6 +13,8 @@ import android.os.Handler;
 import android.os.Process;
 
 public class GameServer implements IGameServer {
+
+	private ServerActivity activity;
 
 	private HashMap<String, BombermanPlayer> players;
 
@@ -26,11 +29,9 @@ public class GameServer implements IGameServer {
 	private Runnable refreshRunnable;
 	private Integer remainingTime;
 
-	private GameActivity gameActivity;
-
 	public GameServer(GameActivity gameActivity, Level level) {
 		super();
-		this.gameActivity = gameActivity;
+		this.activity = activity;
 		this.level = level;
 		this.remainingTime = level.getGameDuration();
 
@@ -68,7 +69,7 @@ public class GameServer implements IGameServer {
 		bombermans.put(username, model);
 
 		/* On new player update devices list */
-		this.gameActivity.updateDevices();
+		this.activity.updateDevices();
 	}
 
 	public void putBomb(String username) {
@@ -122,7 +123,8 @@ public class GameServer implements IGameServer {
 			// startServer
 			this.updateScreen();
 			this.gameClientProxy.updatePlayers(players);
-			this.gameClientProxy.startServer(this.level.getMapDTO());
+			this.gameClientProxy.startServer(this.level.getWidth(),
+					this.level.getHeight(), this.level.getMapDTO());
 		}
 
 		if (bomberman.getBombermanId() == 1) {

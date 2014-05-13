@@ -45,20 +45,15 @@ public class ServerCommunicationManager implements ICommunicationManager,
 					obj.getExtraMessage(), Direction.class);
 
 			this.gameServer.move(obj.getMessage(), direction);
-		}
-		else if (obj.getType().equals(CommunicationObject.PUT_BOMB)) {
+		} else if (obj.getType().equals(CommunicationObject.PUT_BOMB)) {
 			this.gameServer.putBomb(obj.getMessage());
-		}
-		else if (obj.getType().equals(CommunicationObject.PUT_BOMBERMAN)) {
+		} else if (obj.getType().equals(CommunicationObject.PUT_BOMBERMAN)) {
 			this.gameServer.putBomberman(obj.getMessage());
-		}
-		else if (obj.getType().equals(CommunicationObject.PAUSE)) {
+		} else if (obj.getType().equals(CommunicationObject.PAUSE)) {
 			this.gameServer.pause(obj.getMessage());
-		}
-		else if (obj.getType().equals(CommunicationObject.QUIT)) {
+		} else if (obj.getType().equals(CommunicationObject.QUIT)) {
 			this.gameServer.quit(obj.getMessage());
-		}
-		else if (obj.getType().equals(CommunicationObject.DEBUG)) {
+		} else if (obj.getType().equals(CommunicationObject.DEBUG)) {
 			Log.i("CommunicationManager", obj.getMessage());
 		}
 	}
@@ -100,14 +95,20 @@ public class ServerCommunicationManager implements ICommunicationManager,
 
 		broadcast(object);
 	}
-	
+
 	@Override
-	public void startServer(ArrayList<ModelDTO> models) {
+	public void startServer(Integer width, Integer height,
+			ArrayList<ModelDTO> models) {
+		HashMap<String, Integer> extraMessage = new HashMap<String, Integer>();
+		extraMessage.put("width", width);
+		extraMessage.put("height", height);
+
 		Gson gson = new Gson();
 		String messageJson = gson.toJson(models);
-		
+		String extraMessageJson = gson.toJson(extraMessage);
+
 		CommunicationObject object = new CommunicationObject(
-				CommunicationObject.START_SERVER, messageJson);
+				CommunicationObject.START_SERVER, messageJson, extraMessageJson);
 
 		broadcast(object);
 	}

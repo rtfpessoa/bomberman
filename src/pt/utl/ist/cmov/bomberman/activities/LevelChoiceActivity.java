@@ -45,7 +45,7 @@ public class LevelChoiceActivity extends FullScreenActivity {
 	private void levelChoosenAction(Object object) {
 		String levelName = (String) object;
 
-		Intent intent = new Intent(this, GameActivity.class);
+		Intent intent = new Intent(this, ServerActivity.class);
 		intent.putExtra(LEVEL_MESSAGE, levelName);
 		String username = getIntent().getExtras().getString(
 				MainActivity.INTENT_USERNAME);

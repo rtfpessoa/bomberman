@@ -69,13 +69,20 @@ public class ClientCommunicationManager implements ICommunicationManager,
 			this.gameClient.init(mesurements.get("lines"),
 					mesurements.get("cols"), models);
 		} else if (obj.getType().equals(CommunicationObject.START_SERVER)) {
+			Type hashType = new TypeToken<HashMap<String, Integer>>() {
+			}.getType();
+
 			Type collectionType = new TypeToken<ArrayList<ModelDTO>>() {
 			}.getType();
 
 			ArrayList<ModelDTO> models = (ArrayList<ModelDTO>) gson.fromJson(
 					obj.getMessage(), collectionType);
 
-			this.gameClient.startServer(models);
+			HashMap<String, Integer> mesurements = (HashMap<String, Integer>) gson
+					.fromJson(obj.getExtraMessage(), hashType);
+
+			this.gameClient.startServer(mesurements.get("width"),
+					mesurements.get("height"), models);
 		} else if (obj.getType().equals(CommunicationObject.DEBUG)) {
 			Log.i("CommunicationManager", obj.getMessage());
 		}

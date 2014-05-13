@@ -1,6 +1,5 @@
 package pt.utl.ist.cmov.bomberman.activities;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import pt.utl.ist.cmov.bomberman.MainActivity;
@@ -8,115 +7,64 @@ import pt.utl.ist.cmov.bomberman.R;
 import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
 import pt.utl.ist.cmov.bomberman.game.BombermanPlayer;
 import pt.utl.ist.cmov.bomberman.game.GameClient;
-import pt.utl.ist.cmov.bomberman.game.GameServer;
-import pt.utl.ist.cmov.bomberman.game.Level;
-import pt.utl.ist.cmov.bomberman.game.LevelManager;
 import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
-import pt.utl.ist.cmov.bomberman.handlers.ServerSocketHandler;
-import pt.utl.ist.cmov.bomberman.handlers.channels.FakeCommunicationChannel;
 import pt.utl.ist.cmov.bomberman.handlers.managers.ClientCommunicationManager;
-import pt.utl.ist.cmov.bomberman.handlers.managers.ServerCommunicationManager;
 import pt.utl.ist.cmov.bomberman.listeners.DirectionButtonListener;
 import pt.utl.ist.cmov.bomberman.util.Direction;
-import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.p2p.WifiP2pDevice;
-import android.net.wifi.p2p.WifiP2pDeviceList;
-import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-public class GameActivity extends WifiDirectActivity implements
+public abstract class GameActivity extends WifiDirectActivity implements
 		PeerListListener, ConnectionInfoListener {
 
 	public static final String CONNECT_TO_ALL = "pt.utl.ist.cmov.bomberman.CONNECT_TO_ALL";
-
 	public static final String PREVIOUS_SERVER = "pt.utl.ist.cmov.bomberman.PREVIOUS_SERVER";
-
 	public static final String MODELS = "pt.utl.ist.cmov.bomberman.MODELS";
+	public static final String WIDTH = "pt.utl.ist.cmov.bomberman.WIDTH";
+	public static final String HEIGHT = "pt.utl.ist.cmov.bomberman.HEIGHT";
 
-	private static Context context;
-
-	private MainGamePanel gamePanel;
-	private GameServer gameServer;
-	private GameClient gameClient;
-	private ServerCommunicationManager serverManager;
-	private ClientCommunicationManager clientManager;
+	protected MainGamePanel gamePanel;
+	protected GameClient gameClient;
+	protected ClientCommunicationManager clientManager;
 
 	private DirectionButtonListener upListener;
 	private DirectionButtonListener downListener;
 	private DirectionButtonListener leftListener;
 	private DirectionButtonListener rightListener;
 
-	private Handler timerHandler;
-	private Runnable timerRunnable;
+	private Handler updateScreenHandler;
+	private Runnable updateScreenRunnable;
 
 	private TextView timeLeft;
 	private TextView playerName;
 	private TextView score;
 	private TextView playerNumber;
 
-	private Boolean hasStartedServer;
-
-	private Boolean connectToAll;
-	private WifiP2pDevice previousMaster;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		context = getApplicationContext();
-
 		setContentView(R.layout.activity_game);
 
-		this.hasStartedServer = false;
-
-		this.wifiDirectController.startGroup();
+		this.gamePanel = (MainGamePanel) findViewById(R.id.game_panel);
 
 		String username = getIntent().getExtras().getString(
 				MainActivity.INTENT_USERNAME);
 
-		String levelName = getIntent().getExtras().getString(
-				LevelChoiceActivity.LEVEL_MESSAGE);
+		this.gameClient = new GameClient(this, username);
 
-		connectToAll = getIntent().getExtras().getBoolean(
-				GameActivity.CONNECT_TO_ALL);
-		previousMaster = getIntent().getExtras().getParcelable(
-				GameActivity.PREVIOUS_SERVER);
-		ArrayList<ModelDTO> models = getIntent().getExtras().getParcelable(
-				GameActivity.MODELS);
-
-		Level level;
-		if (!connectToAll) {
-			level = LevelManager.loadLevel(context, context.getAssets(),
-					levelName);
-		} else {
-			level = LevelManager.loadLevel(context, context.getAssets(),
-					levelName, null, null, models);
-		}
-
-		this.gamePanel = (MainGamePanel) findViewById(R.id.game_panel);
-
-		this.gameServer = new GameServer(this, level);
-		this.gameClient = new GameClient(username);
-
-		this.serverManager = new ServerCommunicationManager(this.gameServer);
 		this.clientManager = new ClientCommunicationManager(this.gameClient);
 
-		gameServer.setGameClient(serverManager);
-		gameClient.setGameServer(clientManager);
-
-		clientManager
-				.setCommChannel(new FakeCommunicationChannel(serverManager));
-		serverManager
-				.addCommChannel(new FakeCommunicationChannel(clientManager));
+		this.gameClient.setGameServer(clientManager);
 
 		this.gamePanel.setGameClient(this.gameClient);
+
+		this.updateScreenHandler = new Handler();
 
 		upListener = new DirectionButtonListener(Direction.UP, gameClient);
 		this.findViewById(R.id.button_up).setOnTouchListener(upListener);
@@ -135,23 +83,15 @@ public class GameActivity extends WifiDirectActivity implements
 		score = (TextView) this.findViewById(R.id.player_score);
 		playerNumber = (TextView) this.findViewById(R.id.player_number);
 
-		this.timerHandler = new Handler();
-		this.timerRunnable = new Runnable() {
+		this.updateScreenRunnable = new Runnable() {
 			@Override
 			public void run() {
-				try {
-					gameServer.decrementTime();
-					update(gameClient.getPlayer());
-				} catch (NullPointerException ignored) {
-				}
+				update(gameClient.getPlayer());
 
-				timerHandler.postDelayed(timerRunnable, 1000);
+				updateScreenHandler.postDelayed(updateScreenRunnable, 1000);
 			}
 		};
-		this.timerRunnable.run();
-
-		/* Connect to previous players if any, only after all setup */
-		this.wifiDirectController.discoverPeers();
+		this.updateScreenRunnable.run();
 	}
 
 	public void bombClick(View view) {
@@ -194,7 +134,9 @@ public class GameActivity extends WifiDirectActivity implements
 	}
 
 	private void update(BombermanPlayer player) {
-		if (player != null) {
+		if (player == null) {
+			return;
+		}
 			String timeString = player.getTime().toString() + " s";
 			timeLeft.setText(timeString);
 
@@ -206,57 +148,19 @@ public class GameActivity extends WifiDirectActivity implements
 
 			String playerString = player.getPlayers() + " players";
 			playerNumber.setText(playerString);
-		}
 	}
 
-	@Override
-	public void onConnectionInfoAvailable(WifiP2pInfo p2pInfo) {
-		Thread handler = null;
-
-		if (!hasStartedServer && p2pInfo.isGroupOwner) {
-			Log.i("BOMBERMAN", "Connected as GroupOwner");
-			try {
-				handler = new ServerSocketHandler(this.serverManager);
-				handler.start();
-				hasStartedServer = true;
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else if (!p2pInfo.isGroupOwner) {
-			Log.e("BOMBERMAN", "This device must be the groupd owner!");
-		} else {
-			Log.i("BOMBERMAN", "This device already has a server!");
-		}
-	}
-
-	@Override
-	public void onPeersAvailable(WifiP2pDeviceList peers) {
-		if (connectToAll && !peers.getDeviceList().isEmpty()) {
-			for (WifiP2pDevice device : peers.getDeviceList()) {
-				if (previousMaster == null
-						|| !previousMaster.deviceAddress
-								.equals(device.deviceAddress)) {
-					this.wifiDirectController.connect(device);
-				}
-			}
-
-			connectToAll = false;
-		}
-	}
-
-	public void updateDevices() {
-		this.wifiDirectController.requestGroupInfo();
-	}
-
-	private void stopAll() {
-		this.timerHandler.removeCallbacks(this.timerRunnable);
-		this.gameServer.stopAll();
+	protected void stopAll() {
+		this.updateScreenHandler.removeCallbacks(this.updateScreenRunnable);
 		this.gamePanel.stopAll();
 		this.clientManager.close();
-		this.serverManager.close();
 		this.upListener.stopAll();
 		this.downListener.stopAll();
 		this.leftListener.stopAll();
 		this.rightListener.stopAll();
+	}
+
+	public void startNewServer(Integer width, Integer height,
+			ArrayList<ModelDTO> models) {
 	}
 }

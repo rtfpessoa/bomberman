@@ -13,6 +13,7 @@ public interface IGameClient {
 
 	public void updatePlayers(HashMap<String, BombermanPlayer> players);
 
-	public void startServer(ArrayList<ModelDTO> models);
+	public void startServer(Integer width, Integer height,
+			ArrayList<ModelDTO> models);
 
 }
