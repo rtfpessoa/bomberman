@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
+import pt.utl.ist.cmov.bomberman.activities.PlayerActivity;
 import pt.utl.ist.cmov.bomberman.game.drawing.Drawing;
 import pt.utl.ist.cmov.bomberman.game.drawing.DrawingFactory;
 import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
@@ -14,14 +15,18 @@ import android.graphics.Canvas;
 
 public class GameClient implements IGameClient {
 
+	private PlayerActivity activity;
+
 	private String username;
 	private HashMap<String, BombermanPlayer> players;
 
 	protected IGameServer gameServerProxy;
 	private ConcurrentHashMap<Integer, Drawing> drawings;
 
-	public GameClient(String username) {
+	public GameClient(PlayerActivity activity, String username) {
 		super();
+		this.activity = activity;
+
 		this.username = username;
 		this.drawings = new ConcurrentHashMap<Integer, Drawing>();
 
@@ -77,8 +82,7 @@ public class GameClient implements IGameClient {
 
 	@Override
 	public void startServer(ArrayList<ModelDTO> models) {
-		// TODO: start new activity with players and models
-		// activity.startNewServer();
+		activity.startNewServer(models);
 	}
 
 	public void draw(Context context, Canvas canvas) {

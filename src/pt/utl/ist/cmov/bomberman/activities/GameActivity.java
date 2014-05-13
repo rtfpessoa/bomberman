@@ -1,6 +1,7 @@
 package pt.utl.ist.cmov.bomberman.activities;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import pt.utl.ist.cmov.bomberman.MainActivity;
 import pt.utl.ist.cmov.bomberman.R;
@@ -10,6 +11,7 @@ import pt.utl.ist.cmov.bomberman.game.GameClient;
 import pt.utl.ist.cmov.bomberman.game.GameServer;
 import pt.utl.ist.cmov.bomberman.game.Level;
 import pt.utl.ist.cmov.bomberman.game.LevelManager;
+import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
 import pt.utl.ist.cmov.bomberman.handlers.ServerSocketHandler;
 import pt.utl.ist.cmov.bomberman.handlers.channels.FakeCommunicationChannel;
 import pt.utl.ist.cmov.bomberman.handlers.managers.ClientCommunicationManager;
@@ -35,6 +37,8 @@ public class GameActivity extends WifiDirectActivity implements
 	public static final String CONNECT_TO_ALL = "pt.utl.ist.cmov.bomberman.CONNECT_TO_ALL";
 
 	public static final String PREVIOUS_SERVER = "pt.utl.ist.cmov.bomberman.PREVIOUS_SERVER";
+
+	public static final String MODELS = "pt.utl.ist.cmov.bomberman.MODELS";
 
 	private static Context context;
 
@@ -84,9 +88,17 @@ public class GameActivity extends WifiDirectActivity implements
 				GameActivity.CONNECT_TO_ALL);
 		previousMaster = getIntent().getExtras().getParcelable(
 				GameActivity.PREVIOUS_SERVER);
+		ArrayList<ModelDTO> models = getIntent().getExtras().getParcelable(
+				GameActivity.MODELS);
 
-		Level level = LevelManager.loadLevel(context, context.getAssets(),
-				levelName);
+		Level level;
+		if (!connectToAll) {
+			level = LevelManager.loadLevel(context, context.getAssets(),
+					levelName);
+		} else {
+			level = LevelManager.loadLevel(context, context.getAssets(),
+					levelName, null, null, models);
+		}
 
 		this.gamePanel = (MainGamePanel) findViewById(R.id.game_panel);
 

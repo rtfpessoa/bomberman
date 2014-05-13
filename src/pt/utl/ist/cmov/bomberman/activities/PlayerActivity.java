@@ -1,11 +1,14 @@
 package pt.utl.ist.cmov.bomberman.activities;
 
+import java.util.ArrayList;
+
 import pt.utl.ist.cmov.bomberman.MainActivity;
 import pt.utl.ist.cmov.bomberman.R;
 import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
 import pt.utl.ist.cmov.bomberman.game.BombermanPlayer;
 import pt.utl.ist.cmov.bomberman.game.GameClient;
 import pt.utl.ist.cmov.bomberman.game.IGameServer;
+import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
 import pt.utl.ist.cmov.bomberman.handlers.PlayerSocketHandler;
 import pt.utl.ist.cmov.bomberman.handlers.managers.ClientCommunicationManager;
 import pt.utl.ist.cmov.bomberman.listeners.DirectionButtonListener;
@@ -54,7 +57,7 @@ public class PlayerActivity extends WifiDirectActivity implements
 		String username = getIntent().getExtras().getString(
 				MainActivity.INTENT_USERNAME);
 
-		this.gameClient = new GameClient(username);
+		this.gameClient = new GameClient(this, username);
 
 		this.clientManager = new ClientCommunicationManager(this.gameClient);
 
@@ -168,10 +171,11 @@ public class PlayerActivity extends WifiDirectActivity implements
 		// INFO: this is not needed
 	}
 
-	public void startNewServer() {
+	public void startNewServer(ArrayList<ModelDTO> models) {
 		Intent intent = new Intent(this, GameActivity.class);
 		intent.putExtra(GameActivity.CONNECT_TO_ALL, true);
 		intent.putExtra(GameActivity.PREVIOUS_SERVER, this.wifiP2pGroupOwner);
+		intent.putExtra(GameActivity.MODELS, models);
 		finish();
 		startActivity(intent);
 	}
