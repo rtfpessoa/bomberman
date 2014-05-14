@@ -3,6 +3,7 @@ package pt.utl.ist.cmov.bomberman.activities;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import pt.utl.ist.cmov.bomberman.game.BombermanPlayer;
 import pt.utl.ist.cmov.bomberman.game.GameServer;
 import pt.utl.ist.cmov.bomberman.game.Level;
 import pt.utl.ist.cmov.bomberman.game.LevelManager;
@@ -41,12 +42,14 @@ public class ServerActivity extends GameActivity {
 				LevelChoiceActivity.LEVEL_MESSAGE);
 
 		currentPlayers = getIntent().getExtras().getParcelableArrayList(
-				GameActivity.CURRENT_PLAYERS);
+				GameActivity.CURRENT_DEVICES);
 
 		Integer width = getIntent().getExtras().getInt(GameActivity.WIDTH);
 		Integer height = getIntent().getExtras().getInt(GameActivity.HEIGHT);
 		ArrayList<ModelDTO> models = getIntent().getExtras()
 				.getParcelableArrayList(GameActivity.MODELS);
+		ArrayList<BombermanPlayer> players = getIntent().getExtras()
+				.getParcelableArrayList(GameActivity.PLAYERS);
 
 		Level level;
 		if (models != null && models.size() > 0) {
@@ -56,7 +59,7 @@ public class ServerActivity extends GameActivity {
 			level = LevelManager.loadLevel(this, getAssets(), levelName);
 		}
 
-		this.gameServer = new GameServer(this, level);
+		this.gameServer = new GameServer(this, level, players);
 
 		this.serverManager = new ServerCommunicationProxy(this.gameServer);
 

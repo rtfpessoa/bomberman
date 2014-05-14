@@ -1,16 +1,23 @@
 package pt.utl.ist.cmov.bomberman.game;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class BombermanPlayer implements Serializable {
-
-	private static final long serialVersionUID = -1116953100184613328L;
+public class BombermanPlayer implements Parcelable {
 
 	private Integer id;
 	private String username;
 	private Integer score;
 	private Integer time;
 	private Integer players;
+
+	public BombermanPlayer(Parcel in) {
+		id = in.readInt();
+		username = in.readString();
+		score = in.readInt();
+		time = in.readInt();
+		players = in.readInt();
+	}
 
 	public BombermanPlayer(Integer id, String username) {
 		this.id = id;
@@ -55,5 +62,29 @@ public class BombermanPlayer implements Serializable {
 	public void setPlayers(Integer players) {
 		this.players = players;
 	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(id);
+		dest.writeString(username);
+		dest.writeInt(score);
+		dest.writeInt(time);
+		dest.writeInt(players);
+	}
+
+	public static final Parcelable.Creator<BombermanPlayer> CREATOR = new Parcelable.Creator<BombermanPlayer>() {
+		public BombermanPlayer createFromParcel(Parcel in) {
+			return new BombermanPlayer(in);
+		}
+
+		public BombermanPlayer[] newArray(int size) {
+			return new BombermanPlayer[size];
+		}
+	};
 
 }

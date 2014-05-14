@@ -82,16 +82,16 @@ public class ClientCommunicationProxy implements ICommunicationProxy,
 			ArrayList<ModelDTO> models = (ArrayList<ModelDTO>) gson.fromJson(
 					obj.getMessage(), collectionType);
 
-			HashMap<String, String> mesurements = (HashMap<String, String>) gson
+			HashMap<String, String> values = (HashMap<String, String>) gson
 					.fromJson(obj.getExtraMessage(), hashType);
 
 			ArrayList<WifiP2pDevice> players = (ArrayList<WifiP2pDevice>) gson
 					.fromJson(obj.getObject(), playersCollection);
 
-			this.gameClient.startServer(mesurements.get("levelName"),
-					Integer.parseInt(mesurements.get("width")),
-					Integer.parseInt(mesurements.get("height")), models,
-					players);
+			this.gameClient.startServer(values.get("username"),
+					values.get("levelName"),
+					Integer.parseInt(values.get("width")),
+					Integer.parseInt(values.get("height")), models, players);
 		} else if (obj.getType().equals(CommunicationObject.DEBUG)) {
 			Log.i("CommunicationManager", obj.getMessage());
 		}

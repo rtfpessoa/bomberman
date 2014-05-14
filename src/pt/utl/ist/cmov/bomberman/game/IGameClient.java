@@ -14,7 +14,8 @@ public interface IGameClient {
 
 	public void updatePlayers(HashMap<String, BombermanPlayer> players);
 
-	public void startServer(String levelName, Integer width, Integer height,
-			ArrayList<ModelDTO> models, ArrayList<WifiP2pDevice> players);
+	public void startServer(String username, String levelName, Integer width,
+			Integer height, ArrayList<ModelDTO> models,
+			ArrayList<WifiP2pDevice> players);
 
 }

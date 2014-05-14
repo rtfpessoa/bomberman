@@ -40,6 +40,12 @@ public class GameClient implements IGameClient {
 		return this.players.get(this.username);
 	}
 
+	public ArrayList<BombermanPlayer> getPlayers() {
+		ArrayList<BombermanPlayer> playersArray = new ArrayList<BombermanPlayer>();
+		playersArray.addAll(this.players.values());
+		return playersArray;
+	}
+
 	public void setGameServer(IGameServer gameServer) {
 		this.gameServerProxy = gameServer;
 	}
@@ -87,9 +93,11 @@ public class GameClient implements IGameClient {
 	}
 
 	@Override
-	public void startServer(String levelName, Integer width, Integer height,
-			ArrayList<ModelDTO> models, ArrayList<WifiP2pDevice> devices) {
-		activity.startNewServer(levelName, width, height, models, devices);
+	public void startServer(String username, String levelName, Integer width,
+			Integer height, ArrayList<ModelDTO> models,
+			ArrayList<WifiP2pDevice> devices) {
+		activity.startNewServer(username, levelName, width, height, models,
+				devices);
 	}
 
 	public void draw(Context context, Canvas canvas) {

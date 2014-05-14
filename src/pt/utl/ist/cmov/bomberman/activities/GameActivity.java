@@ -24,10 +24,11 @@ import android.widget.TextView;
 public abstract class GameActivity extends WifiDirectActivity implements
 		PeerListListener, ConnectionInfoListener {
 
-	public static final String CURRENT_PLAYERS = "pt.utl.ist.cmov.bomberman.CURRENT_PLAYERS";
+	public static final String CURRENT_DEVICES = "pt.utl.ist.cmov.bomberman.CURRENT_DEVICES";
 	public static final String MODELS = "pt.utl.ist.cmov.bomberman.MODELS";
 	public static final String WIDTH = "pt.utl.ist.cmov.bomberman.WIDTH";
 	public static final String HEIGHT = "pt.utl.ist.cmov.bomberman.HEIGHT";
+	public static final String PLAYERS = "pt.utl.ist.cmov.bomberman.PLAYERS";
 
 	protected MainGamePanel gamePanel;
 	protected GameClient gameClient;
@@ -163,8 +164,9 @@ public abstract class GameActivity extends WifiDirectActivity implements
 		this.rightListener.stopAll();
 	}
 
-	public void startNewServer(String levelName, Integer width, Integer height,
-			ArrayList<ModelDTO> models, ArrayList<WifiP2pDevice> devices) {
+	public void startNewServer(String username, String levelName,
+			Integer width, Integer height, ArrayList<ModelDTO> models,
+			ArrayList<WifiP2pDevice> devices) {
 	}
 
 	public String getUsername() {

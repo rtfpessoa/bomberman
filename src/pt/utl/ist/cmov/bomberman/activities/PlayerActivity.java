@@ -2,6 +2,7 @@ package pt.utl.ist.cmov.bomberman.activities;
 
 import java.util.ArrayList;
 
+import pt.utl.ist.cmov.bomberman.MainActivity;
 import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
 import pt.utl.ist.cmov.bomberman.network.handler.PlayerSocketHandler;
 import android.content.Intent;
@@ -36,16 +37,24 @@ public class PlayerActivity extends GameActivity {
 	}
 
 	@Override
-	public void startNewServer(String levelName, Integer width, Integer height,
-			ArrayList<ModelDTO> models, ArrayList<WifiP2pDevice> devices) {
-		Intent intent = new Intent(this, ServerActivity.class);
-		intent.putParcelableArrayListExtra(GameActivity.CURRENT_PLAYERS,
-				devices);
-		intent.putExtra(LevelChoiceActivity.LEVEL_MESSAGE, levelName);
-		intent.putExtra(GameActivity.WIDTH, width);
-		intent.putExtra(GameActivity.HEIGHT, height);
-		intent.putParcelableArrayListExtra(GameActivity.MODELS, models);
-		finish();
-		startActivity(intent);
+	public void startNewServer(String username, String levelName,
+			Integer width, Integer height, ArrayList<ModelDTO> models,
+			ArrayList<WifiP2pDevice> devices) {
+		// if (username.equals(getUsername())) {
+		if ("Player0".equals(getUsername())) {
+			Intent intent = new Intent(this, ServerActivity.class);
+			intent.putExtra(MainActivity.INTENT_USERNAME, username);
+			intent.putExtra(LevelChoiceActivity.LEVEL_MESSAGE, levelName);
+			intent.putExtra(LevelChoiceActivity.LEVEL_MESSAGE, levelName);
+			intent.putExtra(GameActivity.WIDTH, width);
+			intent.putExtra(GameActivity.HEIGHT, height);
+			intent.putParcelableArrayListExtra(GameActivity.CURRENT_DEVICES,
+					devices);
+			intent.putParcelableArrayListExtra(GameActivity.MODELS, models);
+			intent.putParcelableArrayListExtra(GameActivity.PLAYERS,
+					this.gameClient.getPlayers());
+			finish();
+			startActivity(intent);
+		}
 	}
 }

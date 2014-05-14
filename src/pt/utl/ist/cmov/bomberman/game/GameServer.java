@@ -27,7 +27,8 @@ public class GameServer implements IGameServer {
 	private Runnable refreshRunnable;
 	private Integer remainingTime;
 
-	public GameServer(ServerActivity activity, Level level) {
+	public GameServer(ServerActivity activity, Level level,
+			ArrayList<BombermanPlayer> initialPlayers) {
 		super();
 		this.activity = activity;
 		this.level = level;
@@ -36,6 +37,16 @@ public class GameServer implements IGameServer {
 		this.players = new HashMap<String, BombermanPlayer>();
 		this.bombsToDraw = new HashMap<String, BombModel>();
 		this.bombermans = new HashMap<String, BombermanModel>();
+
+		if (initialPlayers != null) {
+			HashMap<Integer, BombermanModel> bombermanModels = this.level
+					.getBombermanModels();
+			for (BombermanPlayer player : initialPlayers) {
+				this.players.put(player.getUsername(), player);
+				this.bombermans.put(player.getUsername(),
+						bombermanModels.get(player.getId()));
+			}
+		}
 
 		this.refreshHandler = new Handler();
 		this.refreshRunnable = new Runnable() {
@@ -61,10 +72,12 @@ public class GameServer implements IGameServer {
 	}
 
 	public void putBomberman(String username) {
-		BombermanModel model = this.level.putBomberman();
-		bombermans.put(username, model);
-		players.put(username, new BombermanPlayer(model.getBombermanId(),
-				username));
+		if (!players.containsKey(username)) {
+			BombermanModel model = this.level.putBomberman();
+			bombermans.put(username, model);
+			players.put(username, new BombermanPlayer(model.getBombermanId(),
+					username));
+		}
 
 		/* On new player update devices list */
 		this.activity.updateDevices();
@@ -119,14 +132,17 @@ public class GameServer implements IGameServer {
 			// startServer
 			this.updateScreen();
 			this.gameClientProxy.updatePlayers(players);
-			this.gameClientProxy.startServer(this.level.getLevelName(),
-					this.level.getWidth(), this.level.getHeight(),
-					this.level.getMapDTO(), this.activity.getDevices());
+			this.gameClientProxy.startServer(newServer.getUsername(),
+					this.level.getLevelName(), this.level.getWidth(),
+					this.level.getHeight(), this.level.getMapDTO(),
+					this.activity.getDevices());
 
 			try {
 				Thread.sleep(5000);
 			} catch (InterruptedException e) {
 			}
+			activity.finish();
+		} else if (bombermans.size() == 0) {
 			activity.finish();
 		}
 	}

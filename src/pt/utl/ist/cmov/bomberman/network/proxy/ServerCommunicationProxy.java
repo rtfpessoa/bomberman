@@ -98,9 +98,11 @@ public class ServerCommunicationProxy implements ICommunicationProxy,
 	}
 
 	@Override
-	public void startServer(String levelName, Integer width, Integer height,
-			ArrayList<ModelDTO> models, ArrayList<WifiP2pDevice> players) {
+	public void startServer(String username, String levelName, Integer width,
+			Integer height, ArrayList<ModelDTO> models,
+			ArrayList<WifiP2pDevice> players) {
 		HashMap<String, String> extraMessage = new HashMap<String, String>();
+		extraMessage.put("username", username);
 		extraMessage.put("levelName", levelName);
 		extraMessage.put("width", width.toString());
 		extraMessage.put("height", height.toString());

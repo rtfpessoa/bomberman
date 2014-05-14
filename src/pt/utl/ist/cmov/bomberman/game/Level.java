@@ -1,6 +1,7 @@
 package pt.utl.ist.cmov.bomberman.game;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -77,6 +78,20 @@ public class Level {
 
 	public Handler getHandler() {
 		return this.handler;
+	}
+
+	public HashMap<Integer, BombermanModel> getBombermanModels() {
+		HashMap<Integer, BombermanModel> bombermanModels = new HashMap<Integer, BombermanModel>();
+		for (ArrayList<Model> line : modelMap) {
+			for (Model model : line) {
+				if (model.getType() == BOMBERMAN) {
+					BombermanModel bomberman = (BombermanModel) model;
+					bombermanModels.put(bomberman.getBombermanId(), bomberman);
+				}
+			}
+		}
+
+		return bombermanModels;
 	}
 
 	public String getLevelName() {
@@ -285,25 +300,33 @@ public class Level {
 		this.width = width;
 
 		this.maxBombermans = this.bombermansInitialPos.size();
-		this.modelIds = maxBombermans + 1;
+		this.modelIds = 0;
 
 		for (int y = 0; y < this.height; y++) {
 			ArrayList<Model> line = new ArrayList<Model>();
 
 			for (int x = 0; x < this.width; x++) {
 				ModelDTO model = findByPos(initialMap, x, y);
-				Integer id = this.modelIds++;
 
 				Position pos = new Position(x, y);
 
-				if (model.getType() == WALL)
-					line.add(new WallModel(this, id, pos));
-				else if (model.getType() == OBSTACLE)
-					line.add(new ObstacleModel(this, id, pos));
-				else if (model.getType() == ROBOT)
-					line.add(new RobotModel(this, id, pos));
-				else if (model.getType() == EMPTY)
-					line.add(new EmptyModel(this, id, pos));
+				if (model.getType() == WALL) {
+					line.add(new WallModel(this, model.getId(), pos));
+				} else if (model.getType() == OBSTACLE) {
+					line.add(new ObstacleModel(this, model.getId(), pos));
+				} else if (model.getType() == ROBOT) {
+					line.add(new RobotModel(this, model.getId(), pos));
+				} else if (model.getType() == EMPTY) {
+					line.add(new EmptyModel(this, model.getId(), pos));
+				} else if (model.getType() == BOMBERMAN) {
+					line.add(new BombermanModel(this, model.getId(), pos, model
+							.getBombermanId()));
+					bombermansInitialPos.remove(model.getBombermanId());
+				}
+
+				if (this.modelIds < model.getId()) {
+					this.modelIds = model.getId();
+				}
 			}
 
 			this.modelMap.add(line);
