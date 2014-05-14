@@ -74,6 +74,12 @@ public class GameClient implements IGameClient {
 	public void quit() {
 		gameServerProxy.quit(this.username);
 
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 		if (activity instanceof PlayerActivity) {
 			activity.finish();
 		}

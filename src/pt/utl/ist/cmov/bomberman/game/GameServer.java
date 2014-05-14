@@ -118,6 +118,8 @@ public class GameServer implements IGameServer {
 
 	@Override
 	public void quit(String username) {
+		BombermanModel bombermanModel = bombermans.get(username);
+		this.level.removeBomberman(bombermanModel);
 		players.remove(username);
 		bombermans.remove(username);
 

@@ -46,7 +46,6 @@ public class Level {
 
 	private ArrayList<ArrayList<Model>> modelMap;
 
-	private Integer bombermanIds;
 	private Integer modelIds;
 
 	private Boolean isPaused;
@@ -70,7 +69,6 @@ public class Level {
 		this.pointsOpponent = pointsOpponent;
 		this.modelMap = new ArrayList<ArrayList<Model>>();
 		this.bombermansInitialPos = bombermansInitialPos;
-		this.bombermanIds = 1;
 		this.isPaused = false;
 		this.updatesBuffer = new ArrayList<ModelDTO>();
 		this.handler = new Handler();
@@ -154,8 +152,11 @@ public class Level {
 		this.pointsOpponent = pointsOpponent;
 	}
 
-	public Position getBombermanInitialPos(Integer id) {
-		return this.bombermansInitialPos.get(id);
+	public Map.Entry<Integer, Position> getBombermanInitialPos() {
+		Map.Entry<Integer, Position> bombermanEntry = this.bombermansInitialPos
+				.entrySet().iterator().next();
+		this.bombermansInitialPos.remove(bombermanEntry.getKey());
+		return bombermanEntry;
 	}
 
 	public Integer getMaxBombermans() {
@@ -243,12 +244,21 @@ public class Level {
 		setOnMap(bomb.getPos(), bomb);
 	}
 
+	public void removeBomberman(BombermanModel bomberman) {
+		this.bombermansInitialPos.put(bomberman.getBombermanId(),
+				bomberman.getPos());
+		this.putEmpty(bomberman.getPos());
+	}
+
 	public BombermanModel putBomberman() {
-		Integer id = bombermanIds++;
-		Position pos = this.getBombermanInitialPos(id);
+		Map.Entry<Integer, Position> bombermanEntry = this
+				.getBombermanInitialPos();
+		Integer bombermanId = bombermanEntry.getKey();
+		Position pos = bombermanEntry.getValue();
+
 		Model current = getOnMap(pos);
 		BombermanModel bomberman = new BombermanModel(this, current.getId(),
-				pos, id);
+				pos, bombermanId);
 		setOnMap(pos, bomberman);
 
 		return bomberman;

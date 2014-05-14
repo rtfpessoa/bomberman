@@ -24,7 +24,7 @@ public class ServerActivity extends GameActivity {
 
 	private Boolean hasStartedServer;
 
-	private ArrayList<WifiP2pDevice> currentPlayers;
+	private ArrayList<WifiP2pDevice> currentDevices;
 
 	private Handler timerHandler;
 
@@ -41,7 +41,7 @@ public class ServerActivity extends GameActivity {
 		String levelName = getIntent().getExtras().getString(
 				LevelChoiceActivity.LEVEL_MESSAGE);
 
-		currentPlayers = getIntent().getExtras().getParcelableArrayList(
+		currentDevices = getIntent().getExtras().getParcelableArrayList(
 				GameActivity.CURRENT_DEVICES);
 
 		Integer width = getIntent().getExtras().getInt(GameActivity.WIDTH);
@@ -108,15 +108,15 @@ public class ServerActivity extends GameActivity {
 	}
 
 	private void connectToPlayers() {
-		if (currentPlayers == null) {
+		if (currentDevices == null) {
 			return;
 		}
 
-		for (WifiP2pDevice device : currentPlayers) {
+		for (WifiP2pDevice device : currentDevices) {
 			this.wifiDirectController.connect(device);
 		}
 
-		currentPlayers = null;
+		currentDevices = null;
 	}
 
 	public ArrayList<WifiP2pDevice> getDevices() {
