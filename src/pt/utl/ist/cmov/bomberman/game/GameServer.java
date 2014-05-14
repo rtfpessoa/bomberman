@@ -126,7 +126,7 @@ public class GameServer implements IGameServer {
 		if (bombermans.size() > 0 && activity.getUsername().equals(username)) {
 			// pauseGame
 			for (BombermanModel b : bombermans.values()) {
-				b.pause();
+				b.setIsPaused(true);
 			}
 			this.stopAll();
 			// chooseNextServer

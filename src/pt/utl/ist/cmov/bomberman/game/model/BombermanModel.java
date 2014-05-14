@@ -19,9 +19,13 @@ public class BombermanModel extends Model {
 	public Integer getBombermanId() {
 		return this.bombermanId;
 	}
-	
+
 	public Boolean isPaused() {
 		return this.isPaused;
+	}
+
+	public void setIsPaused(Boolean value) {
+		this.isPaused = value;
 	}
 
 	@Override
