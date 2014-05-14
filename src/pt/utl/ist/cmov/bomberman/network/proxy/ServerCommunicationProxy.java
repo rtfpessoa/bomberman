@@ -118,9 +118,9 @@ public class ServerCommunicationProxy implements ICommunicationProxy,
 	}
 
 	@Override
-	public void confirmQuit(String username) {
+	public void confirmQuit(String oldServer, String newServer) {
 		CommunicationObject object = new CommunicationObject(
-				CommunicationObject.CONFIRM_QUIT, username);
+				CommunicationObject.CONFIRM_QUIT, oldServer, newServer);
 
 		broadcast(object);
 	}

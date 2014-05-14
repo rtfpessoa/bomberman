@@ -84,7 +84,7 @@ public class ClientCommunicationProxy implements ICommunicationProxy,
 					Integer.parseInt(values.get("width")),
 					Integer.parseInt(values.get("height")), models, players);
 		} else if (obj.getType().equals(CommunicationObject.CONFIRM_QUIT)) {
-			this.gameClient.confirmQuit(obj.getMessage());
+			this.gameClient.confirmQuit(obj.getMessage(), obj.getExtraMessage());
 		} else if (obj.getType().equals(CommunicationObject.DEBUG)) {
 			Log.i("CommunicationManager", obj.getMessage());
 		}

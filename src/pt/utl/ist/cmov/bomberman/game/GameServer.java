@@ -140,7 +140,8 @@ public class GameServer implements IGameServer {
 				}
 			}
 
-			this.gameClientProxy.confirmQuit(newServer.getUsername());
+			this.gameClientProxy.confirmQuit(activity.getUsername(),
+					newServer.getUsername());
 
 			// startServer
 			this.updateScreen();

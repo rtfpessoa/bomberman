@@ -109,8 +109,9 @@ public class GameClient implements IGameClient {
 	}
 
 	@Override
-	public void confirmQuit(String username) {
-		if (!username.equals(activity.getUsername())) {
+	public void confirmQuit(String oldServer, String newServer) {
+		if (!oldServer.equals(activity.getUsername())
+				&& !newServer.equals(activity.getUsername())) {
 			activity.disconnect();
 		}
 	}

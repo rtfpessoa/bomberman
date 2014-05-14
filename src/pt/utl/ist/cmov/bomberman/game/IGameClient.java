@@ -18,6 +18,6 @@ public interface IGameClient {
 			Integer height, ArrayList<ModelDTO> models,
 			ArrayList<WifiP2pDevice> players);
 
-	void confirmQuit(String username);
+	void confirmQuit(String oldServer, String newServer);
 
 }
