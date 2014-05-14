@@ -130,7 +130,15 @@ public class GameServer implements IGameServer {
 			}
 			this.stopAll();
 			// chooseNextServer
-			BombermanPlayer newServer = players.values().iterator().next();
+			BombermanPlayer newServer = null;
+			for (BombermanPlayer tmpPlayer : players.values()) {
+				if (newServer == null
+						|| Integer.parseInt(newServer.getUsername().split(
+								"Player")[1]) > Integer.parseInt(tmpPlayer
+								.getUsername().split("Player")[1])) {
+					newServer = tmpPlayer;
+				}
+			}
 			// startServer
 			this.updateScreen();
 			this.gameClientProxy.updatePlayers(players);

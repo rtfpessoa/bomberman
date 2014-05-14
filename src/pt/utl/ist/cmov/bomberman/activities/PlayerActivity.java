@@ -40,8 +40,7 @@ public class PlayerActivity extends GameActivity {
 	public void startNewServer(String username, String levelName,
 			Integer width, Integer height, ArrayList<ModelDTO> models,
 			ArrayList<WifiP2pDevice> devices) {
-		// if (username.equals(getUsername())) {
-		if ("Player0".equals(getUsername())) {
+		if (username.equals(getUsername())) {
 			Intent intent = new Intent(this, ServerActivity.class);
 			intent.putExtra(MainActivity.INTENT_USERNAME, username);
 			intent.putExtra(LevelChoiceActivity.LEVEL_MESSAGE, levelName);
