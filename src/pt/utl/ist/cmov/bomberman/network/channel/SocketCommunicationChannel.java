@@ -47,7 +47,7 @@ public class SocketCommunicationChannel implements ICommunicationChannel,
 	}
 
 	@Override
-	public void send(Object object) {
+	public void send(Object object) throws IOException {
 		write(object);
 	}
 
@@ -85,12 +85,8 @@ public class SocketCommunicationChannel implements ICommunicationChannel,
 
 	}
 
-	private void write(Object obj) {
-		try {
-			oStream.writeObject(obj);
-		} catch (IOException e) {
-			Log.e(TAG, "Exception during write", e);
-		}
+	private void write(Object obj) throws IOException {
+		oStream.writeObject(obj);
 	}
 
 	@Override

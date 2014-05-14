@@ -139,6 +139,9 @@ public class GameServer implements IGameServer {
 					newServer = tmpPlayer;
 				}
 			}
+
+			this.gameClientProxy.confirmQuit(newServer.getUsername());
+
 			// startServer
 			this.updateScreen();
 			this.gameClientProxy.updatePlayers(players);

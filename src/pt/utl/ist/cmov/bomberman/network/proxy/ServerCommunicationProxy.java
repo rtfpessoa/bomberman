@@ -24,6 +24,8 @@ public class ServerCommunicationProxy implements ICommunicationProxy,
 	private List<ICommunicationChannel> commChannels;
 	private GameServer gameServer;
 
+	private Gson gson = new Gson();
+
 	public ServerCommunicationProxy(GameServer gameServer) {
 		this.commChannels = Collections
 				.synchronizedList(new ArrayList<ICommunicationChannel>());
@@ -61,7 +63,6 @@ public class ServerCommunicationProxy implements ICommunicationProxy,
 
 	@Override
 	public void updateScreen(ArrayList<ModelDTO> models) {
-		Gson gson = new Gson();
 		String innerJson = gson.toJson(models);
 
 		CommunicationObject object = new CommunicationObject(
@@ -76,7 +77,6 @@ public class ServerCommunicationProxy implements ICommunicationProxy,
 		extraMessage.put("lines", lines);
 		extraMessage.put("cols", cols);
 
-		Gson gson = new Gson();
 		String messageJson = gson.toJson(models);
 		String extraMessageJson = gson.toJson(extraMessage);
 
@@ -88,7 +88,6 @@ public class ServerCommunicationProxy implements ICommunicationProxy,
 
 	@Override
 	public void updatePlayers(HashMap<String, BombermanPlayer> players) {
-		Gson gson = new Gson();
 		String innerJson = gson.toJson(players);
 
 		CommunicationObject object = new CommunicationObject(
@@ -107,7 +106,6 @@ public class ServerCommunicationProxy implements ICommunicationProxy,
 		extraMessage.put("width", width.toString());
 		extraMessage.put("height", height.toString());
 
-		Gson gson = new Gson();
 		String messageJson = gson.toJson(models);
 		String extraMessageJson = gson.toJson(extraMessage);
 		String objJson = gson.toJson(players);
@@ -119,11 +117,28 @@ public class ServerCommunicationProxy implements ICommunicationProxy,
 		broadcast(object);
 	}
 
+	@Override
+	public void confirmQuit(String username) {
+		CommunicationObject object = new CommunicationObject(
+				CommunicationObject.CONFIRM_QUIT, username);
+
+		broadcast(object);
+	}
+
 	private void broadcast(Object object) {
 		synchronized (commChannels) {
-			for (Iterator<ICommunicationChannel> commChannel = commChannels
-					.iterator(); commChannel.hasNext();) {
-				commChannel.next().send(object);
+			for (ICommunicationChannel commChannel : commChannels) {
+				try {
+					commChannel.send(object);
+				} catch (Throwable t) {
+					for (int i = 0; i < commChannels.size(); i++) {
+						if (commChannel.equals(commChannels.get(i))) {
+							commChannel.close();
+							commChannels.remove(i);
+							break;
+						}
+					}
+				}
 			}
 		}
 	}
@@ -131,9 +146,8 @@ public class ServerCommunicationProxy implements ICommunicationProxy,
 	@Override
 	public void close() {
 		synchronized (commChannels) {
-			for (Iterator<ICommunicationChannel> commChannel = commChannels
-					.iterator(); commChannel.hasNext();) {
-				commChannel.next().close();
+			for (ICommunicationChannel commChannel : commChannels) {
+				commChannel.close();
 			}
 		}
 	}

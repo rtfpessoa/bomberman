@@ -8,14 +8,16 @@ import android.net.wifi.p2p.WifiP2pDevice;
 
 public interface IGameClient {
 
-	public void init(Integer lines, Integer cols, ArrayList<ModelDTO> models);
+	void init(Integer lines, Integer cols, ArrayList<ModelDTO> models);
 
-	public void updateScreen(ArrayList<ModelDTO> models);
+	void updateScreen(ArrayList<ModelDTO> models);
 
-	public void updatePlayers(HashMap<String, BombermanPlayer> players);
+	void updatePlayers(HashMap<String, BombermanPlayer> players);
 
-	public void startServer(String username, String levelName, Integer width,
+	void startServer(String username, String levelName, Integer width,
 			Integer height, ArrayList<ModelDTO> models,
 			ArrayList<WifiP2pDevice> players);
+
+	void confirmQuit(String username);
 
 }

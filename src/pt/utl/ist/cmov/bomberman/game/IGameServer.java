@@ -4,14 +4,14 @@ import pt.utl.ist.cmov.bomberman.util.Direction;
 
 public interface IGameServer {
 
-	public void putBomberman(String username);
+	void putBomberman(String username);
 
-	public void putBomb(String username);
+	void putBomb(String username);
 
-	public void pause(String username);
+	void pause(String username);
 
-	public void quit(String username);
+	void quit(String username);
 
-	public void move(String username, Direction direction);
+	void move(String username, Direction direction);
 
 }

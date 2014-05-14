@@ -24,6 +24,18 @@ public class ClientCommunicationProxy implements ICommunicationProxy,
 	private ICommunicationChannel commChannel;
 	private GameClient gameClient;
 
+	private Gson gson = new Gson();
+	Type modelDTOType = new TypeToken<Collection<ModelDTO>>() {
+	}.getType();
+	Type bombermanPlayerType = new TypeToken<HashMap<String, BombermanPlayer>>() {
+	}.getType();
+	Type integerMapType = new TypeToken<HashMap<String, Integer>>() {
+	}.getType();
+	Type stringMapType = new TypeToken<HashMap<String, String>>() {
+	}.getType();
+	Type devicesType = new TypeToken<ArrayList<WifiP2pDevice>>() {
+	}.getType();
+
 	public ClientCommunicationProxy(GameClient gameClient) {
 		this.gameClient = gameClient;
 	}
@@ -34,64 +46,45 @@ public class ClientCommunicationProxy implements ICommunicationProxy,
 		gameClient.putBomberman();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void receive(Object object) {
-		Gson gson = new Gson();
 
 		CommunicationObject obj = (CommunicationObject) object;
 
 		if (obj.getType().equals(CommunicationObject.UPDATE_SCREEN)) {
-			Type collectionType = new TypeToken<Collection<ModelDTO>>() {
-			}.getType();
-
 			ArrayList<ModelDTO> models = (ArrayList<ModelDTO>) gson.fromJson(
-					obj.getMessage(), collectionType);
+					obj.getMessage(), modelDTOType);
 			this.gameClient.updateScreen(models);
 		} else if (obj.getType().equals(CommunicationObject.UPDATE_PLAYERS)) {
-			Type collectionType = new TypeToken<HashMap<String, BombermanPlayer>>() {
-			}.getType();
-
 			HashMap<String, BombermanPlayer> players = (HashMap<String, BombermanPlayer>) gson
-					.fromJson(obj.getMessage(), collectionType);
+					.fromJson(obj.getMessage(), bombermanPlayerType);
 			this.gameClient.updatePlayers(players);
 		} else if (obj.getType().equals(CommunicationObject.INIT)) {
-			Type hashType = new TypeToken<HashMap<String, Integer>>() {
-			}.getType();
-
-			Type collectionType = new TypeToken<ArrayList<ModelDTO>>() {
-			}.getType();
-
 			ArrayList<ModelDTO> models = (ArrayList<ModelDTO>) gson.fromJson(
-					obj.getMessage(), collectionType);
+					obj.getMessage(), modelDTOType);
 
 			HashMap<String, Integer> mesurements = (HashMap<String, Integer>) gson
-					.fromJson(obj.getExtraMessage(), hashType);
+					.fromJson(obj.getExtraMessage(), integerMapType);
 
 			this.gameClient.init(mesurements.get("lines"),
 					mesurements.get("cols"), models);
 		} else if (obj.getType().equals(CommunicationObject.START_SERVER)) {
-			Type hashType = new TypeToken<HashMap<String, String>>() {
-			}.getType();
-
-			Type collectionType = new TypeToken<ArrayList<ModelDTO>>() {
-			}.getType();
-
-			Type playersCollection = new TypeToken<ArrayList<WifiP2pDevice>>() {
-			}.getType();
-
 			ArrayList<ModelDTO> models = (ArrayList<ModelDTO>) gson.fromJson(
-					obj.getMessage(), collectionType);
+					obj.getMessage(), modelDTOType);
 
 			HashMap<String, String> values = (HashMap<String, String>) gson
-					.fromJson(obj.getExtraMessage(), hashType);
+					.fromJson(obj.getExtraMessage(), stringMapType);
 
 			ArrayList<WifiP2pDevice> players = (ArrayList<WifiP2pDevice>) gson
-					.fromJson(obj.getObject(), playersCollection);
+					.fromJson(obj.getObject(), devicesType);
 
 			this.gameClient.startServer(values.get("username"),
 					values.get("levelName"),
 					Integer.parseInt(values.get("width")),
 					Integer.parseInt(values.get("height")), models, players);
+		} else if (obj.getType().equals(CommunicationObject.CONFIRM_QUIT)) {
+			this.gameClient.confirmQuit(obj.getMessage());
 		} else if (obj.getType().equals(CommunicationObject.DEBUG)) {
 			Log.i("CommunicationManager", obj.getMessage());
 		}
@@ -107,7 +100,7 @@ public class ClientCommunicationProxy implements ICommunicationProxy,
 		CommunicationObject object = new CommunicationObject(
 				CommunicationObject.PUT_BOMBERMAN, username);
 
-		commChannel.send(object);
+		send(object);
 	}
 
 	@Override
@@ -115,18 +108,17 @@ public class ClientCommunicationProxy implements ICommunicationProxy,
 		CommunicationObject object = new CommunicationObject(
 				CommunicationObject.PUT_BOMB, username);
 
-		commChannel.send(object);
+		send(object);
 	}
 
 	@Override
 	public void move(String username, Direction direction) {
-		Gson gson = new Gson();
 		String extraMessageJson = gson.toJson(direction);
 
 		CommunicationObject object = new CommunicationObject(
 				CommunicationObject.MOVE, username, extraMessageJson);
 
-		commChannel.send(object);
+		send(object);
 	}
 
 	@Override
@@ -134,7 +126,7 @@ public class ClientCommunicationProxy implements ICommunicationProxy,
 		CommunicationObject object = new CommunicationObject(
 				CommunicationObject.PAUSE, username);
 
-		commChannel.send(object);
+		send(object);
 	}
 
 	@Override
@@ -142,7 +134,7 @@ public class ClientCommunicationProxy implements ICommunicationProxy,
 		CommunicationObject object = new CommunicationObject(
 				CommunicationObject.QUIT, username);
 
-		commChannel.send(object);
+		send(object);
 	}
 
 	@Override
@@ -158,5 +150,15 @@ public class ClientCommunicationProxy implements ICommunicationProxy,
 		ArrayList<String> channelAddresses = new ArrayList<String>();
 		channelAddresses.add(commChannel.getChannelEndpoint());
 		return channelAddresses;
+	}
+
+	private void send(Object object) {
+		if (commChannel != null) {
+			try {
+				commChannel.send(object);
+			} catch (Throwable t) {
+				close();
+			}
+		}
 	}
 }

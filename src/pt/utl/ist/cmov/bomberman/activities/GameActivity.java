@@ -176,4 +176,8 @@ public abstract class GameActivity extends WifiDirectActivity implements
 	@Override
 	public void onPeersAvailable(WifiP2pDeviceList peers) {
 	}
+
+	public void disconnect() {
+		this.wifiDirectController.removeGroup();
+	}
 }

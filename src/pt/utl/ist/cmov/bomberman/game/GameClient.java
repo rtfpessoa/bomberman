@@ -102,8 +102,17 @@ public class GameClient implements IGameClient {
 	public void startServer(String username, String levelName, Integer width,
 			Integer height, ArrayList<ModelDTO> models,
 			ArrayList<WifiP2pDevice> devices) {
-		activity.startNewServer(username, levelName, width, height, models,
-				devices);
+		if (username.equals(activity.getUsername())) {
+			activity.startNewServer(username, levelName, width, height, models,
+					devices);
+		}
+	}
+
+	@Override
+	public void confirmQuit(String username) {
+		if (!username.equals(activity.getUsername())) {
+			activity.disconnect();
+		}
 	}
 
 	public void draw(Context context, Canvas canvas) {
