@@ -55,7 +55,9 @@ public class SocketCommunicationChannel implements ICommunicationChannel,
 	public void close() {
 		try {
 			this.isRunning = false;
-			socket.close();
+			if (socket != null && !socket.isClosed()) {
+				socket.close();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -101,7 +101,7 @@ public class ServerActivity extends GameActivity {
 
 			connectToPlayers();
 		} else if (!p2pInfo.isGroupOwner) {
-			Log.e("BOMBERMAN", "This device must be the groupd owner!");
+			Log.e("BOMBERMAN", "This device must be the group owner!");
 		} else {
 			Log.i("BOMBERMAN", "This device already has a server!");
 		}

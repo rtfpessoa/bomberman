@@ -41,7 +41,9 @@ public class ClientCommunicationProxy implements ICommunicationProxy,
 	}
 
 	public void setCommChannel(ICommunicationChannel commChannel) {
-		close();
+		if (this.commChannel != null) {
+			close();
+		}
 		this.commChannel = commChannel;
 		gameClient.putBomberman();
 	}
@@ -84,7 +86,8 @@ public class ClientCommunicationProxy implements ICommunicationProxy,
 					Integer.parseInt(values.get("width")),
 					Integer.parseInt(values.get("height")), models, players);
 		} else if (obj.getType().equals(CommunicationObject.CONFIRM_QUIT)) {
-			this.gameClient.confirmQuit(obj.getMessage(), obj.getExtraMessage());
+			this.gameClient
+					.confirmQuit(obj.getMessage(), obj.getExtraMessage());
 		} else if (obj.getType().equals(CommunicationObject.DEBUG)) {
 			Log.i("CommunicationManager", obj.getMessage());
 		}

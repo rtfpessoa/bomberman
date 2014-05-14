@@ -110,7 +110,7 @@ public class WifiDirectController extends BroadcastReceiver {
 
 			@Override
 			public void onFailure(int reason) {
-				Log.i("BOMBERMAN", "Failed to wifiP2p group!");
+				Log.i("BOMBERMAN", "Failed to create wifiP2p group!");
 			}
 		});
 	}
