@@ -51,6 +51,7 @@ public class PlayerActivity extends GameActivity {
 		intent.putParcelableArrayListExtra(GameActivity.MODELS, models);
 		intent.putParcelableArrayListExtra(GameActivity.PLAYERS,
 				this.gameClient.getPlayers());
+		this.wifiDirectController.removeGroup();
 		finish();
 		startActivity(intent);
 	}
