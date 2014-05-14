@@ -224,6 +224,16 @@ public class Level {
 
 	public void putExploding(BombModel model, Position pos) {
 		Model current = getOnMap(pos);
+		
+		if (current.getType() == ROBOT) {
+			model.getBomberman().getPlayer().addToScore(this.pointsRobot);
+		}
+		
+		if (current.getType() == BOMBERMAN) {
+			if (!(current.getId() == model.getBomberman().getId())) {
+				model.getBomberman().getPlayer().addToScore(this.pointsOpponent);
+			}
+		}
 
 		ExplosionModel explosion = new ExplosionModel(this, current.getId(),
 				pos, model);

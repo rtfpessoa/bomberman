@@ -42,9 +42,10 @@ public class GameServer implements IGameServer {
 			HashMap<Integer, BombermanModel> bombermanModels = this.level
 					.getBombermanModels();
 			for (BombermanPlayer player : initialPlayers) {
+				BombermanModel bomberman = bombermanModels.get(player.getId());
+				bomberman.setPlayer(player);
 				this.players.put(player.getUsername(), player);
-				this.bombermans.put(player.getUsername(),
-						bombermanModels.get(player.getId()));
+				this.bombermans.put(player.getUsername(), bomberman);
 			}
 		}
 
@@ -75,8 +76,10 @@ public class GameServer implements IGameServer {
 		if (!players.containsKey(username)) {
 			BombermanModel model = this.level.putBomberman();
 			bombermans.put(username, model);
-			players.put(username, new BombermanPlayer(model.getBombermanId(),
-					username));
+			BombermanPlayer player = new BombermanPlayer(model.getBombermanId(),
+					username);
+			model.setPlayer(player);
+			players.put(username, player);
 		}
 
 		/* On new player update devices list */

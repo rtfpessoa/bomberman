@@ -1,5 +1,6 @@
 package pt.utl.ist.cmov.bomberman.game.model;
 
+import pt.utl.ist.cmov.bomberman.game.BombermanPlayer;
 import pt.utl.ist.cmov.bomberman.game.Level;
 import pt.utl.ist.cmov.bomberman.util.Position;
 
@@ -7,6 +8,7 @@ public class BombermanModel extends Model {
 
 	private Integer bombermanId;
 	private Boolean isPaused;
+	private BombermanPlayer player;
 
 	public BombermanModel(Level level, Integer id, Position pos,
 			Integer bombermanId) {
@@ -14,6 +16,7 @@ public class BombermanModel extends Model {
 
 		this.bombermanId = bombermanId;
 		this.isPaused = false;
+		this.player = null;
 	}
 
 	public Integer getBombermanId() {
@@ -26,6 +29,14 @@ public class BombermanModel extends Model {
 
 	public void setIsPaused(Boolean value) {
 		this.isPaused = value;
+	}
+
+	public BombermanPlayer getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(BombermanPlayer player) {
+		this.player = player;
 	}
 
 	@Override
