@@ -12,6 +12,7 @@ import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
 import pt.utl.ist.cmov.bomberman.network.CommunicationObject;
 import pt.utl.ist.cmov.bomberman.network.channel.ICommunicationChannel;
 import pt.utl.ist.cmov.bomberman.util.Direction;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -69,20 +70,28 @@ public class ClientCommunicationProxy implements ICommunicationProxy,
 			this.gameClient.init(mesurements.get("lines"),
 					mesurements.get("cols"), models);
 		} else if (obj.getType().equals(CommunicationObject.START_SERVER)) {
-			Type hashType = new TypeToken<HashMap<String, Integer>>() {
+			Type hashType = new TypeToken<HashMap<String, String>>() {
 			}.getType();
 
 			Type collectionType = new TypeToken<ArrayList<ModelDTO>>() {
 			}.getType();
 
+			Type playersCollection = new TypeToken<ArrayList<WifiP2pDevice>>() {
+			}.getType();
+
 			ArrayList<ModelDTO> models = (ArrayList<ModelDTO>) gson.fromJson(
 					obj.getMessage(), collectionType);
 
-			HashMap<String, Integer> mesurements = (HashMap<String, Integer>) gson
+			HashMap<String, String> mesurements = (HashMap<String, String>) gson
 					.fromJson(obj.getExtraMessage(), hashType);
 
-			this.gameClient.startServer(mesurements.get("width"),
-					mesurements.get("height"), models);
+			ArrayList<WifiP2pDevice> players = (ArrayList<WifiP2pDevice>) gson
+					.fromJson(obj.getObject(), playersCollection);
+
+			this.gameClient.startServer(mesurements.get("levelName"),
+					Integer.parseInt(mesurements.get("width")),
+					Integer.parseInt(mesurements.get("height")), models,
+					players);
 		} else if (obj.getType().equals(CommunicationObject.DEBUG)) {
 			Log.i("CommunicationManager", obj.getMessage());
 		}

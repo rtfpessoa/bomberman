@@ -24,17 +24,28 @@ public class CommunicationObject implements Serializable {
 	private final String type;
 	private final String message;
 	private final String extraMessage;
+	private final String obj;
 
 	public CommunicationObject(String type, String message) {
 		this.type = type;
 		this.message = message;
 		this.extraMessage = null;
+		this.obj = null;
 	}
 
 	public CommunicationObject(String type, String message, String extraMessage) {
 		this.type = type;
 		this.message = message;
 		this.extraMessage = extraMessage;
+		this.obj = null;
+	}
+
+	public CommunicationObject(String type, String message,
+			String extraMessage, String obj) {
+		this.type = type;
+		this.message = message;
+		this.extraMessage = extraMessage;
+		this.obj = obj;
 	}
 
 	public String getType() {
@@ -47,6 +58,10 @@ public class CommunicationObject implements Serializable {
 
 	public String getExtraMessage() {
 		return extraMessage;
+	}
+
+	public String getObject() {
+		return obj;
 	}
 
 }

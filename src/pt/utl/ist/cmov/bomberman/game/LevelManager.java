@@ -69,7 +69,7 @@ public class LevelManager {
 			levelInfo.nextLine();
 			Map<Integer, Position> bombermans = new HashMap<Integer, Position>();
 
-			Level level = new Level(gameDuration, explosionTimeout,
+			Level level = new Level(levelName, gameDuration, explosionTimeout,
 					explosionDuration, explosionRange, robotSpeed, pointsRobot,
 					pointsOpponent, bombermans);
 
@@ -101,7 +101,7 @@ public class LevelManager {
 			levelInfo.nextLine();
 			Map<Integer, Position> bombermans = new HashMap<Integer, Position>();
 
-			Level level = new Level(gameDuration, explosionTimeout,
+			Level level = new Level(levelName, gameDuration, explosionTimeout,
 					explosionDuration, explosionRange, robotSpeed, pointsRobot,
 					pointsOpponent, bombermans);
 

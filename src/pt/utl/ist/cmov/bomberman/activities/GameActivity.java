@@ -12,6 +12,8 @@ import pt.utl.ist.cmov.bomberman.listeners.DirectionButtonListener;
 import pt.utl.ist.cmov.bomberman.network.proxy.ClientCommunicationProxy;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.content.Intent;
+import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.Bundle;
@@ -22,8 +24,7 @@ import android.widget.TextView;
 public abstract class GameActivity extends WifiDirectActivity implements
 		PeerListListener, ConnectionInfoListener {
 
-	public static final String CONNECT_TO_ALL = "pt.utl.ist.cmov.bomberman.CONNECT_TO_ALL";
-	public static final String PREVIOUS_SERVER = "pt.utl.ist.cmov.bomberman.PREVIOUS_SERVER";
+	public static final String CURRENT_PLAYERS = "pt.utl.ist.cmov.bomberman.CURRENT_PLAYERS";
 	public static final String MODELS = "pt.utl.ist.cmov.bomberman.MODELS";
 	public static final String WIDTH = "pt.utl.ist.cmov.bomberman.WIDTH";
 	public static final String HEIGHT = "pt.utl.ist.cmov.bomberman.HEIGHT";
@@ -45,6 +46,8 @@ public abstract class GameActivity extends WifiDirectActivity implements
 	private TextView score;
 	private TextView playerNumber;
 
+	private String username;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -53,7 +56,7 @@ public abstract class GameActivity extends WifiDirectActivity implements
 
 		this.gamePanel = (MainGamePanel) findViewById(R.id.game_panel);
 
-		String username = getIntent().getExtras().getString(
+		username = getIntent().getExtras().getString(
 				MainActivity.INTENT_USERNAME);
 
 		this.gameClient = new GameClient(this, username);
@@ -137,17 +140,17 @@ public abstract class GameActivity extends WifiDirectActivity implements
 		if (player == null) {
 			return;
 		}
-			String timeString = player.getTime().toString() + " s";
-			timeLeft.setText(timeString);
+		String timeString = player.getTime().toString() + " s";
+		timeLeft.setText(timeString);
 
-			String usernameString = player.getUsername();
-			playerName.setText(usernameString);
+		String usernameString = player.getUsername();
+		playerName.setText(usernameString);
 
-			String scoreString = player.getScore() + " pts";
-			score.setText(scoreString);
+		String scoreString = player.getScore() + " pts";
+		score.setText(scoreString);
 
-			String playerString = player.getPlayers() + " players";
-			playerNumber.setText(playerString);
+		String playerString = player.getPlayers() + " players";
+		playerNumber.setText(playerString);
 	}
 
 	protected void stopAll() {
@@ -160,7 +163,15 @@ public abstract class GameActivity extends WifiDirectActivity implements
 		this.rightListener.stopAll();
 	}
 
-	public void startNewServer(Integer width, Integer height,
-			ArrayList<ModelDTO> models) {
+	public void startNewServer(String levelName, Integer width, Integer height,
+			ArrayList<ModelDTO> models, ArrayList<WifiP2pDevice> devices) {
+	}
+
+	public String getUsername() {
+		return this.username;
+	}
+
+	@Override
+	public void onPeersAvailable(WifiP2pDeviceList peers) {
 	}
 }

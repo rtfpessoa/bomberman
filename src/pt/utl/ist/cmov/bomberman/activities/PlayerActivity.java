@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
 import pt.utl.ist.cmov.bomberman.network.handler.PlayerSocketHandler;
 import android.content.Intent;
-import android.net.wifi.p2p.WifiP2pDeviceList;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,18 +36,15 @@ public class PlayerActivity extends GameActivity {
 	}
 
 	@Override
-	public void onPeersAvailable(WifiP2pDeviceList peers) {
-		// INFO: this is not needed
-	}
-
-	@Override
-	public void startNewServer(Integer width, Integer height, ArrayList<ModelDTO> models) {
+	public void startNewServer(String levelName, Integer width, Integer height,
+			ArrayList<ModelDTO> models, ArrayList<WifiP2pDevice> devices) {
 		Intent intent = new Intent(this, ServerActivity.class);
-		intent.putExtra(GameActivity.CONNECT_TO_ALL, true);
-		intent.putExtra(GameActivity.PREVIOUS_SERVER, this.wifiP2pGroupOwner);
+		intent.putParcelableArrayListExtra(GameActivity.CURRENT_PLAYERS,
+				devices);
+		intent.putExtra(LevelChoiceActivity.LEVEL_MESSAGE, levelName);
 		intent.putExtra(GameActivity.WIDTH, width);
 		intent.putExtra(GameActivity.HEIGHT, height);
-		intent.putExtra(GameActivity.MODELS, models);
+		intent.putParcelableArrayListExtra(GameActivity.MODELS, models);
 		finish();
 		startActivity(intent);
 	}

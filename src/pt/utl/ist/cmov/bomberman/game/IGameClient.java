@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
+import android.net.wifi.p2p.WifiP2pDevice;
 
 public interface IGameClient {
 
@@ -13,7 +14,7 @@ public interface IGameClient {
 
 	public void updatePlayers(HashMap<String, BombermanPlayer> players);
 
-	public void startServer(Integer width, Integer height,
-			ArrayList<ModelDTO> models);
+	public void startServer(String levelName, Integer width, Integer height,
+			ArrayList<ModelDTO> models, ArrayList<WifiP2pDevice> players);
 
 }

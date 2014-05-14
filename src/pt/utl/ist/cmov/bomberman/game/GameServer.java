@@ -105,12 +105,10 @@ public class GameServer implements IGameServer {
 
 	@Override
 	public void quit(String username) {
-		BombermanModel bomberman = bombermans.get(username);
-
 		players.remove(username);
 		bombermans.remove(username);
 
-		if (bombermans.size() > 0 && bomberman.getBombermanId() == 1) {
+		if (bombermans.size() > 0 && activity.getUsername().equals(username)) {
 			// pauseGame
 			for (BombermanModel b : bombermans.values()) {
 				b.pause();
@@ -121,8 +119,15 @@ public class GameServer implements IGameServer {
 			// startServer
 			this.updateScreen();
 			this.gameClientProxy.updatePlayers(players);
-			this.gameClientProxy.startServer(this.level.getWidth(),
-					this.level.getHeight(), this.level.getMapDTO());
+			this.gameClientProxy.startServer(this.level.getLevelName(),
+					this.level.getWidth(), this.level.getHeight(),
+					this.level.getMapDTO(), this.activity.getDevices());
+
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+			}
+			activity.finish();
 		}
 	}
 

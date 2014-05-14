@@ -13,6 +13,7 @@ import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
 import pt.utl.ist.cmov.bomberman.network.CommunicationObject;
 import pt.utl.ist.cmov.bomberman.network.channel.ICommunicationChannel;
 import pt.utl.ist.cmov.bomberman.util.Direction;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -97,18 +98,21 @@ public class ServerCommunicationProxy implements ICommunicationProxy,
 	}
 
 	@Override
-	public void startServer(Integer width, Integer height,
-			ArrayList<ModelDTO> models) {
-		HashMap<String, Integer> extraMessage = new HashMap<String, Integer>();
-		extraMessage.put("width", width);
-		extraMessage.put("height", height);
+	public void startServer(String levelName, Integer width, Integer height,
+			ArrayList<ModelDTO> models, ArrayList<WifiP2pDevice> players) {
+		HashMap<String, String> extraMessage = new HashMap<String, String>();
+		extraMessage.put("levelName", levelName);
+		extraMessage.put("width", width.toString());
+		extraMessage.put("height", height.toString());
 
 		Gson gson = new Gson();
 		String messageJson = gson.toJson(models);
 		String extraMessageJson = gson.toJson(extraMessage);
+		String objJson = gson.toJson(players);
 
 		CommunicationObject object = new CommunicationObject(
-				CommunicationObject.START_SERVER, messageJson, extraMessageJson);
+				CommunicationObject.START_SERVER, messageJson,
+				extraMessageJson, objJson);
 
 		broadcast(object);
 	}

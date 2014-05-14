@@ -10,9 +10,7 @@ import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
 import pt.utl.ist.cmov.bomberman.network.channel.FakeCommunicationChannel;
 import pt.utl.ist.cmov.bomberman.network.handler.ServerSocketHandler;
 import pt.utl.ist.cmov.bomberman.network.proxy.ServerCommunicationProxy;
-import android.content.Context;
 import android.net.wifi.p2p.WifiP2pDevice;
-import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pInfo;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,15 +18,12 @@ import android.util.Log;
 
 public class ServerActivity extends GameActivity {
 
-	private static Context context;
-
 	private GameServer gameServer;
 	private ServerCommunicationProxy serverManager;
 
 	private Boolean hasStartedServer;
 
-	private Boolean connectToAll;
-	private WifiP2pDevice previousMaster;
+	private ArrayList<WifiP2pDevice> currentPlayers;
 
 	private Handler timerHandler;
 
@@ -38,8 +33,6 @@ public class ServerActivity extends GameActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		context = getApplicationContext();
-
 		this.hasStartedServer = false;
 
 		this.wifiDirectController.startGroup();
@@ -47,23 +40,20 @@ public class ServerActivity extends GameActivity {
 		String levelName = getIntent().getExtras().getString(
 				LevelChoiceActivity.LEVEL_MESSAGE);
 
-		connectToAll = getIntent().getExtras().getBoolean(
-				GameActivity.CONNECT_TO_ALL);
-		previousMaster = getIntent().getExtras().getParcelable(
-				GameActivity.PREVIOUS_SERVER);
+		currentPlayers = getIntent().getExtras().getParcelableArrayList(
+				GameActivity.CURRENT_PLAYERS);
 
 		Integer width = getIntent().getExtras().getInt(GameActivity.WIDTH);
 		Integer height = getIntent().getExtras().getInt(GameActivity.HEIGHT);
-		ArrayList<ModelDTO> models = getIntent().getExtras().getParcelable(
-				GameActivity.MODELS);
+		ArrayList<ModelDTO> models = getIntent().getExtras()
+				.getParcelableArrayList(GameActivity.MODELS);
 
 		Level level;
 		if (models != null && models.size() > 0) {
-			level = LevelManager.loadLevel(context, context.getAssets(),
-					levelName, height, width, models);
+			level = LevelManager.loadLevel(this, getAssets(), levelName,
+					height, width, models);
 		} else {
-			level = LevelManager.loadLevel(context, context.getAssets(),
-					levelName);
+			level = LevelManager.loadLevel(this, getAssets(), levelName);
 		}
 
 		this.gameServer = new GameServer(this, level);
@@ -76,7 +66,7 @@ public class ServerActivity extends GameActivity {
 				.setCommChannel(new FakeCommunicationChannel(serverManager));
 		serverManager
 				.addCommChannel(new FakeCommunicationChannel(clientManager));
-		
+
 		this.timerHandler = new Handler();
 		this.timerRunnable = new Runnable() {
 			@Override
@@ -91,8 +81,7 @@ public class ServerActivity extends GameActivity {
 		};
 		this.timerRunnable.run();
 
-		/* Connect to previous players if any, only after all setup */
-		this.wifiDirectController.discoverPeers();
+		connectToPlayers();
 	}
 
 	@Override
@@ -115,19 +104,20 @@ public class ServerActivity extends GameActivity {
 		}
 	}
 
-	@Override
-	public void onPeersAvailable(WifiP2pDeviceList peers) {
-		if (connectToAll && !peers.getDeviceList().isEmpty()) {
-			for (WifiP2pDevice device : peers.getDeviceList()) {
-				if (previousMaster == null
-						|| !previousMaster.deviceAddress
-								.equals(device.deviceAddress)) {
-					this.wifiDirectController.connect(device);
-				}
-			}
-
-			connectToAll = false;
+	private void connectToPlayers() {
+		if (currentPlayers == null) {
+			return;
 		}
+
+		for (WifiP2pDevice device : currentPlayers) {
+			this.wifiDirectController.connect(device);
+		}
+
+		currentPlayers = null;
+	}
+
+	public ArrayList<WifiP2pDevice> getDevices() {
+		return currentPlayers;
 	}
 
 	public void updateDevices() {

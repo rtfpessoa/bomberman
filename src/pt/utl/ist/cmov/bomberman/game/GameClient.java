@@ -13,6 +13,7 @@ import pt.utl.ist.cmov.bomberman.util.Direction;
 import pt.utl.ist.cmov.bomberman.util.MapMeasurements;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.net.wifi.p2p.WifiP2pDevice;
 
 public class GameClient implements IGameClient {
 
@@ -86,9 +87,9 @@ public class GameClient implements IGameClient {
 	}
 
 	@Override
-	public void startServer(Integer width, Integer height,
-			ArrayList<ModelDTO> models) {
-		activity.startNewServer(width, height, models);
+	public void startServer(String levelName, Integer width, Integer height,
+			ArrayList<ModelDTO> models, ArrayList<WifiP2pDevice> devices) {
+		activity.startNewServer(levelName, width, height, models, devices);
 	}
 
 	public void draw(Context context, Canvas canvas) {

@@ -20,6 +20,8 @@ import android.os.Handler;
 
 public class Level {
 
+	private String levelName;
+
 	private Integer gameDuration;
 	private Integer explosionTimeout;
 	private Integer explosionDuration;
@@ -52,11 +54,12 @@ public class Level {
 
 	private Handler handler;
 
-	public Level(Integer gameDuration, Integer explosionTimeout,
-			Integer explosionDuration, Integer explosionRange,
-			Integer robotSpeed, Integer pointsRobot, Integer pointsOpponent,
-			Map<Integer, Position> bombermansInitialPos) {
+	public Level(String levelName, Integer gameDuration,
+			Integer explosionTimeout, Integer explosionDuration,
+			Integer explosionRange, Integer robotSpeed, Integer pointsRobot,
+			Integer pointsOpponent, Map<Integer, Position> bombermansInitialPos) {
 		super();
+		this.levelName = levelName;
 		this.gameDuration = gameDuration;
 		this.explosionTimeout = explosionTimeout;
 		this.explosionDuration = explosionDuration;
@@ -74,6 +77,10 @@ public class Level {
 
 	public Handler getHandler() {
 		return this.handler;
+	}
+
+	public String getLevelName() {
+		return this.levelName;
 	}
 
 	public Integer getGameDuration() {
@@ -270,7 +277,8 @@ public class Level {
 		this.isPaused = false;
 	}
 
-	public void parseMap(Integer height, Integer width, ArrayList<ModelDTO> initialMap) {
+	public void parseMap(Integer height, Integer width,
+			ArrayList<ModelDTO> initialMap) {
 		this.isPaused = true;
 
 		this.height = height;
