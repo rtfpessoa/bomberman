@@ -120,7 +120,7 @@ public class ServerActivity extends GameActivity {
 	}
 
 	public ArrayList<WifiP2pDevice> getDevices() {
-		return currentPlayers;
+		return this.wifiDirectController.getGroupDevices();
 	}
 
 	public void updateDevices() {
