@@ -54,6 +54,7 @@ public class SocketCommunicationChannel implements ICommunicationChannel,
 	@Override
 	public void close() {
 		try {
+			this.isRunning = false;
 			socket.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -77,6 +78,7 @@ public class SocketCommunicationChannel implements ICommunicationChannel,
 			e.printStackTrace();
 		} finally {
 			try {
+				this.isRunning = false;
 				socket.close();
 			} catch (IOException e) {
 				e.printStackTrace();
