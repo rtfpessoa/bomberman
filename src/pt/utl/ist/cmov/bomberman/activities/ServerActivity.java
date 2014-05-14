@@ -83,8 +83,6 @@ public class ServerActivity extends GameActivity {
 			}
 		};
 		this.timerRunnable.run();
-
-		connectToPlayers();
 	}
 
 	@Override
@@ -100,6 +98,8 @@ public class ServerActivity extends GameActivity {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+
+			connectToPlayers();
 		} else if (!p2pInfo.isGroupOwner) {
 			Log.e("BOMBERMAN", "This device must be the groupd owner!");
 		} else {
