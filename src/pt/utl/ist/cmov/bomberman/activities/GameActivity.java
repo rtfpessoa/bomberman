@@ -8,7 +8,7 @@ import pt.utl.ist.cmov.bomberman.activities.views.MainGamePanel;
 import pt.utl.ist.cmov.bomberman.game.BombermanPlayer;
 import pt.utl.ist.cmov.bomberman.game.GameClient;
 import pt.utl.ist.cmov.bomberman.game.dto.ModelDTO;
-import pt.utl.ist.cmov.bomberman.listeners.DirectionButtonListener;
+import pt.utl.ist.cmov.bomberman.listener.DirectionButtonListener;
 import pt.utl.ist.cmov.bomberman.network.proxy.ClientCommunicationProxy;
 import pt.utl.ist.cmov.bomberman.util.Direction;
 import android.content.Intent;

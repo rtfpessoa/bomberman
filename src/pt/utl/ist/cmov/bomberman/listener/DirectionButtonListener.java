@@ -1,4 +1,4 @@
-package pt.utl.ist.cmov.bomberman.listeners;
+package pt.utl.ist.cmov.bomberman.listener;
 
 import pt.utl.ist.cmov.bomberman.game.GameClient;
 import pt.utl.ist.cmov.bomberman.util.Direction;
