@@ -15,7 +15,7 @@ public class ExplosionModel extends Model {
 
 	@Override
 	public boolean canMoveOver(Model model) {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -29,6 +29,7 @@ public class ExplosionModel extends Model {
 			return;
 		}
 		if (model.getType() == Level.ROBOT) {
+			((RobotModel) model).stopAll();
 			bomb.getBomberman().getPlayer()
 					.addToScore(this.level.getPointsRobot());
 			return;

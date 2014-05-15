@@ -10,19 +10,22 @@ public class RobotModel extends Model {
 	private Direction direction;
 	private Handler robotHandler;
 	private Runnable robotRunnable;
+	private Boolean isRunning;
 
 	public RobotModel(Level level, Integer id, Position pos) {
 		super(level, Level.ROBOT, id, pos);
 		direction = Direction.LEFT;
+		isRunning = true;
 		robotHandler = new Handler();
 		this.robotRunnable = new Runnable() {
 			@Override
 			public void run() {
 				move();
-				resetMoveRunnable();
+				if (isRunning) {
+					resetMoveRunnable();
+				}
 			}
 		};
-
 		this.robotRunnable.run();
 	}
 
@@ -37,6 +40,14 @@ public class RobotModel extends Model {
 	@Override
 	public boolean canMoveOver(Model model) {
 		return false;
+	}
+	
+	@Override
+	public void moveAction(Model model) {
+		if (model.getType() == Level.EXPLODING) {
+			this.level.putEmpty(this.pos);
+			return;
+		}
 	}
 
 	private void move() {
@@ -57,6 +68,7 @@ public class RobotModel extends Model {
 	}
 
 	public void stopAll() {
+		isRunning = false;
 		robotHandler.removeCallbacks(this.robotRunnable);
 	}
 

@@ -189,10 +189,13 @@ public class Level {
 
 			Model destination = this.getOnMap(newPos);
 			if (destination.canMoveOver(model)) {
-				model.moveAction(destination);
-				destination.moveAction(model);
 				this.move(model.getPos(), newPos);
 			} else {
+				if (destination.getType() == EXPLODING) {
+					model.moveAction(destination);
+					destination.moveAction(model);
+				}
+				
 				return false;
 			}
 
@@ -224,19 +227,11 @@ public class Level {
 
 	public void putExploding(BombModel model, Position pos) {
 		Model current = getOnMap(pos);
-		
-		if (current.getType() == ROBOT) {
-			model.getBomberman().getPlayer().addToScore(this.pointsRobot);
-		}
-		
-		if (current.getType() == BOMBERMAN) {
-			if (!(current.getId() == model.getBomberman().getId())) {
-				model.getBomberman().getPlayer().addToScore(this.pointsOpponent);
-			}
-		}
 
 		ExplosionModel explosion = new ExplosionModel(this, current.getId(),
 				pos, model);
+		current.moveAction(explosion);
+		explosion.moveAction(current);
 		setOnMap(pos, explosion);
 	}
 

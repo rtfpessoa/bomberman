@@ -41,11 +41,6 @@ public class BombermanModel extends Model {
 
 	@Override
 	public boolean canMoveOver(Model model) {
-		if (model.getType() == Level.ROBOT
-				|| model.getType() == Level.EXPLODING) {
-			return true;
-		}
-
 		return false;
 	}
 
