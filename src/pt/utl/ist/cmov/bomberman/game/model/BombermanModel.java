@@ -44,6 +44,12 @@ public class BombermanModel extends Model {
 	public void putDead() {
 		this.isDead = true;
 	}
+	
+	@Override
+	public void putKillingZone() {
+		this.putDead();
+		this.level.putEmpty(this.pos);
+	}
 
 	public void setPlayer(BombermanPlayer player) {
 		this.player = player;
@@ -57,7 +63,7 @@ public class BombermanModel extends Model {
 	@Override
 	public void moveAction(Model model) {
 		if (model.getType() == Level.EXPLODING
-				|| model.getType() == Level.ROBOT) {
+				|| (model.getType() == Level.EMPTY && model.isKillingZone())) {
 			this.putDead();
 			this.level.putEmpty(this.pos);
 			return;

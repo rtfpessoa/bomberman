@@ -9,6 +9,7 @@ public abstract class Model {
 	protected Position pos;
 	protected Integer id;
 	private final Character type;
+	private Boolean isKillingZone;
 
 	public Model(Level level, Character type, Integer id, Position pos) {
 		super();
@@ -17,6 +18,7 @@ public abstract class Model {
 		this.type = type;
 		this.id = id;
 		this.pos = pos;
+		this.isKillingZone = false;
 	}
 
 	public Character getType() {
@@ -29,6 +31,18 @@ public abstract class Model {
 
 	public Position getPos() {
 		return this.pos;
+	}
+
+	public Boolean isKillingZone() {
+		return this.isKillingZone;
+	}
+
+	public void putKillingZone() {
+		this.isKillingZone = true;
+	}
+
+	public void removeKillingZone() {
+		this.isKillingZone = false;
 	}
 
 	public abstract boolean canMoveOver(Model model);

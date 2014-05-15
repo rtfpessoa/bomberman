@@ -11,16 +11,9 @@ public class EmptyModel extends Model {
 
 	@Override
 	public boolean canMoveOver(Model model) {
-		return true;
-	}
-
-	@Override
-	public void moveAction(Model model) {
-		if (model.getType() == Level.BOMBERMAN
-				&& this.level.isInDeathZone(this.getPos())) {
-			this.level.putEmpty(model.getPos());
-			// TODO: Bomberman Killed
-			return;
+		if (isKillingZone() && model.getType() == Level.BOMBERMAN) {
+			return false;
 		}
+		return true;
 	}
 }

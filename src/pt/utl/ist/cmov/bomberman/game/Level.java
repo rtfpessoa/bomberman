@@ -207,13 +207,37 @@ public class Level {
 		synchronized (this.modelMap) {
 			Model model = getOnMap(dest);
 			Model otherModel = getOnMap(orig);
+			
+			if (otherModel.getType() == ROBOT) {
+				removeKillingZone(otherModel.getPos());
+			}
 
 			model.setPos(orig);
 			otherModel.setPos(dest);
 
 			setOnMap(dest, otherModel);
 			setOnMap(orig, model);
+			
+			if (otherModel.getType() == ROBOT) {
+				putKillingZone(otherModel.getPos());
+			}
 		}
+	}
+
+	private void putKillingZone(Position pos) {
+		getOnMap(pos).putKillingZone();
+		getOnMap(Position.calculateUpPosition(pos)).putKillingZone();
+		getOnMap(Position.calculateDownPosition(pos)).putKillingZone();
+		getOnMap(Position.calculateLeftPosition(pos)).putKillingZone();
+		getOnMap(Position.calculateRightPosition(pos)).putKillingZone();
+	}
+
+	private void removeKillingZone(Position pos) {
+		getOnMap(pos).putKillingZone();
+		getOnMap(Position.calculateUpPosition(pos)).removeKillingZone();
+		getOnMap(Position.calculateDownPosition(pos)).removeKillingZone();
+		getOnMap(Position.calculateLeftPosition(pos)).removeKillingZone();
+		getOnMap(Position.calculateRightPosition(pos)).removeKillingZone();
 	}
 
 	public void putEmpty(Position pos) {
@@ -343,6 +367,17 @@ public class Level {
 			}
 
 			this.modelMap.add(line);
+		}
+
+		for (int y = 0; y < this.height; y++) {
+
+			for (int x = 0; x < this.width; x++) {
+				Position pos = new Position(x, y);
+
+				if (getOnMap(pos).getType() == ROBOT) {
+					putKillingZone(pos);
+				}
+			}
 		}
 
 		this.isPaused = false;

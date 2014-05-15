@@ -126,7 +126,7 @@ public class GameClient implements IGameClient {
 		Collections.sort(playersValues, new Comparator<BombermanPlayer>() {
 			@Override
 			public int compare(BombermanPlayer lhs, BombermanPlayer rhs) {
-				return lhs.getScore().compareTo(rhs.getScore());
+				return rhs.getScore().compareTo(lhs.getScore());
 			}
 		});
 

@@ -34,4 +34,20 @@ public class Position implements Serializable {
 		return null;
 	}
 
+	public static Position calculateUpPosition(Position pos) {
+		return new Position(pos.x, pos.y - 1);
+	}
+
+	public static Position calculateDownPosition(Position pos) {
+		return new Position(pos.x, pos.y + 1);
+	}
+
+	public static Position calculateLeftPosition(Position pos) {
+		return new Position(pos.x - 1, pos.y);
+	}
+
+	public static Position calculateRightPosition(Position pos) {
+		return new Position(pos.x + 1, pos.y);
+	}
+
 }
