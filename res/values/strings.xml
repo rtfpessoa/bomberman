@@ -14,5 +14,8 @@
     <!-- Peer Choice Screen -->
     <string name="peer_choice_title">Peer Choice</string>
     <string name="refresh">Refresh</string>
+    
+    <!-- End Game Screen -->
+    <string name="game_over">Game Over</string>
 
 </resources>

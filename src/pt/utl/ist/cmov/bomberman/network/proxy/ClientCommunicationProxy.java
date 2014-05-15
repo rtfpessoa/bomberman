@@ -88,6 +88,10 @@ public class ClientCommunicationProxy implements ICommunicationProxy,
 		} else if (obj.getType().equals(CommunicationObject.CONFIRM_QUIT)) {
 			this.gameClient
 					.confirmQuit(obj.getMessage(), obj.getExtraMessage());
+		} else if (obj.getType().equals(CommunicationObject.END_GAME)) {
+			HashMap<String, BombermanPlayer> players = (HashMap<String, BombermanPlayer>) gson
+					.fromJson(obj.getMessage(), bombermanPlayerType);
+			this.gameClient.endGame(players);
 		} else if (obj.getType().equals(CommunicationObject.DEBUG)) {
 			Log.i("CommunicationManager", obj.getMessage());
 		}

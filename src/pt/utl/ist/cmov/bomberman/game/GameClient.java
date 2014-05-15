@@ -1,6 +1,8 @@
 package pt.utl.ist.cmov.bomberman.game;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -114,6 +116,21 @@ public class GameClient implements IGameClient {
 				&& !newServer.equals(activity.getUsername())) {
 			activity.disconnect();
 		}
+	}
+
+	@Override
+	public void endGame(HashMap<String, BombermanPlayer> players) {
+		ArrayList<BombermanPlayer> playersValues = new ArrayList<BombermanPlayer>(
+				players.values());
+
+		Collections.sort(playersValues, new Comparator<BombermanPlayer>() {
+			@Override
+			public int compare(BombermanPlayer lhs, BombermanPlayer rhs) {
+				return lhs.getScore().compareTo(rhs.getScore());
+			}
+		});
+
+		this.activity.endGame(playersValues);
 	}
 
 	public void draw(Context context, Canvas canvas) {

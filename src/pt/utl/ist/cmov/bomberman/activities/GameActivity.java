@@ -110,12 +110,11 @@ public abstract class GameActivity extends WifiDirectActivity implements
 		gameClient.quit();
 	}
 
-	public void endGame() {
+	public void endGame(ArrayList<BombermanPlayer> sortedPlayers) {
 		Intent intent = new Intent(this, EndGameActivity.class);
 
-		// TODO: get winner and points
-		intent.putExtra(EndGameActivity.INTENT_WINNER, "rtfpessoa");
-		intent.putExtra(EndGameActivity.INTENT_WINNER_POINTS, "69");
+		intent.putParcelableArrayListExtra(EndGameActivity.INTENT_PLAYERS,
+				sortedPlayers);
 		finish();
 		startActivity(intent);
 	}

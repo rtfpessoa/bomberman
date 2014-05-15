@@ -76,8 +76,8 @@ public class GameServer implements IGameServer {
 		if (!players.containsKey(username)) {
 			BombermanModel model = this.level.putBomberman();
 			bombermans.put(username, model);
-			BombermanPlayer player = new BombermanPlayer(model.getBombermanId(),
-					username);
+			BombermanPlayer player = new BombermanPlayer(
+					model.getBombermanId(), username);
 			model.setPlayer(player);
 			players.put(username, player);
 		}
@@ -89,7 +89,7 @@ public class GameServer implements IGameServer {
 	public void putBomb(String username) {
 		BombermanModel bomberman = bombermans.get(username);
 
-		if (bomberman.isPaused()) {
+		if (bomberman.isPaused() || bomberman.isDead()) {
 			return;
 		}
 
@@ -100,7 +100,7 @@ public class GameServer implements IGameServer {
 	public void move(String username, Direction dir) {
 		BombermanModel bomberman = bombermans.get(username);
 
-		if (bomberman.isPaused()) {
+		if (bomberman.isPaused() || bomberman.isDead()) {
 			return;
 		}
 
@@ -117,6 +117,12 @@ public class GameServer implements IGameServer {
 	public void pause(String username) {
 		BombermanModel bomberman = bombermans.get(username);
 		bomberman.pause();
+
+		if (bombsToDraw.containsKey(username)) {
+			BombModel bomb = bombsToDraw.get(username);
+			this.level.putBomb(bomb);
+			bombsToDraw.remove(username);
+		}
 	}
 
 	@Override
@@ -178,6 +184,10 @@ public class GameServer implements IGameServer {
 		}
 
 		this.gameClientProxy.updatePlayers(players);
+
+		if (this.remainingTime <= 0) {
+			this.gameClientProxy.endGame(players);
+		}
 	}
 
 	public void stopAll() {

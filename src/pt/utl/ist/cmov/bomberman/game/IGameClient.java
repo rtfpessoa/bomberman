@@ -20,4 +20,6 @@ public interface IGameClient {
 
 	void confirmQuit(String oldServer, String newServer);
 
+	void endGame(HashMap<String, BombermanPlayer> players);
+
 }

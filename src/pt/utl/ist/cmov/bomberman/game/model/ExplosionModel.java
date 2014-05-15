@@ -21,10 +21,10 @@ public class ExplosionModel extends Model {
 	@Override
 	public void moveAction(Model model) {
 		if (model.getType() == Level.BOMBERMAN) {
-			// TODO: Bomberman Killed
-			bomb.getBomberman().getPlayer()
-					.addToScore(this.level.getPointsOpponent());
-			bomb.getBomberman();
+			if (model.getId() != bomb.getBomberman().getId()) {
+				bomb.getBomberman().getPlayer()
+						.addToScore(this.level.getPointsOpponent());
+			}
 
 			return;
 		}

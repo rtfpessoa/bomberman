@@ -9,6 +9,7 @@ public class BombermanModel extends Model {
 	private Integer bombermanId;
 	private Boolean isPaused;
 	private BombermanPlayer player;
+	private Boolean isDead;
 
 	public BombermanModel(Level level, Integer id, Position pos,
 			Integer bombermanId) {
@@ -17,6 +18,7 @@ public class BombermanModel extends Model {
 		this.bombermanId = bombermanId;
 		this.isPaused = false;
 		this.player = null;
+		this.isDead = false;
 	}
 
 	public Integer getBombermanId() {
@@ -35,6 +37,14 @@ public class BombermanModel extends Model {
 		return player;
 	}
 
+	public Boolean isDead() {
+		return isDead;
+	}
+
+	public void putDead() {
+		this.isDead = true;
+	}
+
 	public void setPlayer(BombermanPlayer player) {
 		this.player = player;
 	}
@@ -44,7 +54,21 @@ public class BombermanModel extends Model {
 		return false;
 	}
 
+	@Override
+	public void moveAction(Model model) {
+		if (model.getType() == Level.EXPLODING
+				|| model.getType() == Level.ROBOT) {
+			this.putDead();
+			this.level.putEmpty(this.pos);
+			return;
+		}
+	}
+
 	public void pause() {
+		if (isDead) {
+			return;
+		}
+
 		if (isPaused) {
 			this.isPaused = false;
 			this.level.putBomberman(this);

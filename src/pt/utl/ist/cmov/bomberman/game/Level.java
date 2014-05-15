@@ -191,11 +191,9 @@ public class Level {
 			if (destination.canMoveOver(model)) {
 				this.move(model.getPos(), newPos);
 			} else {
-				if (destination.getType() == EXPLODING) {
-					model.moveAction(destination);
-					destination.moveAction(model);
-				}
-				
+				model.moveAction(destination);
+				destination.moveAction(model);
+
 				return false;
 			}
 

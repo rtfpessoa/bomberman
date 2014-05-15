@@ -125,6 +125,16 @@ public class ServerCommunicationProxy implements ICommunicationProxy,
 		broadcast(object);
 	}
 
+	@Override
+	public void endGame(HashMap<String, BombermanPlayer> players) {
+		String innerJson = gson.toJson(players);
+
+		CommunicationObject object = new CommunicationObject(
+				CommunicationObject.END_GAME, innerJson);
+		
+		broadcast(object);
+	}
+
 	private void broadcast(Object object) {
 		synchronized (commChannels) {
 			for (ICommunicationChannel commChannel : commChannels) {

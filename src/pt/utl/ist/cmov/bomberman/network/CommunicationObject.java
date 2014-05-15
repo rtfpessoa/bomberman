@@ -21,6 +21,7 @@ public class CommunicationObject implements Serializable {
 	public static final String UPDATE_PLAYERS = "pt.utl.ist.cmov.bomberman.UPDATE_PLAYERS";
 	public static final String START_SERVER = "pt.utl.ist.cmov.bomberman.START_SERVER";
 	public static final String CONFIRM_QUIT = "pt.utl.ist.cmov.bomberman.CONFIRM_QUIT";
+	public static final String END_GAME = "pt.utl.ist.cmov.bomberman.END_GAME";
 
 	private final String type;
 	private final String message;

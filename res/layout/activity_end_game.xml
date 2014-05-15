@@ -13,8 +13,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:keepScreenOn="true"
-        android:text="Game Over"
-        android:textColor="#ecf0f1"
+        android:text="@string/game_over"
+        android:textColor="#444444"
         android:textSize="50sp"
         android:textStyle="bold" />
 
@@ -28,20 +28,17 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:keepScreenOn="true"
-        android:textColor="#ecf0f1"
+        android:textColor="#444444"
         android:textSize="40sp" />
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="50sp" />
 
-    <TextView
-        android:id="@+id/game_end_points"
+    <ListView
+        android:id="@+id/players_table"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:keepScreenOn="true"
-        android:textColor="#ecf0f1"
-        android:textSize="30sp" />
+        android:layout_height="wrap_content" >
+    </ListView>
 
 </LinearLayout>
