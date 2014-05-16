@@ -131,5 +131,6 @@ public class ServerActivity extends GameActivity {
 		super.stopAll();
 		this.gameServer.stopAll();
 		this.serverManager.close();
+		this.timerHandler.removeCallbacks(timerRunnable);
 	}
 }

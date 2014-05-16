@@ -239,6 +239,7 @@ public class GameServer implements IGameServer {
 				|| this.level.getRemainingBombermans() <= 0
 				|| (this.level.getRemainingRobots() <= 0 && this.level
 						.getRemainingBombermans() <= 1)) {
+			this.stopAll();
 			this.gameClientProxy.endGame(players);
 		}
 	}
