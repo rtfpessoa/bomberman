@@ -170,6 +170,56 @@ public class GameServer implements IGameServer {
 		}
 	}
 
+	@Override
+	public void split(String username) {
+		if (bombermans.size() > 1 && activity.getUsername().equals(username)) {
+
+			// chooseNextServer
+			BombermanPlayer newServer = null;
+			for (BombermanPlayer tmpPlayer : players.values()) {
+				if (newServer == null
+						|| Integer.parseInt(newServer.getUsername().split(
+								"Player")[1]) > Integer.parseInt(tmpPlayer
+								.getUsername().split("Player")[1])) {
+					newServer = tmpPlayer;
+				}
+			}
+
+			ArrayList<ModelDTO> splitMap = new ArrayList<ModelDTO>();
+			for (ModelDTO model : this.level.getMapDTO()) {
+				if (model.getType() == Level.BOMBERMAN
+						&& model.getBombermanId() != bombermans.get(
+								newServer.getUsername()).getBombermanId()) {
+					splitMap.add(new ModelDTO(model.getId(), Level.EMPTY, model
+							.getPos()));
+				} else {
+					splitMap.add(model);
+				}
+			}
+			this.level.putEmpty(bombermans.get(newServer.getUsername())
+					.getPos());
+
+			HashMap<String, BombermanPlayer> tmpPlayer = new HashMap<String, BombermanPlayer>();
+			tmpPlayer.put(newServer.getUsername(), newServer);
+
+			// startServer
+			this.updateScreen();
+			this.gameClientProxy.updatePlayers(tmpPlayer);
+			this.gameClientProxy.startServer(newServer.getUsername(),
+					this.level.getLevelName(), this.level.getWidth(),
+					this.level.getHeight(), splitMap,
+					this.activity.getDevices());
+
+			BombermanModel bombermanModel = bombermans.get(newServer
+					.getUsername());
+			this.level.removeBomberman(bombermanModel);
+			players.remove(newServer.getUsername());
+			bombermans.remove(newServer.getUsername());
+
+			this.gameClientProxy.updatePlayers(players);
+		}
+	}
+
 	private void updateScreen() {
 		ArrayList<ModelDTO> changedModels = level.getLatestUpdates();
 		this.gameClientProxy.updateScreen(changedModels);

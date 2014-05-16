@@ -41,7 +41,7 @@ public class RobotModel extends Model {
 	public boolean canMoveOver(Model model) {
 		return false;
 	}
-	
+
 	@Override
 	public void moveAction(Model model) {
 		if (model.getType() == Level.EXPLODING) {

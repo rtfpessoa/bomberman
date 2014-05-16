@@ -15,6 +15,7 @@ public class CommunicationObject implements Serializable {
 	public static final String PAUSE = "pt.utl.ist.cmov.bomberman.PAUSE";
 	public static final String QUIT = "pt.utl.ist.cmov.bomberman.QUIT";
 	public static final String MOVE = "pt.utl.ist.cmov.bomberman.MOVE";
+	public static final String SPLIT = "pt.utl.ist.cmov.bomberman.SPLIT";
 
 	/* Client */
 	public static final String UPDATE_SCREEN = "pt.utl.ist.cmov.bomberman.UPDATE_SCREEN";

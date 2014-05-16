@@ -110,6 +110,10 @@ public abstract class GameActivity extends WifiDirectActivity implements
 		gameClient.quit();
 	}
 
+	public void splitClick(View view) {
+		gameClient.split();
+	}
+
 	public void endGame(ArrayList<BombermanPlayer> sortedPlayers) {
 		Intent intent = new Intent(this, EndGameActivity.class);
 

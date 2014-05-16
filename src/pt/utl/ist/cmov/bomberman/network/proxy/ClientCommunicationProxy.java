@@ -145,6 +145,14 @@ public class ClientCommunicationProxy implements ICommunicationProxy,
 	}
 
 	@Override
+	public void split(String username) {
+		CommunicationObject object = new CommunicationObject(
+				CommunicationObject.SPLIT, username);
+
+		send(object);
+	}
+
+	@Override
 	public void close() {
 		if (this.commChannel != null) {
 			this.commChannel.close();

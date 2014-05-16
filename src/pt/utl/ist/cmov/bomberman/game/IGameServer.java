@@ -12,6 +12,8 @@ public interface IGameServer {
 
 	void quit(String username);
 
+	void split(String username);
+
 	void move(String username, Direction direction);
 
 }

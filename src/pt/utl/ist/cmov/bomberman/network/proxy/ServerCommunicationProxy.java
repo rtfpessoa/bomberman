@@ -56,6 +56,8 @@ public class ServerCommunicationProxy implements ICommunicationProxy,
 			this.gameServer.pause(obj.getMessage());
 		} else if (obj.getType().equals(CommunicationObject.QUIT)) {
 			this.gameServer.quit(obj.getMessage());
+		} else if (obj.getType().equals(CommunicationObject.SPLIT)) {
+			this.gameServer.split(obj.getMessage());
 		} else if (obj.getType().equals(CommunicationObject.DEBUG)) {
 			Log.i("CommunicationManager", obj.getMessage());
 		}
@@ -131,7 +133,7 @@ public class ServerCommunicationProxy implements ICommunicationProxy,
 
 		CommunicationObject object = new CommunicationObject(
 				CommunicationObject.END_GAME, innerJson);
-		
+
 		broadcast(object);
 	}
 

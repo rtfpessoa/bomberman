@@ -207,7 +207,7 @@ public class Level {
 		synchronized (this.modelMap) {
 			Model model = getOnMap(dest);
 			Model otherModel = getOnMap(orig);
-			
+
 			if (otherModel.getType() == ROBOT) {
 				removeKillingZone(otherModel.getPos());
 			}
@@ -217,7 +217,7 @@ public class Level {
 
 			setOnMap(dest, otherModel);
 			setOnMap(orig, model);
-			
+
 			if (otherModel.getType() == ROBOT) {
 				putKillingZone(otherModel.getPos());
 			}

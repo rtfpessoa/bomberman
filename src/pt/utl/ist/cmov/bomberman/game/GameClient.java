@@ -87,6 +87,10 @@ public class GameClient implements IGameClient {
 		}
 	}
 
+	public void split() {
+		gameServerProxy.split(this.username);
+	}
+
 	@Override
 	public void updateScreen(ArrayList<ModelDTO> models) {
 		for (ModelDTO model : models) {
