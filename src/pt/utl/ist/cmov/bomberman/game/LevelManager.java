@@ -66,12 +66,13 @@ public class LevelManager {
 			Integer robotSpeed = levelInfo.nextInt();
 			Integer pointsRobot = levelInfo.nextInt();
 			Integer pointsOpponent = levelInfo.nextInt();
+			Integer numberOfRobots = levelInfo.nextInt();
 			levelInfo.nextLine();
 			Map<Integer, Position> bombermans = new HashMap<Integer, Position>();
 
 			Level level = new Level(levelName, gameDuration, explosionTimeout,
 					explosionDuration, explosionRange, robotSpeed, pointsRobot,
-					pointsOpponent, bombermans);
+					pointsOpponent, numberOfRobots, bombermans);
 
 			List<List<Character>> characters = readMap(levelInfo, bombermans);
 			level.parseMap(characters);
@@ -98,12 +99,13 @@ public class LevelManager {
 			Integer robotSpeed = levelInfo.nextInt();
 			Integer pointsRobot = levelInfo.nextInt();
 			Integer pointsOpponent = levelInfo.nextInt();
+			Integer numberOfRobots = levelInfo.nextInt();
 			levelInfo.nextLine();
 			Map<Integer, Position> bombermans = new HashMap<Integer, Position>();
 
 			Level level = new Level(levelName, gameDuration, explosionTimeout,
 					explosionDuration, explosionRange, robotSpeed, pointsRobot,
-					pointsOpponent, bombermans);
+					pointsOpponent, numberOfRobots, bombermans);
 
 			readMap(levelInfo, bombermans);
 			level.parseMap(height, width, initialMap);

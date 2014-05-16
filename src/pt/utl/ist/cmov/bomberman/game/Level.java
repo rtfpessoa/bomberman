@@ -32,6 +32,8 @@ public class Level {
 	private Integer pointsOpponent;
 	private Map<Integer, Position> bombermansInitialPos;
 	private Integer maxBombermans;
+	private Integer remainingRobots;
+	private Integer remainingBombermans;
 
 	public static final Character WALL = 'W';
 	public static final Character OBSTACLE = 'O';
@@ -57,7 +59,8 @@ public class Level {
 	public Level(String levelName, Integer gameDuration,
 			Integer explosionTimeout, Integer explosionDuration,
 			Integer explosionRange, Integer robotSpeed, Integer pointsRobot,
-			Integer pointsOpponent, Map<Integer, Position> bombermansInitialPos) {
+			Integer pointsOpponent, Integer numberOfRobots,
+			Map<Integer, Position> bombermansInitialPos) {
 		super();
 		this.levelName = levelName;
 		this.gameDuration = gameDuration;
@@ -67,6 +70,8 @@ public class Level {
 		this.robotSpeed = robotSpeed;
 		this.pointsRobot = pointsRobot;
 		this.pointsOpponent = pointsOpponent;
+		this.remainingRobots = numberOfRobots;
+		this.remainingBombermans = 0;
 		this.modelMap = new ArrayList<ArrayList<Model>>();
 		this.bombermansInitialPos = bombermansInitialPos;
 		this.isPaused = false;
@@ -152,6 +157,26 @@ public class Level {
 		this.pointsOpponent = pointsOpponent;
 	}
 
+	public Integer getRemainingRobots() {
+		return remainingRobots;
+	}
+	
+	public void decrRemainingRobots() {
+		this.remainingRobots--;
+	}
+
+	public Integer getRemainingBombermans() {
+		return remainingBombermans;
+	}
+	
+	public void decrRemainingBomberman() {
+		this.remainingBombermans--;
+	}
+	
+	public void incrRemainingBomberman() {
+		this.remainingBombermans++;
+	}
+
 	public Map.Entry<Integer, Position> getBombermanInitialPos() {
 		Map.Entry<Integer, Position> bombermanEntry = this.bombermansInitialPos
 				.entrySet().iterator().next();
@@ -224,7 +249,7 @@ public class Level {
 		}
 	}
 
-	private void putKillingZone(Position pos) {
+	public void putKillingZone(Position pos) {
 		getOnMap(pos).putKillingZone();
 		getOnMap(Position.calculateUpPosition(pos)).putKillingZone();
 		getOnMap(Position.calculateDownPosition(pos)).putKillingZone();
@@ -232,8 +257,8 @@ public class Level {
 		getOnMap(Position.calculateRightPosition(pos)).putKillingZone();
 	}
 
-	private void removeKillingZone(Position pos) {
-		getOnMap(pos).putKillingZone();
+	public void removeKillingZone(Position pos) {
+		getOnMap(pos).removeKillingZone();
 		getOnMap(Position.calculateUpPosition(pos)).removeKillingZone();
 		getOnMap(Position.calculateDownPosition(pos)).removeKillingZone();
 		getOnMap(Position.calculateLeftPosition(pos)).removeKillingZone();
@@ -287,6 +312,8 @@ public class Level {
 		BombermanModel bomberman = new BombermanModel(this, current.getId(),
 				pos, bombermanId);
 		setOnMap(pos, bomberman);
+		
+		this.remainingBombermans++;
 
 		return bomberman;
 	}

@@ -42,6 +42,7 @@ public class BombermanModel extends Model {
 	}
 
 	public void putDead() {
+		level.decrRemainingBomberman();
 		this.isDead = true;
 	}
 	

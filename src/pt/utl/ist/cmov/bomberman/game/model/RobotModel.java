@@ -46,6 +46,8 @@ public class RobotModel extends Model {
 	public void moveAction(Model model) {
 		if (model.getType() == Level.EXPLODING) {
 			this.level.putEmpty(this.pos);
+			this.level.decrRemainingRobots();
+			this.level.removeKillingZone(this.pos);
 			return;
 		}
 	}

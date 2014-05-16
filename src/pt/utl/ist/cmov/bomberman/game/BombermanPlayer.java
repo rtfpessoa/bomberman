@@ -46,7 +46,7 @@ public class BombermanPlayer implements Parcelable {
 	public void setScore(Integer score) {
 		this.score = score;
 	}
-	
+
 	public void addToScore(Integer points) {
 		this.score += points;
 	}
